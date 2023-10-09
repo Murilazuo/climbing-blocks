@@ -9,7 +9,7 @@ public class MatchManager : MonoBehaviour
     [SerializeField] GameObject piecePrefab;
     [SerializeField] Piece.PieceData[] pieceDatas;
     [SerializeField] Vector2 spawPiecePosition;
-
+    public Vector2 playerPlatformSpawnPosition;
     [SerializeField] GameObject player;
     Piece lastPiece;
 
@@ -19,8 +19,9 @@ public class MatchManager : MonoBehaviour
     }
     private void Start()
     {
+
     }
-    void StartMatch()
+    public void StartMatch()
     {
         NextPiece();
     }

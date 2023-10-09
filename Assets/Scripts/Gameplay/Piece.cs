@@ -13,16 +13,22 @@ public class Piece : NetworkBehaviour
 
     [SerializeField] GameObject piecePart;
     public Rigidbody2D rig;
-    bool pieceIsStoped;
+    bool pieceIsStoped ;
     public System.Action OnPieceStop;
-
+    private void Awake()
+    {
+        transform.position = new Vector2(NetworkPlayer.pieceControllerPlayer.transform.position.x, rig.transform.position.y);
+    }
     private void Update()
     {
-        if (!isServer) return;
+        if (pieceIsStoped) return;
 
-        if(rig.velocity.y > 0 && !pieceIsStoped)
+        transform.position = new Vector2(NetworkPlayer.pieceControllerPlayer.transform.position.x, rig.transform.position.y);
+
+        if (rig.velocity.y > 0 && !pieceIsStoped)
         {
-            PieceStop();
+            OnPieceStop?.Invoke();
+            pieceIsStoped = true;
         }
     }
     public void Init(PieceData data)
