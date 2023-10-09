@@ -1,8 +1,9 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Piece : MonoBehaviour
+public class Piece : NetworkBehaviour
 {
     [System.Serializable]
     public struct PieceData {
@@ -17,6 +18,8 @@ public class Piece : MonoBehaviour
 
     private void Update()
     {
+        if (!isServer) return;
+
         if(rig.velocity.y > 0 && !pieceIsStoped)
         {
             PieceStop();
@@ -28,6 +31,7 @@ public class Piece : MonoBehaviour
         foreach (var piecePosition in data.piecePositions)
         {
             GameObject part = Instantiate(piecePart, transform);
+            NetworkServer.Spawn(part);
             part.transform.localPosition = piecePosition;
 
             part.GetComponent<SpriteRenderer>().color = data.color;

@@ -1,6 +1,7 @@
+using Mirror;
 using System.Collections;
 using UnityEngine;
-public class Player : MonoBehaviour
+public class Player : NetworkBehaviour
 {
     [Header("Move")]
     [SerializeField] bool canMove;
@@ -11,13 +12,6 @@ public class Player : MonoBehaviour
     [SerializeField] Rigidbody2D rig;
     public Vector2 Velocity { get => rig.velocity; }
 
-    bool lookRight;
-
-    public static Player instance;
-    private void Awake()
-    {
-        instance = this;
-    }
     private void Update()
     {
         if (Input.GetButtonDown("Jump") && canMove)
@@ -30,10 +24,6 @@ public class Player : MonoBehaviour
             Vector3 velocity = rig.velocity;
             velocity.x = speed * Time.deltaTime * Input.GetAxis("Horizontal");
             rig.velocity = velocity;
-
-            if (rig.velocity.x != 0)
-                lookRight = rig.velocity.x > 0;
-
         }
     }
     

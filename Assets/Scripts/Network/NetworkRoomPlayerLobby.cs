@@ -1,18 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
+using UnityEngine.SceneManagement;
 
-public class NetworkRoomPlayerLobby : MonoBehaviour
+public class NetworkRoomPlayerLobby : NetworkBehaviour 
 {
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
+    {
+        DontDestroyOnLoad(this);
+        SceneManager.LoadScene("Main");
+    }
+    public override void OnStartLocalPlayer()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
