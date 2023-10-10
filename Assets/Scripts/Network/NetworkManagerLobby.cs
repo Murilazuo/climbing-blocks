@@ -20,7 +20,8 @@ public class NetworkManagerLobby : NetworkManager
         playerId = numPlayers;
         Debug.Log(playerId);
 
-        MatchManager.Instance.StartMatch();
+        if (numPlayers > 1)
+            MatchManager.Instance.StartMatch();
     }
     
 }

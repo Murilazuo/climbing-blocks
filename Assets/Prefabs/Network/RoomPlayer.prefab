@@ -75,10 +75,11 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 8
-  rig: {fileID: 9113436076101872187}
   spawnPLatformPosition: {x: 0, y: 0}
+  clampPosition: 4.4
   pieceControllerPositionY: 7.48
   col: {fileID: 8965854728069587536}
+  rig: {fileID: 9113436076101872187}
 --- !u!50 &9113436076101872187
 Rigidbody2D:
   serializedVersion: 4
@@ -184,7 +185,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   target: {fileID: 3016407646373095982}
-  clientAuthority: 1
+  clientAuthority: 0
   syncPosition: 1
   syncRotation: 1
   syncScale: 0

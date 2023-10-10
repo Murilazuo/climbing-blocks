@@ -1,25 +1,28 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MatchManager : MonoBehaviour
+public class MatchManager : NetworkBehaviour
 {
-    public static MatchManager Instance;
+    static MatchManager instance;
+    public static MatchManager Instance
+    {
+        get
+        {
+            if (!instance) instance = FindObjectOfType<MatchManager>();
+            return instance;
+        }
+    }
     public static System.Action<Piece> OnSpawnPiece;
-    [SerializeField] GameObject piecePrefab;
-    [SerializeField] Piece.PieceData[] pieceDatas;
+    [SerializeField] GameObject[] piecePrefabs;
     [SerializeField] Vector2 spawPiecePosition;
     public Vector2 playerPlatformSpawnPosition;
-    [SerializeField] GameObject player;
     Piece lastPiece;
 
     private void Awake()
     {
-        Instance = this;
-    }
-    private void Start()
-    {
-
+        instance = this;
     }
     public void StartMatch()
     {
@@ -30,8 +33,9 @@ public class MatchManager : MonoBehaviour
     {
         if(lastPiece) lastPiece.OnPieceStop -= NextPiece;
 
-        Piece piece = Instantiate(piecePrefab,spawPiecePosition,Quaternion.identity).GetComponent<Piece>();
-        piece.Init(pieceDatas[Random.Range(0, pieceDatas.Length)]);
+        Piece piece = Instantiate(piecePrefabs[Random.Range(0, piecePrefabs.Length)], spawPiecePosition,Quaternion.identity).GetComponent<Piece>();
+
+        NetworkServer.Spawn(piece.gameObject);
 
         piece.OnPieceStop += NextPiece;
 
