@@ -18,10 +18,9 @@ public class NetworkManagerLobby : NetworkManager
     {
         base.OnServerAddPlayer(conn);
         playerId = numPlayers;
-        Debug.Log(playerId);
 
         if (numPlayers > 1)
             MatchManager.Instance.StartMatch();
     }
-    
+    public void SetNetWorkAdress(string adress) => networkAddress = adress;    
 }
