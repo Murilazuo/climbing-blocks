@@ -19,8 +19,8 @@ public class NetworkManagerLobby : NetworkManager
         base.OnServerAddPlayer(conn);
         playerId = numPlayers;
 
-        if (numPlayers > 1)
-            MatchManager.Instance.StartMatch();
+        if (numPlayers == 1)
+            LeanTween.delayedCall(.2f, () => MatchManager.Instance.StartMatch());
     }
     public void SetNetWorkAdress(string adress) => networkAddress = adress;    
 }

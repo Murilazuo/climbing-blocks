@@ -16,11 +16,14 @@ public class NetworkPlayer : NetworkBehaviour
     [SerializeField] float clampPosition; 
     public static NetworkPlayer pieceControllerPlayer;
     [SerializeField] float pieceControllerPositionY;
+    [SerializeField] float pieceControllerMult;
+    [SerializeField] float timeToMove;
     
     [Header("Components")]
     [SerializeField] Collider2D col;
     public Rigidbody2D rig;
     int playerId;
+
     public override void OnStartLocalPlayer()
     {
         playerId = NetworkManagerLobby.Instance.playerId;
@@ -30,11 +33,20 @@ public class NetworkPlayer : NetworkBehaviour
             transform.position = new(0, pieceControllerPositionY);
             rig.constraints = RigidbodyConstraints2D.FreezePositionY;
             col.enabled = false;
+            InvokeRepeating(nameof(PieceGravity), 0, timeToMove);
         }
         else
         {
             rig.constraints = RigidbodyConstraints2D.None;
             transform.position = spawnPLatformPosition;
+        }
+  
+    }
+    void PieceGravity()
+    {
+        if (Piece.currentPiece)
+        {
+            Piece.currentPiece.MoveDown();
         }
     }
     private void Update()
@@ -53,7 +65,30 @@ public class NetworkPlayer : NetworkBehaviour
                 {
                     Piece.currentPiece.transform.localEulerAngles = new(0, 0, Piece.currentPiece.transform.localEulerAngles.z - 90);
                 }
+
+                if (Input.GetButtonDown("Horizontal"))
+                {
+                    Piece.currentPiece.MoveX((int)Input.GetAxisRaw("Horizontal"));
+                }
+
+
+                if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+                {
+                        Piece.currentPiece.MoveDown();
+                }
             }
+
+            /*
+            if (Input.GetButtonDown("Horizontal"))
+            {
+                Vector2 pos = rig.position;
+                pos.x += Input.GetAxisRaw("Horizontal");
+                if (pos.x < clampPosition && pos.x > -clampPosition)
+                {
+                    rig.MovePosition(pos);
+                }
+            }
+             */
         }
         else
         {
@@ -67,18 +102,12 @@ public class NetworkPlayer : NetworkBehaviour
     private void FixedUpdate()
     {
         if (!isLocalPlayer) return;
-        Vector3 velocity = rig.velocity;
-        velocity.x = speed * Time.deltaTime * Input.GetAxis("Horizontal");
-        rig.velocity = velocity;
-    }
-    private void LateUpdate()
-    {
-        if (!isLocalPlayer) return;
-
-        rig.position = new(Mathf.Clamp(transform.position.x,-clampPosition,clampPosition),rig.position.y);
-    }
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawCube(new(0, pieceControllerPositionY),new(clampPosition*2,.3f));
+        
+        if(playerId != 1)
+        {
+            Vector3 velocity = rig.velocity;
+            velocity.x = speed * Time.deltaTime * Input.GetAxis("Horizontal");
+            rig.velocity = velocity;
+        }
     }
 }

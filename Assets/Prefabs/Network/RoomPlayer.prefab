@@ -75,9 +75,11 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 8
-  spawnPLatformPosition: {x: 0, y: 0}
-  clampPosition: 4.4
+  spawnPLatformPosition: {x: 10, y: 2}
+  clampPosition: 5
   pieceControllerPositionY: 7.48
+  pieceControllerMult: 0.015
+  timeToMove: 0.7
   col: {fileID: 8965854728069587536}
   rig: {fileID: 9113436076101872187}
 --- !u!50 &9113436076101872187

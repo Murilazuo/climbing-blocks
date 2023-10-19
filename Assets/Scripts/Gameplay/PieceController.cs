@@ -10,11 +10,6 @@ public class PieceController : MonoBehaviour
     {
         if (currentPiece)
         {
-            Rigidbody2D rig = currentPiece.rig;
-
-            Vector3 velocity = rig.velocity;
-            velocity.x = speed * Time.deltaTime * Input.GetAxis("Horizontal2");
-            rig.velocity = velocity;
         }
     }
     
