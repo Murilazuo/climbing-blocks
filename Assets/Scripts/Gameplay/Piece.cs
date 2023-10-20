@@ -62,7 +62,7 @@ public class Piece : NetworkBehaviour
             print("Has Piece");
             foreach (var piece in PartPosition)
             {
-                print($"x {piece.x},y {piece.y} ");
+                print($"x {piece.x},y {piece.y} , {MatchManager.Get2Dto1DIndex(piece)} ");
             }
             pos.x -= moveX;
             transform.position = pos;
@@ -77,7 +77,10 @@ public class Piece : NetworkBehaviour
         if (MatchManager.Instance.HasPiece(PartPosition))
         {
             print("Has Piece");
-           
+            foreach (var piece in PartPosition)
+            {
+                print($"x {piece.x},y {piece.y} , {MatchManager.Get2Dto1DIndex(piece)} ");
+            }
             pos.y += 1;
             transform.position = pos;
             currentPiece = null;

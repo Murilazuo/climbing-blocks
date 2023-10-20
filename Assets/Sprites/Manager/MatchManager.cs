@@ -1,6 +1,7 @@
 using Mirror;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MatchManager : NetworkBehaviour
@@ -25,61 +26,39 @@ public class MatchManager : NetworkBehaviour
 
     [SerializeField] Vector2Int arenaSize;
 
-    bool[,] pieceMatrix;
-    private void Start()
-    {
-        pieceMatrix = new bool[arenaSize.x, arenaSize.y];
-
-        for (int x = 0; x < arenaSize.x; x++)
-            for (int y = 0; y < arenaSize.y; y++)
-                if (y == 0 || x == 0 || x == (arenaSize.x - 1))
-                    pieceMatrix[x, y] = true;
-
-        PrintGrid();
-    }
-    [ContextMenu("SpawnGrid")]
-    void SpawnGrid()
-    {
-        for (int x = 0; x < arenaSize.x; x++)
-        {
-            for (int y = 0; y < arenaSize.y; y++)
-            {
-                if (y == 0 || x == 0 || x == (arenaSize.x - 1))
-                {
-                    //pieceMatrix[x, y] = true;
-                    Instantiate(arenaPartObj, new Vector3(x, y, 0), Quaternion.identity).transform.SetParent(transform);
-                }
-            }
-        }
-    }
-
-    [ContextMenu("Print Grid")]
-    void PrintGrid()
-    {
-        for (int x = 0; x < arenaSize.x; x++)
-            for (int y = 0; y < arenaSize.y; y++)
-                print($"x: {x} y: {y} = {pieceMatrix[x, y]}");
-    }
-    public void SetPiece(Vector2Int[] toSet)
-    {
-        foreach (var set in toSet)
-        {
-            pieceMatrix[set.x,set.y] = true;
-        }
-    }
-    public bool HasPiece(Vector2Int[] toCheck)
-    {
-        foreach (var set in toCheck)
-        {
-            if (pieceMatrix[set.x, set.y]) return true;
-        }
-        return false;
-    }
-
+    [SerializeField]
+    readonly SyncList<bool> pieceMatrix = new SyncList<bool>();
+    public static int Get2Dto1DIndex(Vector2Int index) => index.x + (index.y * Instance.arenaSize.x);
+    bool GetTileState(Vector2Int index) => pieceMatrix[Get2Dto1DIndex(index)];
+    void SetTileState(Vector2Int index, bool value) => pieceMatrix[Get2Dto1DIndex(index)] = value;
     private void Awake()
     {
         instance = this;
     }
+    private void Start()
+    {
+        for (int x = 0; x < arenaSize.x; x++)
+            for (int y = 0; y < arenaSize.y; y++)
+                pieceMatrix.Add(y == 0 || x == 0 || x == (arenaSize.x - 1));
+    }
+
+    public void SetPiece(Vector2Int[] toSet)
+    {
+        foreach (var set in toSet)
+        {
+            SetTileState(set, true);
+        }
+    }
+    public bool HasPiece(Vector2Int[] toCheck)
+    {
+        foreach (var pos in toCheck)
+        {
+            if (GetTileState(pos)) return true;
+        }
+        return false;
+    }
+
+    [Server]    
     public void StartMatch()
     {
         NextPiece();
@@ -99,6 +78,13 @@ public class MatchManager : NetworkBehaviour
 
         lastPiece = piece;
     }
+#if UNITY_EDITOR
+    [SerializeField] bool[] gridDebug;
+    private void FixedUpdate()
+    {
+        gridDebug = pieceMatrix.ToArray();
+    }
+#endif
     private void OnDrawGizmosSelected()
     {
         Gizmos.DrawSphere(spawPiecePosition, .5f);

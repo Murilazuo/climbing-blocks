@@ -92,6 +92,26 @@ public class NetworkPlayer : NetworkBehaviour
         }
         else
         {
+            if (Input.GetButtonDown("Horizontal"))
+            {
+                Vector2 pos = transform.position;
+                int dir = (int)Input.GetAxisRaw("Horizontal");
+                pos.x += dir;
+                transform.position = pos;
+                Vector2Int[] posInt = new Vector2Int[1];
+                posInt[0].x = (int)pos.x;
+                posInt[0].y = (int)pos.y;
+
+                if (MatchManager.Instance.HasPiece(posInt))
+                {
+                    print("Has Piece");
+                    
+                    pos.x -= dir;
+                    transform.position = pos;
+                }
+
+            }
+
             if (Input.GetButtonDown("Jump"))
             {
                 if (Physics2D.Raycast(rig.position, Vector2.down, groundCheckDistance, layerMask))
@@ -105,9 +125,11 @@ public class NetworkPlayer : NetworkBehaviour
         
         if(playerId != 1)
         {
+            /*
             Vector3 velocity = rig.velocity;
             velocity.x = speed * Time.deltaTime * Input.GetAxis("Horizontal");
             rig.velocity = velocity;
+            */
         }
     }
 }

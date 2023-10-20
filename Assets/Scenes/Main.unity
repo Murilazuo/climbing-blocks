@@ -218,7 +218,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &134764844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -828,6 +828,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 535507834}
   m_CullTransparentMesh: 1
+--- !u!1 &550530282 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5549972229688061796, guid: 4def5ae2bf004234f876bf012479a173, type: 3}
+  m_PrefabInstance: {fileID: 1524086764}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &648293322
 GameObject:
   m_ObjectHideFlags: 0
@@ -1918,7 +1923,7 @@ GameObject:
   - component: {fileID: 1102556779}
   - component: {fileID: 1102556781}
   m_Layer: 0
-  m_Name: MechManager
+  m_Name: MachManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1948,6 +1953,7 @@ MonoBehaviour:
   playerPlatformSpawnPosition: {x: 0, y: 0}
   arenaPartObj: {fileID: 7262513710035777682, guid: 5d7a69df5fa5fe343ae3f50cd5101ec1, type: 3}
   arenaSize: {x: 21, y: 23}
+  gridDebug: 
 --- !u!4 &1102556780
 Transform:
   m_ObjectHideFlags: 0
@@ -2210,7 +2216,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1288539390
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2271,7 +2277,7 @@ GameObject:
   - component: {fileID: 1321303205}
   - component: {fileID: 1321303204}
   - component: {fileID: 1321303206}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3384,8 +3390,12 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 5549972229688061793, guid: 4def5ae2bf004234f876bf012479a173, type: 3}
+      propertyPath: offsetY
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 5549972229688061793, guid: 4def5ae2bf004234f876bf012479a173, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5549972229688061795, guid: 4def5ae2bf004234f876bf012479a173, type: 3}
       propertyPath: m_RootOrder
@@ -3823,7 +3833,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1690628883
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4082,7 +4092,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1777708771
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4299,9 +4309,66 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5549972229688061806, guid: 4def5ae2bf004234f876bf012479a173, type: 3}
   m_PrefabInstance: {fileID: 1524086764}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 550530282}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5d2d9161a5fbfb9438e3a5e8a3782ad2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2017300655 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5549972229688061792, guid: 4def5ae2bf004234f876bf012479a173, type: 3}
+  m_PrefabInstance: {fileID: 1524086764}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 550530282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2017300657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 550530282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88c37d3deca7a834d80cfd8d3cfcc510, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  networkDiscovery: {fileID: 2017300658}
+--- !u!114 &2017300658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 550530282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c761308e733c51245b2e8bb4201f46dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableActiveDiscovery: 1
+  BroadcastAddress: 
+  serverBroadcastListenPort: 47777
+  ActiveDiscoveryInterval: 3
+  transport: {fileID: 2017300655}
+  OnServerFound:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2017300657}
+        m_TargetAssemblyTypeName: Mirror.Discovery.NetworkDiscoveryHUD, Mirror.Components
+        m_MethodName: OnDiscoveredServer
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  secretHandshake: 6058633132647696296

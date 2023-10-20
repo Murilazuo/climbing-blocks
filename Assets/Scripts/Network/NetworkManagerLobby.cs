@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using UnityEngine.SceneManagement;
 
 public class NetworkManagerLobby : NetworkManager
 {
@@ -21,6 +22,11 @@ public class NetworkManagerLobby : NetworkManager
 
         if (numPlayers == 1)
             LeanTween.delayedCall(.2f, () => MatchManager.Instance.StartMatch());
+    }
+    public override void OnClientDisconnect()
+    {
+        base.OnClientDisconnect();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     public void SetNetWorkAdress(string adress) => networkAddress = adress;    
 }
