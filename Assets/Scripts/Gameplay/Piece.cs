@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Piece : NetworkBehaviour
 {
+    public const string STOPED_PIECE_TAG = "StopedPiece";
+    public const string MOVE_PIECE_TAG = "MovePiece";
     [SerializeField] GameObject piecePart;
     Vector2Int[] PartPosition
     {
@@ -15,13 +17,13 @@ public class Piece : NetworkBehaviour
             foreach (Transform t in transform)
             {
                 result[i].x = (int)t.position.x;
-                result[i].y = (int)t.position.y ;
+                result[i].y = (int)t.position.y;
                 i++;
             }
             return result;
         }
     }
-    bool pieceIsStoped ;
+    bool pieceIsStoped;
     public System.Action OnPieceStop;
     public static Piece currentPiece;
     private void Awake()
@@ -29,13 +31,14 @@ public class Piece : NetworkBehaviour
         currentPiece = this;
         pieceIsStoped = true;
         LeanTween.delayedCall(1, () => pieceIsStoped = false);
+        tag = MOVE_PIECE_TAG;
 
     }
+        /*
     private void Update()
     {
         if (pieceIsStoped) return;
 
-        /*
         rig.transform.position = new Vector2((int)NetworkPlayer.pieceControllerPlayer.rig.transform.position.x, rig.transform.position.y);
 
         Vector2 pos = rig.position;
@@ -49,8 +52,8 @@ public class Piece : NetworkBehaviour
             pieceIsStoped = true;
             rig.constraints = RigidbodyConstraints2D.FreezeAll;
         }
-        */
     }
+        */
     
     public void MoveX(int moveX)
     {
@@ -60,10 +63,6 @@ public class Piece : NetworkBehaviour
         if (MatchManager.Instance.HasPiece(PartPosition))
         {
             print("Has Piece");
-            foreach (var piece in PartPosition)
-            {
-                print($"x {piece.x},y {piece.y} , {MatchManager.Get2Dto1DIndex(piece)} ");
-            }
             pos.x -= moveX;
             transform.position = pos;
         }
@@ -77,14 +76,11 @@ public class Piece : NetworkBehaviour
         if (MatchManager.Instance.HasPiece(PartPosition))
         {
             print("Has Piece");
-            foreach (var piece in PartPosition)
-            {
-                print($"x {piece.x},y {piece.y} , {MatchManager.Get2Dto1DIndex(piece)} ");
-            }
             pos.y += 1;
             transform.position = pos;
             currentPiece = null;
             OnPieceStop?.Invoke();
+            tag = STOPED_PIECE_TAG;
             MatchManager.Instance.SetPiece(PartPosition);
         }
     }

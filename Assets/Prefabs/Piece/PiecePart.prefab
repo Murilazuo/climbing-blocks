@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2025602940197647260}
   m_Layer: 3
   m_Name: PiecePart
-  m_TagString: Untagged
+  m_TagString: MovePiece
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

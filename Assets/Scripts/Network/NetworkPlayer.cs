@@ -24,10 +24,11 @@ public class NetworkPlayer : NetworkBehaviour
     public Rigidbody2D rig;
     int playerId;
 
+    const int PIECE_CONTROLLER_ID = 1;
     public override void OnStartLocalPlayer()
     {
         playerId = NetworkManagerLobby.Instance.playerId;
-        if(playerId  == 1)
+        if(playerId  == PIECE_CONTROLLER_ID)
         {
             pieceControllerPlayer = this;
             transform.position = new(0, pieceControllerPositionY);
@@ -53,10 +54,11 @@ public class NetworkPlayer : NetworkBehaviour
     {
         if (!isLocalPlayer) return;
 
-        if (playerId == 1)
+        if (playerId == PIECE_CONTROLLER_ID)
         {
             if (Piece.currentPiece)
             {
+                /*
                 if (Input.GetKeyDown(KeyCode.Q))
                 {
                     Piece.currentPiece.transform.localEulerAngles = new(0, 0, Piece.currentPiece.transform.localEulerAngles.z + 90);
@@ -65,17 +67,14 @@ public class NetworkPlayer : NetworkBehaviour
                 {
                     Piece.currentPiece.transform.localEulerAngles = new(0, 0, Piece.currentPiece.transform.localEulerAngles.z - 90);
                 }
+                 */
 
                 if (Input.GetButtonDown("Horizontal"))
-                {
                     Piece.currentPiece.MoveX((int)Input.GetAxisRaw("Horizontal"));
-                }
 
 
-                if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
-                {
-                        Piece.currentPiece.MoveDown();
-                }
+                if (Input.GetButtonDown("MoveDown"))
+                    Piece.currentPiece.MoveDown();
             }
 
             /*
@@ -92,6 +91,7 @@ public class NetworkPlayer : NetworkBehaviour
         }
         else
         {
+            /*
             if (Input.GetButtonDown("Horizontal"))
             {
                 Vector2 pos = transform.position;
@@ -111,11 +111,17 @@ public class NetworkPlayer : NetworkBehaviour
                 }
 
             }
+             */
 
             if (Input.GetButtonDown("Jump"))
             {
                 if (Physics2D.Raycast(rig.position, Vector2.down, groundCheckDistance, layerMask))
+                {
+                    Vector2 velocity = rig.velocity;
+                    velocity.y = 0;
+                    rig.velocity = velocity;
                     rig.AddForce(jumpForce * Vector2.up);
+                }
             }
         }
     }
@@ -123,13 +129,31 @@ public class NetworkPlayer : NetworkBehaviour
     {
         if (!isLocalPlayer) return;
         
-        if(playerId != 1)
+        if(playerId != PIECE_CONTROLLER_ID)
         {
-            /*
             Vector3 velocity = rig.velocity;
-            velocity.x = speed * Time.deltaTime * Input.GetAxis("Horizontal");
+            velocity.x = speed * Input.GetAxis("Horizontal");
             rig.velocity = velocity;
-            */
         }
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+            switch (collision.tag)
+            {
+                case "End":
+                    MatchManager.Instance.PlayerPlatformWin();
+                    break;
+                case Piece.MOVE_PIECE_TAG:
+                    MatchManager.Instance.PlayerPiecesWin();
+                    break;
+            }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawRay(transform.position, Vector2.down * groundCheckDistance);
     }
 }

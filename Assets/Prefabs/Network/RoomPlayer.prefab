@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6059230813312788297}
   - component: {fileID: 8965854728069587536}
   - component: {fileID: 3613878726906322518}
+  - component: {fileID: 328292859274225962}
   m_Layer: 0
   m_Name: RoomPlayer
   m_TagString: Untagged
@@ -69,7 +70,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  speed: 300
+  speed: 10
   jumpForce: 900
   groundCheckDistance: 0.73
   layerMask:
@@ -170,7 +171,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.52
 --- !u!114 &3613878726906322518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205,3 +206,19 @@ MonoBehaviour:
   positionSensitivity: 0.01
   rotationSensitivity: 0.01
   scaleSensitivity: 0.01
+--- !u!58 &328292859274225962
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3016407646373095971}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5

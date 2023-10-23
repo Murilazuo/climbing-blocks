@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MatchManager : NetworkBehaviour
 {
@@ -15,6 +16,10 @@ public class MatchManager : NetworkBehaviour
             return instance;
         }
     }
+
+    public static System.Action OnPlayerPieceWin;
+    public static System.Action OnPlayerPlatformWin;
+
     public static System.Action<Piece> OnSpawnPiece;
     [SerializeField] GameObject[] piecePrefabs;
     [SerializeField] Vector2 spawPiecePosition;
@@ -26,20 +31,25 @@ public class MatchManager : NetworkBehaviour
 
     [SerializeField] Vector2Int arenaSize;
 
-    [SerializeField]
-    readonly SyncList<bool> pieceMatrix = new SyncList<bool>();
-    public static int Get2Dto1DIndex(Vector2Int index) => index.x + (index.y * Instance.arenaSize.x);
-    bool GetTileState(Vector2Int index) => pieceMatrix[Get2Dto1DIndex(index)];
-    void SetTileState(Vector2Int index, bool value) => pieceMatrix[Get2Dto1DIndex(index)] = value;
+    [SerializeField] bool [,] pieceMatrix;
+
+
+    bool GetTileState(Vector2Int index) => pieceMatrix[index.x,index.y];
+    void SetTileState(Vector2Int index, bool value) => pieceMatrix[index.x, index.y] = value;
     private void Awake()
     {
         instance = this;
     }
     private void Start()
     {
+        Time.timeScale = 1;
+
+        pieceMatrix = new bool[arenaSize.x , arenaSize.y];
+
         for (int x = 0; x < arenaSize.x; x++)
             for (int y = 0; y < arenaSize.y; y++)
-                pieceMatrix.Add(y == 0 || x == 0 || x == (arenaSize.x - 1));
+                if(y == 0 || x == 0 || x == (arenaSize.x - 1))
+                    pieceMatrix[x, y] = true;
     }
 
     public void SetPiece(Vector2Int[] toSet)
@@ -78,28 +88,28 @@ public class MatchManager : NetworkBehaviour
 
         lastPiece = piece;
     }
-#if UNITY_EDITOR
-    [SerializeField] bool[] gridDebug;
-    private void FixedUpdate()
-    {
-        gridDebug = pieceMatrix.ToArray();
-    }
-#endif
     private void OnDrawGizmosSelected()
     {
         Gizmos.DrawSphere(spawPiecePosition, .5f);
 
-
         for (int x = 0; x < arenaSize.x; x++)
-        {
             for (int y = 0; y < arenaSize.y; y++)
-            {
                 if (y == 0 || x == 0 || x == (arenaSize.x-1))
-                {
                     Gizmos.DrawWireCube(new(x, y), new(1, 1));
-                }
-            }
-            
-        }
+    }
+
+    public void PlayerPiecesWin()
+    {
+        OnPlayerPieceWin?.Invoke();
+        Time.timeScale = 0;
+    }
+    public void PlayerPlatformWin()
+    {
+        Time.timeScale = 0;
+        OnPlayerPlatformWin?.Invoke();
+    }
+    public void GoToMenu()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
