@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using UnityEngine.SceneManagement;
-using System.Net;
-using System.Linq;
 using Mirror.Discovery;
 
 public class NetworkManagerLobby : NetworkManager
@@ -20,12 +18,12 @@ public class NetworkManagerLobby : NetworkManager
             DestroyImmediate(gameObject);
             return;
         }
-
+/*
         networkDiscovery.BroadcastAddress = Dns.GetHostEntry(Dns.GetHostName())
         .AddressList
         .First(f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
         .ToString();
-
+*/
         base.Awake();
         Instance = this;
     }
@@ -34,7 +32,7 @@ public class NetworkManagerLobby : NetworkManager
         base.OnServerAddPlayer(conn);
         playerId = numPlayers;
 
-        if (numPlayers == 2)
+        if (numPlayers == 1)
             LeanTween.delayedCall(.2f, () => MatchManager.Instance.StartMatch());
     }
     public override void OnClientDisconnect()

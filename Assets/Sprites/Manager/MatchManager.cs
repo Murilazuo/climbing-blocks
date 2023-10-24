@@ -33,6 +33,8 @@ public class MatchManager : NetworkBehaviour
 
     [SerializeField] bool [,] pieceMatrix;
 
+    [SyncVar(hook = nameof(OnEndGame))] bool returnToLobby;
+
     bool GetTileState(Vector2Int index) => pieceMatrix[index.x,index.y];
     void SetTileState(Vector2Int index, bool value) => pieceMatrix[index.x, index.y] = value;
     private void Awake()
@@ -108,14 +110,23 @@ public class MatchManager : NetworkBehaviour
     }
     public void GoToMenu()
     {
+        returnToLobby = true;
+
         NetworkManagerLobby.Instance.StopClient();
 
-        if (isServer)
-        {
-            NetworkServer.ClearHandlers();
-            NetworkServer.Shutdown();
-        }
-        
+        NetworkServer.ClearHandlers();
+        NetworkServer.Shutdown();
         EndGamePanel.instance.DisablePanel();
+    }
+    void OnEndGame(bool oldValue, bool newValue)
+    {
+        Debug.Log("OnEndGame");    
+        returnToLobby = false;
+        NetworkManagerLobby.Instance.StopClient();
+
+        NetworkServer.ClearHandlers();
+        NetworkServer.Shutdown();
+        EndGamePanel.instance.DisablePanel();
+        
     }
 }

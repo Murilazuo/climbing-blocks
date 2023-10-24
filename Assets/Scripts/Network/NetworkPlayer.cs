@@ -22,10 +22,20 @@ public class NetworkPlayer : NetworkBehaviour
     [Header("Components")]
     [SerializeField] Collider2D col;
     [SerializeField] Collider2D trigger;
+    [SerializeField] SpriteRenderer render;
     public Rigidbody2D rig;
     int playerId;
 
     const int PIECE_CONTROLLER_ID = 1;
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        print("Start Client");
+        if(playerId == PIECE_CONTROLLER_ID)
+        {
+            render.enabled = false;
+        }
+    }
     public override void OnStartLocalPlayer()
     {
         playerId = NetworkManagerLobby.Instance.playerId;
