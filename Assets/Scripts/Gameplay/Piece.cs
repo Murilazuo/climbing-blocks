@@ -80,9 +80,14 @@ public class Piece : NetworkBehaviour
             transform.position = pos;
             currentPiece = null;
             OnPieceStop?.Invoke();
-            tag = STOPED_PIECE_TAG;
+            PieceStop();
             MatchManager.Instance.SetPiece(PartPosition);
         }
     }
-
+    [ClientRpc]
+    void PieceStop()
+    {
+        foreach (Transform t in transform)
+            t.gameObject.tag = STOPED_PIECE_TAG;
+    }
 }

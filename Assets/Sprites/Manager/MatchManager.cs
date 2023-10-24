@@ -33,7 +33,6 @@ public class MatchManager : NetworkBehaviour
 
     [SerializeField] bool [,] pieceMatrix;
 
-
     bool GetTileState(Vector2Int index) => pieceMatrix[index.x,index.y];
     void SetTileState(Vector2Int index, bool value) => pieceMatrix[index.x, index.y] = value;
     private void Awake()
@@ -97,7 +96,6 @@ public class MatchManager : NetworkBehaviour
                 if (y == 0 || x == 0 || x == (arenaSize.x-1))
                     Gizmos.DrawWireCube(new(x, y), new(1, 1));
     }
-
     public void PlayerPiecesWin()
     {
         OnPlayerPieceWin?.Invoke();
@@ -110,6 +108,14 @@ public class MatchManager : NetworkBehaviour
     }
     public void GoToMenu()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        NetworkManagerLobby.Instance.StopClient();
+
+        if (isServer)
+        {
+            NetworkServer.ClearHandlers();
+            NetworkServer.Shutdown();
+        }
+        
+        EndGamePanel.instance.DisablePanel();
     }
 }

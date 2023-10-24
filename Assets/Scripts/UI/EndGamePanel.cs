@@ -1,3 +1,4 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,6 +8,12 @@ public class EndGamePanel : MonoBehaviour
 {
     [SerializeField] TMP_Text titleText;
     [SerializeField] CanvasGroup canvasGroup;
+
+    public static EndGamePanel instance;
+    private void Awake()
+    {
+        instance = this; 
+    }
     private void OnEnable()
     {
         MatchManager.OnPlayerPieceWin += OnPieceWin;
@@ -32,5 +39,11 @@ public class EndGamePanel : MonoBehaviour
         canvasGroup.alpha = 1;
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
+    }
+    public void DisablePanel()
+    {
+        canvasGroup.alpha = 0;
+        canvasGroup.interactable = false;
+        canvasGroup.blocksRaycasts = false;
     }
 }
