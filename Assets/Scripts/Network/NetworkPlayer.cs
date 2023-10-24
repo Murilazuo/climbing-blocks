@@ -21,6 +21,7 @@ public class NetworkPlayer : NetworkBehaviour
     
     [Header("Components")]
     [SerializeField] Collider2D col;
+    [SerializeField] Collider2D trigger;
     public Rigidbody2D rig;
     int playerId;
 
@@ -34,6 +35,7 @@ public class NetworkPlayer : NetworkBehaviour
             transform.position = new(0, pieceControllerPositionY);
             rig.constraints = RigidbodyConstraints2D.FreezePositionY;
             col.enabled = false;
+            trigger.enabled = false;
             InvokeRepeating(nameof(PieceGravity), 0, timeToMove);
         }
         else

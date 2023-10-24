@@ -82,6 +82,7 @@ MonoBehaviour:
   pieceControllerMult: 0.015
   timeToMove: 0.7
   col: {fileID: 8965854728069587536}
+  trigger: {fileID: 328292859274225962}
   rig: {fileID: 9113436076101872187}
 --- !u!50 &9113436076101872187
 Rigidbody2D:
