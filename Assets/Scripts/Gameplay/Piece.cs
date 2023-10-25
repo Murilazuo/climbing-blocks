@@ -92,9 +92,7 @@ public class Piece : NetworkBehaviour
             t.gameObject.tag = STOPED_PIECE_TAG;
 
             if (GameObject.Find("End").transform.position.y <= t.transform.position.y)
-            {
                 MatchManager.Instance.PlayerPlatformWin();
-            }
         }
     }
 }
