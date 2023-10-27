@@ -1,9 +1,8 @@
-using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Piece : NetworkBehaviour
+public class Piece : MonoBehaviour
 {
     public const string STOPED_PIECE_TAG = "StopedPiece";
     public const string MOVE_PIECE_TAG = "MovePiece";
@@ -60,7 +59,7 @@ public class Piece : NetworkBehaviour
         Vector3 pos = transform.position;
         pos.x += moveX;
         transform.position = pos;
-        if (MatchManager.Instance.HasPiece(PartPosition))
+        if (PieceController.Instance.HasPiece(PartPosition))
         {
             print("Has Piece");
             pos.x -= moveX;
@@ -73,7 +72,7 @@ public class Piece : NetworkBehaviour
         Vector3 pos = transform.position;
         pos.y -= 1;
         transform.position = pos;
-        if (MatchManager.Instance.HasPiece(PartPosition))
+        if (PieceController.Instance.HasPiece(PartPosition))
         {
             print("Has Piece");
             pos.y += 1;
@@ -81,10 +80,9 @@ public class Piece : NetworkBehaviour
             currentPiece = null;
             OnPieceStop?.Invoke();
             PieceStop();
-            MatchManager.Instance.SetPiece(PartPosition);
+            PieceController.Instance.SetPiece(PartPosition);
         }
     }
-    [ClientRpc]
     void PieceStop()
     {
         foreach (Transform t in transform)

@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Mirror;
 
-public class NetworkPlayer : NetworkBehaviour 
+public class NetworkPlayer : MonoBehaviour 
 {
     [Header("Platform")]
     [SerializeField] float speed;
@@ -27,34 +26,7 @@ public class NetworkPlayer : NetworkBehaviour
     int playerId;
 
     const int PIECE_CONTROLLER_ID = 1;
-    public override void OnStartClient()
-    {
-        base.OnStartClient();
-        print("Start Client");
-        if(playerId == PIECE_CONTROLLER_ID)
-        {
-            render.enabled = false;
-        }
-    }
-    public override void OnStartLocalPlayer()
-    {
-        playerId = NetworkManagerLobby.Instance.playerId;
-        if(playerId  == PIECE_CONTROLLER_ID)
-        {
-            pieceControllerPlayer = this;
-            transform.position = new(0, pieceControllerPositionY);
-            rig.constraints = RigidbodyConstraints2D.FreezePositionY;
-            col.enabled = false;
-            trigger.enabled = false;
-            InvokeRepeating(nameof(PieceGravity), 0, timeToMove);
-        }
-        else
-        {
-            rig.constraints = RigidbodyConstraints2D.None;
-            transform.position = spawnPLatformPosition;
-        }
-  
-    }
+   
     void PieceGravity()
     {
         if (Piece.currentPiece)
@@ -64,23 +36,10 @@ public class NetworkPlayer : NetworkBehaviour
     }
     private void Update()
     {
-        if (!isLocalPlayer) return;
-
         if (playerId == PIECE_CONTROLLER_ID)
         {
             if (Piece.currentPiece)
             {
-                /*
-                if (Input.GetKeyDown(KeyCode.Q))
-                {
-                    Piece.currentPiece.transform.localEulerAngles = new(0, 0, Piece.currentPiece.transform.localEulerAngles.z + 90);
-                }
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    Piece.currentPiece.transform.localEulerAngles = new(0, 0, Piece.currentPiece.transform.localEulerAngles.z - 90);
-                }
-                 */
-
                 if (Input.GetButtonDown("Horizontal"))
                     Piece.currentPiece.MoveX((int)Input.GetAxisRaw("Horizontal"));
 
@@ -88,43 +47,9 @@ public class NetworkPlayer : NetworkBehaviour
                 if (Input.GetButtonDown("MoveDown"))
                     Piece.currentPiece.MoveDown();
             }
-
-            /*
-            if (Input.GetButtonDown("Horizontal"))
-            {
-                Vector2 pos = rig.position;
-                pos.x += Input.GetAxisRaw("Horizontal");
-                if (pos.x < clampPosition && pos.x > -clampPosition)
-                {
-                    rig.MovePosition(pos);
-                }
-            }
-             */
         }
         else
         {
-            /*
-            if (Input.GetButtonDown("Horizontal"))
-            {
-                Vector2 pos = transform.position;
-                int dir = (int)Input.GetAxisRaw("Horizontal");
-                pos.x += dir;
-                transform.position = pos;
-                Vector2Int[] posInt = new Vector2Int[1];
-                posInt[0].x = (int)pos.x;
-                posInt[0].y = (int)pos.y;
-
-                if (MatchManager.Instance.HasPiece(posInt))
-                {
-                    print("Has Piece");
-                    
-                    pos.x -= dir;
-                    transform.position = pos;
-                }
-
-            }
-             */
-
             if (Input.GetButtonDown("Jump"))
             {
                 if (Physics2D.Raycast(rig.position, Vector2.down, groundCheckDistance, layerMask))
@@ -139,8 +64,6 @@ public class NetworkPlayer : NetworkBehaviour
     }
     private void FixedUpdate()
     {
-        if (!isLocalPlayer) return;
-        
         if(playerId != PIECE_CONTROLLER_ID)
         {
             Vector3 velocity = rig.velocity;
