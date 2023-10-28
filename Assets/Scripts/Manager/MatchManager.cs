@@ -1,8 +1,12 @@
+using ExitGames.Client.Photon;
+using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class MatchManager : MonoBehaviour
+public class MatchManager : MonoBehaviourPunCallbacks
 {
     static MatchManager instance;
     public static MatchManager Instance
@@ -14,34 +18,44 @@ public class MatchManager : MonoBehaviour
         }
     }
 
-    public static System.Action OnPlayerPieceWin;
-    public static System.Action OnPlayerPlatformWin;
+    public static System.Action OnStarGame;
 
-    public static System.Action<Piece> OnSpawnPiece;
-    
+    public const int START_MATCH_EVENT = 1;
+    public const int PIECE_WIN_GAME_EVENT = 2;
+    public const int PLATFORM_WIN_GAME_EVENT = 3;
+    bool isStartMatch;
     private void Awake()
     {
         instance = this;
     }
-    private void Start()
-    {
-        Time.timeScale = 1;
-    }
-
-    
-
     public void PlayerPiecesWin()
     {
-        OnPlayerPieceWin?.Invoke();
-        Time.timeScale = 0;
+        PhotonNetwork.RaiseEvent(PIECE_WIN_GAME_EVENT, new object[] { }, RaiseEventOptions.Default, SendOptions.SendUnreliable);
     }
     public void PlayerPlatformWin()
     {
-        Time.timeScale = 0;
-        OnPlayerPlatformWin?.Invoke();
+        PhotonNetwork.RaiseEvent(PLATFORM_WIN_GAME_EVENT, new object[] { }, RaiseEventOptions.Default, SendOptions.SendUnreliable);
+    }
+    private void Start()
+    {
+        StartMatch();
+    }
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+            Debug.Log(PhotonNetwork.CurrentRoom.PlayerCount);
+        if (PhotonNetwork.CurrentRoom.PlayerCount > 1)
+        {
+            StartMatch();
+        }
+    }
+    void StartMatch()
+    {
+            OnStarGame?.Invoke();
+            PhotonNetwork.RaiseEvent(START_MATCH_EVENT, new object[] { }, RaiseEventOptions.Default, SendOptions.SendUnreliable);
     }
     public void GoToMenu()
     {
-        EndGamePanel.instance.DisablePanel();
+        PhotonNetwork.LeaveRoom();
+        SceneManager.LoadScene(1);
     }
 }

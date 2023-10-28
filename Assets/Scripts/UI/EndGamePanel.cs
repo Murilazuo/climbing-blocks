@@ -1,3 +1,5 @@
+using ExitGames.Client.Photon;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -15,23 +17,22 @@ public class EndGamePanel : MonoBehaviour
     }
     private void OnEnable()
     {
-        MatchManager.OnPlayerPieceWin += OnPieceWin;
-        MatchManager.OnPlayerPlatformWin += OnPlatformWin;
+        PhotonNetwork.NetworkingClient.EventReceived += OnEndGame;
     }
     private void OnDisable()
     {
-        MatchManager.OnPlayerPieceWin -= OnPieceWin;
-        MatchManager.OnPlayerPlatformWin -= OnPlatformWin;
+        PhotonNetwork.NetworkingClient.EventReceived -= OnEndGame;
     }
-    void OnPieceWin()
+    bool endGame;
+    void OnEndGame(EventData eventData)
     {
-        ActivePanel();
-        titleText.text = "Pieces Win";
-    }
-    void OnPlatformWin()
-    {
-        ActivePanel();
-        titleText.text = "Platformers Win";
+        if (eventData.Code == MatchManager.PLATFORM_WIN_GAME_EVENT || eventData.Code == MatchManager.PIECE_WIN_GAME_EVENT && !endGame)
+        {
+            endGame = true;
+            ActivePanel();
+
+            titleText.text = eventData.Code == MatchManager.PLATFORM_WIN_GAME_EVENT ? "Platformers Win" : "Pieces Win";
+        }
     }
     void ActivePanel()
     {

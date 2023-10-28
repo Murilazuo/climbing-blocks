@@ -1,12 +1,18 @@
+using ExitGames.Client.Photon;
+using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Piece : MonoBehaviour
+public class Piece : MonoBehaviourPun
 {
     public const string STOPED_PIECE_TAG = "StopedPiece";
     public const string MOVE_PIECE_TAG = "MovePiece";
     [SerializeField] GameObject piecePart;
+
+    public const int PIECE_STOP_EVENT = 18;
+    [SerializeField] float endPositionY;
     Vector2Int[] PartPosition
     {
         get
@@ -25,34 +31,18 @@ public class Piece : MonoBehaviour
     bool pieceIsStoped;
     public System.Action OnPieceStop;
     public static Piece currentPiece;
+
+    static int pieceCount = 0;
+    int pieceId;
     private void Awake()
     {
         currentPiece = this;
         pieceIsStoped = true;
         LeanTween.delayedCall(1, () => pieceIsStoped = false);
         tag = MOVE_PIECE_TAG;
-
+        pieceCount++;
+        pieceId = pieceCount;
     }
-        /*
-    private void Update()
-    {
-        if (pieceIsStoped) return;
-
-        rig.transform.position = new Vector2((int)NetworkPlayer.pieceControllerPlayer.rig.transform.position.x, rig.transform.position.y);
-
-        Vector2 pos = rig.position;
-        pos.x = NetworkPlayer.pieceControllerPlayer.rig.position.x;
-        
-        transform.position = pos;
-
-        if (rig.velocity.y >= 0 && !pieceIsStoped)
-        {
-            OnPieceStop?.Invoke();
-            pieceIsStoped = true;
-            rig.constraints = RigidbodyConstraints2D.FreezeAll;
-        }
-    }
-        */
     
     public void MoveX(int moveX)
     {
@@ -79,18 +69,39 @@ public class Piece : MonoBehaviour
             transform.position = pos;
             currentPiece = null;
             OnPieceStop?.Invoke();
-            PieceStop();
             PieceController.Instance.SetPiece(PartPosition);
+            StopPiece();
+
+            object[] datas = new object[] { };
+            PhotonNetwork.RaiseEvent(PIECE_STOP_EVENT, datas,RaiseEventOptions.Default,SendOptions.SendUnreliable);
         }
     }
-    void PieceStop()
+    void StopPiece()
     {
+        if (pieceIsStoped) return;
+        pieceIsStoped = true;
         foreach (Transform t in transform)
         {
             t.gameObject.tag = STOPED_PIECE_TAG;
 
-            if (GameObject.Find("End").transform.position.y <= t.transform.position.y)
+            if (endPositionY <= t.transform.position.y)
                 MatchManager.Instance.PlayerPlatformWin();
         }
     }
+    private void OnEnable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived += NetworkCliente_RisedEvent;
+    }
+    private void OnDisable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived -= NetworkCliente_RisedEvent;
+    }
+    void NetworkCliente_RisedEvent(EventData eventData)
+    {
+        if(eventData.Code == PIECE_STOP_EVENT)
+        {
+            StopPiece();
+        }
+    }
+
 }

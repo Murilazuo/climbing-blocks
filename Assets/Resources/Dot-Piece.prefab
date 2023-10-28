@@ -51,6 +51,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piecePart: {fileID: 7262513710035777682, guid: 5d7a69df5fa5fe343ae3f50cd5101ec1, type: 3}
+  endPositionY: 16
 --- !u!114 &5297207850482899483
 MonoBehaviour:
   m_ObjectHideFlags: 0

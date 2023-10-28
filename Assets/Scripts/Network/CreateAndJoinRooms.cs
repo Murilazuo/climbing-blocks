@@ -19,5 +19,4 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.LoadLevel(2);
     }
-
 }

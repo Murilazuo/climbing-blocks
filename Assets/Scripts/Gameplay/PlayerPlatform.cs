@@ -36,6 +36,19 @@ public class PlayerPlatform : MonoBehaviour
         rig.velocity = velocity;
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.CompareTag(Piece.MOVE_PIECE_TAG))
+        {
+            MatchManager.Instance.PlayerPiecesWin();
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("End"))
+        {
+            MatchManager.Instance.PlayerPlatformWin();
+        }
+    }
 
-    
 }

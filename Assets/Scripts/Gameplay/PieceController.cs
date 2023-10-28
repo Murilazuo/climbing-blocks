@@ -1,12 +1,17 @@
 using Photon.Pun;
-using Photon.Realtime;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PieceController : MonoBehaviourPunCallbacks
+public class PieceController : MonoBehaviour
 {
-    [SerializeField] float timeToMoveDown;
+    float moveDelayTimer;
+    float moveSpeedDelayTimer;
+    float moveHoldTimer;
+
+    public float moveDelay;
+    public float moveHoldTimeToSpeedMove;
+    public float moveTimeToMoveSpeed;
+    public float timeToMoveDown;
+
     [SerializeField] GameObject[] piecePrefabs;
     [SerializeField] Vector2 spawPiecePosition;
     Piece lastPiece;
@@ -27,15 +32,8 @@ public class PieceController : MonoBehaviourPunCallbacks
             if (GetTileState(pos)) return true;
         return false;
     }
-
-    public override void OnPlayerEnteredRoom(Player newPlayer)
-    {
-        if(PhotonNetwork.CurrentRoom.PlayerCount >= 1)
-            StartMatch();
-    }
     private void Awake()
     {
-
         pieceMatrix = new bool[arenaSize.x, arenaSize.y];
 
         for (int x = 0; x < arenaSize.x; x++)
@@ -45,7 +43,10 @@ public class PieceController : MonoBehaviourPunCallbacks
 
         Instance = this;
     }
-   
+    private void OnDestroy()
+    {
+        Instance = null;
+    }
     void PieceGravity()
     {
         Piece.currentPiece.MoveDown();
@@ -54,12 +55,52 @@ public class PieceController : MonoBehaviourPunCallbacks
     {
         if (Piece.currentPiece)
         {
-            if (Input.GetButtonDown("Horizontal"))
-                Piece.currentPiece.MoveX((int)Input.GetAxisRaw("Horizontal"));
+            
+            moveDelayTimer += Time.deltaTime;
+            
+            if(Input.GetButton("Horizontal") || Input.GetButton("MoveDown"))
+            {
+                moveHoldTimer += Time.deltaTime;
+            }
 
+            if (Input.GetButtonUp("Horizontal") || Input.GetButtonUp("MoveDown"))
+            {
+                moveHoldTimer = 0;
+                moveSpeedDelayTimer = 0;
+            }
 
-            if (Input.GetButtonDown("MoveDown"))
-                Piece.currentPiece.MoveDown();
+            bool canMove = moveDelayTimer >= moveDelay;
+            bool isSpeedMoving = moveHoldTimer >= moveHoldTimeToSpeedMove;
+
+            if (isSpeedMoving)
+            {
+                moveSpeedDelayTimer += Time.deltaTime;
+
+                if(moveSpeedDelayTimer >= moveTimeToMoveSpeed)
+                {
+                    moveSpeedDelayTimer = 0;
+                    if (Input.GetButton("Horizontal"))
+                        Piece.currentPiece.MoveX((int)Input.GetAxisRaw("Horizontal"));
+
+                    if (Input.GetButton("MoveDown"))
+                        Piece.currentPiece.MoveDown();
+                }
+            }
+            else
+            {
+                if (Input.GetButtonDown("Horizontal") && canMove)
+                {
+                    moveDelayTimer = 0;
+                    Piece.currentPiece.MoveX((int)Input.GetAxisRaw("Horizontal"));
+
+                }
+
+                if (Input.GetButtonDown("MoveDown") && canMove)
+                {
+                    moveDelayTimer = 0;
+                    Piece.currentPiece.MoveDown();
+                } 
+            }
         }
     }
     public void StartMatch()
@@ -67,21 +108,21 @@ public class PieceController : MonoBehaviourPunCallbacks
         NextPiece();
         InvokeRepeating(nameof(PieceGravity), timeToMoveDown, timeToMoveDown);
     }
-
+    public void SetGravity(float gravity)
+    {
+        timeToMoveDown = gravity;
+        CancelInvoke(nameof(PieceGravity));
+        InvokeRepeating(nameof(PieceGravity), timeToMoveDown, timeToMoveDown);
+    }
     void NextPiece()
     {
         if (lastPiece) lastPiece.OnPieceStop -= NextPiece;
 
-
         Piece piece = PhotonNetwork.Instantiate(piecePrefabs[Random.Range(0, piecePrefabs.Length)].name, spawPiecePosition, Quaternion.identity).GetComponent<Piece>();
-
         piece.OnPieceStop += NextPiece;
 
         lastPiece = piece;
     }
-
-
-
 
     private void OnDrawGizmosSelected()
     {
@@ -91,5 +132,15 @@ public class PieceController : MonoBehaviourPunCallbacks
             for (int y = 0; y < arenaSize.y; y++)
                 if (y == 0 || x == 0 || x == (arenaSize.x - 1))
                     Gizmos.DrawWireCube(new(x, y), new(1, 1));
+    }
+
+    public void OnEnable()
+    {
+        MatchManager.OnStarGame += StartMatch;
+    }
+
+    public void OnDisable()
+    {
+        MatchManager.OnStarGame -= StartMatch;
     }
 }
