@@ -14,7 +14,7 @@ public class SpawnPlayers : MonoBehaviour
     }
     public void SpawnPlayer()
     {
-        if(PhotonNetwork.CurrentRoom.PlayerCount == 2)
+        if(PhotonNetwork.CurrentRoom.PlayerCount == 1)
             Instantiate(playerPiece,Vector3.zero,Quaternion.identity);
         else
             PhotonNetwork.Instantiate(playerPlatform.name, playerPosition, Quaternion.identity);

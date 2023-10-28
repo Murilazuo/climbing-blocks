@@ -38,7 +38,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     }
     private void Start()
     {
-        StartMatch();
+
     }
     bool matchStarted;
     public override void OnPlayerEnteredRoom(Player newPlayer)
