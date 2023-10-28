@@ -5,34 +5,74 @@ using UnityEngine;
 
 public class PlayerPlatform : MonoBehaviour
 {
-    [SerializeField] PhotonView view;
+    [SerializeField] Vector2 spawnPlatformPosition;
+    
+    [Header("Move")]
     [SerializeField] float speed;
+    
+    [Header("Jump")]
     [SerializeField] float jumpForce;
     [SerializeField] float groundCheckDistance;
     [SerializeField] LayerMask layerMask;
-    [SerializeField] Vector2 spawnPlatformPosition;
+    [SerializeField] float startJumpTime;
+    float jumpTime;
+    bool isJumping;
+
+    [Header("Component")]
+    [SerializeField] PhotonView view;
     [SerializeField] Rigidbody2D rig;
+
+    bool InGrounded
+    {
+        get =>
+        Physics2D.Raycast(rig.position, Vector2.down, groundCheckDistance, layerMask);
+    }
     void Update()
     {
         if (!view.IsMine) return;
-        
+
+
         if (Input.GetButtonDown("Jump"))
         {
-            if (Physics2D.Raycast(rig.position, Vector2.down, groundCheckDistance, layerMask))
+            if (InGrounded)
             {
-                Vector2 velocity = rig.velocity;
-                velocity.y = 0;
-                rig.velocity = velocity;
-                rig.AddForce(jumpForce * Vector2.up);
+                isJumping = true;
+                jumpTime = startJumpTime;
+                SetJumpVelocity();
             }
         }
+        
+        if (Input.GetButton("Jump") && isJumping)
+        {
+            if (jumpTime > 0)
+            {
+                SetJumpVelocity();
+                jumpTime -= Time.deltaTime;
+            }
+            else
+            {
+                isJumping = false;
+            }
+        }
+
+        if (Input.GetButtonUp("Jump"))
+        {
+            isJumping = false;
+        }
+         
+    }
+    void SetJumpVelocity()
+    {
+        Vector2 velocity = rig.velocity;
+        velocity.y = jumpForce;
+        rig.velocity = velocity;
     }
     private void FixedUpdate()
     {
         if (!view.IsMine) return;
 
         Vector3 velocity = rig.velocity;
-        velocity.x = speed * Input.GetAxis("Horizontal");
+        velocity.x = speed * Input.GetAxisRaw("Horizontal");
         rig.velocity = velocity;
     }
 

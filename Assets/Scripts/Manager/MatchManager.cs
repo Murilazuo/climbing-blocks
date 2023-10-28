@@ -40,6 +40,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     {
         StartMatch();
     }
+    bool matchStarted;
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
             Debug.Log(PhotonNetwork.CurrentRoom.PlayerCount);
@@ -50,8 +51,12 @@ public class MatchManager : MonoBehaviourPunCallbacks
     }
     void StartMatch()
     {
-            OnStarGame?.Invoke();
-            PhotonNetwork.RaiseEvent(START_MATCH_EVENT, new object[] { }, RaiseEventOptions.Default, SendOptions.SendUnreliable);
+        if (matchStarted) return;
+
+        matchStarted = true;
+
+        OnStarGame?.Invoke();
+        PhotonNetwork.RaiseEvent(START_MATCH_EVENT, new object[] { }, RaiseEventOptions.Default, SendOptions.SendUnreliable);
     }
     public void GoToMenu()
     {
