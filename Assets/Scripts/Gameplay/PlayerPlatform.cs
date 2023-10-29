@@ -18,9 +18,13 @@ public class PlayerPlatform : MonoBehaviour
     float jumpTime;
     bool isJumping;
 
+    [Header("Attack")]
+    [SerializeField] Transform punchPivot;
+
     [Header("Component")]
     [SerializeField] PhotonView view;
     [SerializeField] Rigidbody2D rig;
+    [SerializeField] SpriteRenderer playerRenderer;
 
     bool InGrounded
     {
@@ -59,7 +63,11 @@ public class PlayerPlatform : MonoBehaviour
         {
             isJumping = false;
         }
-         
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Punch(new (Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")));
+        }
     }
     void SetJumpVelocity()
     {
@@ -69,6 +77,8 @@ public class PlayerPlatform : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        playerRenderer.flipX = !(rig.velocity.x > 0);
+
         if (!view.IsMine) return;
 
         Vector3 velocity = rig.velocity;
@@ -91,4 +101,11 @@ public class PlayerPlatform : MonoBehaviour
         }
     }
 
+    void Punch(Vector2 direction)
+    {
+        punchPivot.gameObject.SetActive(true);
+        
+        punchPivot.eulerAngles = new(0,0, Vector2.Angle(Vector2.zero, direction));
+        LeanTween.delayedCall(.5f, () => punchPivot.gameObject.SetActive(false));
+    }
 }
