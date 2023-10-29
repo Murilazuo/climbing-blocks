@@ -11,7 +11,6 @@ public class Piece : MonoBehaviourPun
     public const string MOVE_PIECE_TAG = "MovePiece";
     [SerializeField] GameObject piecePart;
 
-    public const int PIECE_STOP_EVENT = 18;
     [SerializeField] float endPositionY;
     Vector2Int[] PartPosition
     {
@@ -73,7 +72,7 @@ public class Piece : MonoBehaviourPun
             StopPiece();
 
             object[] datas = new object[] { };
-            PhotonNetwork.RaiseEvent(PIECE_STOP_EVENT, datas,RaiseEventOptions.Default,SendOptions.SendUnreliable);
+            NetworkEventSystem.CallEvent(NetworkEventSystem.PIECE_STOP_EVENT);
         }
     }
     void StopPiece()
@@ -98,7 +97,7 @@ public class Piece : MonoBehaviourPun
     }
     void NetworkCliente_RisedEvent(EventData eventData)
     {
-        if(eventData.Code == PIECE_STOP_EVENT)
+        if(eventData.Code == NetworkEventSystem.PIECE_STOP_EVENT)
         {
             StopPiece();
         }

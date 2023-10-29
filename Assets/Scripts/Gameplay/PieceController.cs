@@ -49,7 +49,8 @@ public class PieceController : MonoBehaviour
     }
     void PieceGravity()
     {
-        Piece.currentPiece.MoveDown();
+        if(Piece.currentPiece)
+            Piece.currentPiece.MoveDown();
     }
     private void Update()
     {

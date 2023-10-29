@@ -20,25 +20,38 @@ public class PlayerPlatform : MonoBehaviour
 
     [Header("Attack")]
     [SerializeField] Transform punchPivot;
+    [SerializeField] float rayDistance;
+    [SerializeField] LayerMask groundLayer;
+    Ray attackRayCast;
 
     [Header("Component")]
     [SerializeField] PhotonView view;
     [SerializeField] Rigidbody2D rig;
     [SerializeField] SpriteRenderer playerRenderer;
-
     bool InGrounded
     {
         get =>
         Physics2D.Raycast(rig.position, Vector2.down, groundCheckDistance, layerMask);
     }
+    bool HasGroundAbove
+    {
+        get =>
+        Physics2D.Raycast(rig.position, Vector2.up, groundCheckDistance, layerMask);
+    }
+    float lastInputX;
     void Update()
     {
         if (!view.IsMine) return;
 
+        if (Input.GetButton("Horizontal"))
+            lastInputX = Input.GetAxisRaw("Horizontal");
+
+        if (lastInputX > 0) playerRenderer.flipX = false;
+        else if (lastInputX < 0) playerRenderer.flipX = true;
 
         if (Input.GetButtonDown("Jump"))
         {
-            if (InGrounded)
+            if (InGrounded && !HasGroundAbove)
             {
                 isJumping = true;
                 jumpTime = startJumpTime;
@@ -60,14 +73,10 @@ public class PlayerPlatform : MonoBehaviour
         }
 
         if (Input.GetButtonUp("Jump"))
-        {
             isJumping = false;
-        }
 
         if (Input.GetKeyDown(KeyCode.Space))
-        {
             Punch(new (Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")));
-        }
     }
     void SetJumpVelocity()
     {
@@ -77,8 +86,6 @@ public class PlayerPlatform : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        playerRenderer.flipX = !(rig.velocity.x > 0);
-
         if (!view.IsMine) return;
 
         Vector3 velocity = rig.velocity;
@@ -103,9 +110,47 @@ public class PlayerPlatform : MonoBehaviour
 
     void Punch(Vector2 direction)
     {
-        punchPivot.gameObject.SetActive(true);
+        attackRayCast.origin = transform.position;
+        attackRayCast.direction = direction;
         
-        punchPivot.eulerAngles = new(0,0, Vector2.Angle(Vector2.zero, direction));
-        LeanTween.delayedCall(.5f, () => punchPivot.gameObject.SetActive(false));
+        RaycastHit2D hit = Physics2D.Raycast(attackRayCast.origin,attackRayCast.direction,rayDistance,groundLayer);
+        
+        print(hit.collider);
+        print(hit.collider.gameObject.tag);
+
+
+        if(hit.collider && hit.collider.gameObject.CompareTag(Piece.STOPED_PIECE_TAG))
+            PhotonNetwork.Destroy(hit.collider.gameObject);
+        
+        PunchRenderer(direction);
+    }
+
+    void PunchRenderer(Vector2 direction)
+    {
+        punchPivot.gameObject.SetActive(true);
+        float eulerX = 0;
+
+        if (direction.x > 0)
+        {
+            direction.y = 0;
+            eulerX = 0;
+        }
+        else if (direction.x < 0)
+        {
+            direction.y = 0;
+            eulerX = 180;
+        }
+        else if (direction.y > 0)
+            eulerX = 90;
+        else if (direction.y < 0)
+            eulerX = 270;
+
+        punchPivot.eulerAngles = new(0, 0, eulerX);
+        LeanTween.delayedCall(.1f, () => punchPivot.gameObject.SetActive(false));
+
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawRay(attackRayCast.origin,attackRayCast.direction * rayDistance);
     }
 }

@@ -20,25 +20,18 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
     public static System.Action OnStarGame;
 
-    public const int START_MATCH_EVENT = 1;
-    public const int PIECE_WIN_GAME_EVENT = 2;
-    public const int PLATFORM_WIN_GAME_EVENT = 3;
-    bool isStartMatch;
+    
     private void Awake()
     {
         instance = this;
     }
     public void PlayerPiecesWin()
     {
-        PhotonNetwork.RaiseEvent(PIECE_WIN_GAME_EVENT, new object[] { }, RaiseEventOptions.Default, SendOptions.SendUnreliable);
+        NetworkEventSystem.CallEvent(NetworkEventSystem.PIECE_WIN_GAME_EVENT);
     }
     public void PlayerPlatformWin()
     {
-        PhotonNetwork.RaiseEvent(PLATFORM_WIN_GAME_EVENT, new object[] { }, RaiseEventOptions.Default, SendOptions.SendUnreliable);
-    }
-    private void Start()
-    {
-
+        NetworkEventSystem.CallEvent(NetworkEventSystem.PLATFORM_WIN_GAME_EVENT);
     }
     bool matchStarted;
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -56,7 +49,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
         matchStarted = true;
 
         OnStarGame?.Invoke();
-        PhotonNetwork.RaiseEvent(START_MATCH_EVENT, new object[] { }, RaiseEventOptions.Default, SendOptions.SendUnreliable);
+        NetworkEventSystem.CallEvent(NetworkEventSystem.START_MATCH_EVENT);
     }
     public void GoToMenu()
     {

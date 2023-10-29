@@ -26,12 +26,12 @@ public class EndGamePanel : MonoBehaviour
     bool endGame;
     void OnEndGame(EventData eventData)
     {
-        if (eventData.Code == MatchManager.PLATFORM_WIN_GAME_EVENT || eventData.Code == MatchManager.PIECE_WIN_GAME_EVENT && !endGame)
+        if (eventData.Code == NetworkEventSystem.PLATFORM_WIN_GAME_EVENT || eventData.Code == NetworkEventSystem.PIECE_WIN_GAME_EVENT && !endGame)
         {
             endGame = true;
             ActivePanel();
 
-            titleText.text = eventData.Code == MatchManager.PLATFORM_WIN_GAME_EVENT ? "Platformers Win" : "Pieces Win";
+            titleText.text = eventData.Code == NetworkEventSystem.PLATFORM_WIN_GAME_EVENT ? "Platformers Win" : "Pieces Win";
         }
     }
     void ActivePanel()
