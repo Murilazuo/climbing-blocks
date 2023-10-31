@@ -12,6 +12,7 @@ public class Piece : MonoBehaviourPun
     [SerializeField] GameObject piecePart;
 
     [SerializeField] float endPositionY;
+
     Vector2Int[] PartPosition
     {
         get
@@ -32,7 +33,7 @@ public class Piece : MonoBehaviourPun
     public static Piece currentPiece;
 
     static int pieceCount = 0;
-    int pieceId;
+    public int pieceId;
     private void Awake()
     {
         currentPiece = this;
@@ -71,7 +72,6 @@ public class Piece : MonoBehaviourPun
             PieceController.Instance.SetPiece(PartPosition);
             StopPiece();
 
-            object[] datas = new object[] { };
             NetworkEventSystem.CallEvent(NetworkEventSystem.PIECE_STOP_EVENT);
         }
     }
@@ -97,9 +97,20 @@ public class Piece : MonoBehaviourPun
     }
     void NetworkCliente_RisedEvent(EventData eventData)
     {
-        if(eventData.Code == NetworkEventSystem.PIECE_STOP_EVENT)
-        {
-            StopPiece();
+        switch (eventData.Code) { 
+            case NetworkEventSystem.PIECE_STOP_EVENT:
+                StopPiece();
+                break;
+            case NetworkEventSystem.PIECE_DESTROY_EVENT:
+                object[] data = (object[])eventData.CustomData;
+                int pieceId = (int)data[0];
+                int childrenId = (int)data[1];
+
+                if(this.pieceId == pieceId)
+                {
+                    transform.GetChild(childrenId).gameObject.SetActive(false);
+                }
+                break;
         }
     }
 

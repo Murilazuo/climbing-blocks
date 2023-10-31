@@ -7,10 +7,11 @@ using UnityEngine;
 
 public class NetworkEventSystem
 {
-    public const int START_MATCH_EVENT = 1;
-    public const int PIECE_WIN_GAME_EVENT = 2;
-    public const int PLATFORM_WIN_GAME_EVENT = 3;
-    public const int PIECE_STOP_EVENT = 10;
+    public const byte START_MATCH_EVENT = 1;
+    public const byte PIECE_WIN_GAME_EVENT = 2;
+    public const byte PLATFORM_WIN_GAME_EVENT = 3;
+    public const byte PIECE_STOP_EVENT = 10;
+    public const byte PIECE_DESTROY_EVENT = 11;
 
     public static void CallEvent(byte id, object[] data)
     {

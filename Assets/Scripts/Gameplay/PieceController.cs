@@ -1,4 +1,6 @@
+using ExitGames.Client.Photon;
 using Photon.Pun;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 public class PieceController : MonoBehaviour
@@ -106,6 +108,7 @@ public class PieceController : MonoBehaviour
     }
     public void StartMatch()
     {
+        print("Piece Controller Start Match");
         NextPiece();
         InvokeRepeating(nameof(PieceGravity), timeToMoveDown, timeToMoveDown);
     }
@@ -138,10 +141,23 @@ public class PieceController : MonoBehaviour
     public void OnEnable()
     {
         MatchManager.OnStarGame += StartMatch;
+        PhotonNetwork.NetworkingClient.EventReceived += NetworkCliente_RisedEvent;
     }
 
     public void OnDisable()
     {
         MatchManager.OnStarGame -= StartMatch;
+        PhotonNetwork.NetworkingClient.EventReceived -= NetworkCliente_RisedEvent;
+    }
+
+    private void NetworkCliente_RisedEvent(EventData eventData)
+    {
+        if(eventData.Code == NetworkEventSystem.PIECE_DESTROY_EVENT)
+        {
+            object[] data = (object[])eventData.CustomData;
+            Vector3 blockPosition = (Vector3)data[2];
+         
+            SetTileState(new((int)blockPosition.x, (int)blockPosition.y), false);
+        }
     }
 }

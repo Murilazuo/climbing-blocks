@@ -39,6 +39,10 @@ public class PlayerPlatform : MonoBehaviour
         Physics2D.Raycast(rig.position, Vector2.up, groundCheckDistance, layerMask);
     }
     float lastInputX;
+    private void Start()
+    {
+        if(!view.IsMine) rig.simulated = false;
+    }
     void Update()
     {
         if (!view.IsMine) return;
@@ -115,12 +119,20 @@ public class PlayerPlatform : MonoBehaviour
         
         RaycastHit2D hit = Physics2D.Raycast(attackRayCast.origin,attackRayCast.direction,rayDistance,groundLayer);
         
-        print(hit.collider);
-        print(hit.collider.gameObject.tag);
+        if(hit.collider )
+            if (hit.collider.gameObject.CompareTag(Piece.STOPED_PIECE_TAG))
+            {
+                object[] data =
+                {
+                    hit.collider.gameObject.GetComponentInParent<Piece>().pieceId,
+                    hit.transform.GetSiblingIndex(),
+                    hit.transform.position
+                };
 
+                hit.transform.gameObject.SetActive(false);
 
-        if(hit.collider && hit.collider.gameObject.CompareTag(Piece.STOPED_PIECE_TAG))
-            PhotonNetwork.Destroy(hit.collider.gameObject);
+                NetworkEventSystem.CallEvent(NetworkEventSystem.PIECE_DESTROY_EVENT,data);
+            }
         
         PunchRenderer(direction);
     }

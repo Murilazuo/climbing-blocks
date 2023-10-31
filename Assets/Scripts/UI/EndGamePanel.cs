@@ -17,21 +17,22 @@ public class EndGamePanel : MonoBehaviour
     }
     private void OnEnable()
     {
-        PhotonNetwork.NetworkingClient.EventReceived += OnEndGame;
+        MatchManager.OnEndGame += OnEndGame;
+
     }
     private void OnDisable()
     {
-        PhotonNetwork.NetworkingClient.EventReceived -= OnEndGame;
+        MatchManager.OnEndGame -= OnEndGame;
     }
     bool endGame;
-    void OnEndGame(EventData eventData)
+    void OnEndGame(int eventCode)
     {
-        if (eventData.Code == NetworkEventSystem.PLATFORM_WIN_GAME_EVENT || eventData.Code == NetworkEventSystem.PIECE_WIN_GAME_EVENT && !endGame)
+        if (eventCode == NetworkEventSystem.PLATFORM_WIN_GAME_EVENT || eventCode == NetworkEventSystem.PIECE_WIN_GAME_EVENT && !endGame)
         {
             endGame = true;
             ActivePanel();
 
-            titleText.text = eventData.Code == NetworkEventSystem.PLATFORM_WIN_GAME_EVENT ? "Platformers Win" : "Pieces Win";
+            titleText.text = eventCode == NetworkEventSystem.PLATFORM_WIN_GAME_EVENT ? "Platformers Win" : "Pieces Win";
         }
     }
     void ActivePanel()
