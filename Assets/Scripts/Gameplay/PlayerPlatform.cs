@@ -127,7 +127,7 @@ public class PlayerPlatform : MonoBehaviour
                     hit.transform.position
                 };
 
-                hit.transform.gameObject.SetActive(false);
+                DestroyImmediate(hit.transform.gameObject);
 
                 NetworkEventSystem.CallEvent(NetworkEventSystem.PIECE_DESTROY_EVENT,data);
             }

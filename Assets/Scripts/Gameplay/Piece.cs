@@ -109,7 +109,7 @@ public class Piece : MonoBehaviourPun
                 foreach (Transform t in transform)
                 {
                     if (V3ToV3Int(t.position) == V3ToV3Int(piecePosition))
-                        t.gameObject.SetActive(false);
+                        DestroyImmediate(t.gameObject);
                 }
                 break;
         }
