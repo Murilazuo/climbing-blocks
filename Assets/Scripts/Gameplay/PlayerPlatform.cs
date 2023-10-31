@@ -28,17 +28,14 @@ public class PlayerPlatform : MonoBehaviour
     [SerializeField] PhotonView view;
     [SerializeField] Rigidbody2D rig;
     [SerializeField] SpriteRenderer playerRenderer;
-    bool InGrounded
-    {
-        get =>
-        Physics2D.Raycast(rig.position, Vector2.down, groundCheckDistance, layerMask);
-    }
-    bool HasGroundAbove
-    {
-        get =>
-        Physics2D.Raycast(rig.position, Vector2.up, groundCheckDistance, layerMask);
-    }
+    
+    [Header("Anim")]
+    [SerializeField] Animator anim;
+    readonly int lookRightId = Animator.StringToHash("LookRight");
+    bool InGrounded { get => Physics2D.Raycast(rig.position, Vector2.down, groundCheckDistance, layerMask);}
+    bool HasGroundAbove { get => Physics2D.Raycast(rig.position, Vector2.up, groundCheckDistance, layerMask); }
     float lastInputX;
+
     private void Start()
     {
         if(!view.IsMine) rig.simulated = false;
@@ -50,8 +47,8 @@ public class PlayerPlatform : MonoBehaviour
         if (Input.GetButton("Horizontal"))
             lastInputX = Input.GetAxisRaw("Horizontal");
 
-        if (lastInputX > 0) playerRenderer.flipX = false;
-        else if (lastInputX < 0) playerRenderer.flipX = true;
+        if (lastInputX > 0) anim.SetBool(lookRightId, true);
+        else if (lastInputX < 0) anim.SetBool(lookRightId, false);
 
         if (Input.GetButtonDown("Jump"))
         {
