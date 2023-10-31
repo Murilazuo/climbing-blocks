@@ -155,7 +155,7 @@ public class PieceController : MonoBehaviour
         if(eventData.Code == NetworkEventSystem.PIECE_DESTROY_EVENT)
         {
             object[] data = (object[])eventData.CustomData;
-            Vector3 blockPosition = (Vector3)data[2];
+            Vector3 blockPosition = (Vector3)data[0];
          
             SetTileState(new((int)blockPosition.x, (int)blockPosition.y), false);
         }

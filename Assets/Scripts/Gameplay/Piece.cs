@@ -43,7 +43,7 @@ public class Piece : MonoBehaviourPun
         pieceCount++;
         pieceId = pieceCount;
     }
-    
+
     public void MoveX(int moveX)
     {
         Vector3 pos = transform.position;
@@ -97,21 +97,23 @@ public class Piece : MonoBehaviourPun
     }
     void NetworkCliente_RisedEvent(EventData eventData)
     {
-        switch (eventData.Code) { 
+        switch (eventData.Code)
+        {
             case NetworkEventSystem.PIECE_STOP_EVENT:
                 StopPiece();
                 break;
             case NetworkEventSystem.PIECE_DESTROY_EVENT:
                 object[] data = (object[])eventData.CustomData;
-                int pieceId = (int)data[0];
-                int childrenId = (int)data[1];
+                Vector3 piecePosition = (Vector3)data[0];
 
-                if(this.pieceId == pieceId)
+                foreach (Transform t in transform)
                 {
-                    transform.GetChild(childrenId).gameObject.SetActive(false);
+                    if (V3ToV3Int(t.position) == V3ToV3Int(piecePosition))
+                        t.gameObject.SetActive(false);
                 }
                 break;
         }
     }
 
+    Vector2Int V3ToV3Int(Vector3 value) => new((int)value.x, (int)value.y);
 }

@@ -124,8 +124,6 @@ public class PlayerPlatform : MonoBehaviour
             {
                 object[] data =
                 {
-                    hit.collider.gameObject.GetComponentInParent<Piece>().pieceId,
-                    hit.transform.GetSiblingIndex(),
                     hit.transform.position
                 };
 
