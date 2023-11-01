@@ -4,6 +4,7 @@ using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -50,6 +51,18 @@ public class MatchManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.LeaveRoom();
         SceneManager.LoadScene(1);
+    }
+
+    public void DestroyBlock(GameObject block)
+    {
+        if (block.CompareTag(Piece.STOPED_PIECE_TAG))
+        {
+            object[] data = { block.transform.position };
+
+            DestroyImmediate(block);
+
+            NetworkEventSystem.CallEvent(NetworkEventSystem.PIECE_DESTROY_EVENT, data);
+        }
     }
 
     public override void OnEnable()

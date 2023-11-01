@@ -312,6 +312,9 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
+  timeToDisablePunch: 0.3
+  bombObject: {fileID: 8350832146692561155, guid: 2a002d5b95d4d2243b27e71ef33bbdce, type: 3}
+  bombDelay: 3
   view: {fileID: 7323254342142190606}
   rig: {fileID: 9179352317349263220}
   playerRenderer: {fileID: 2938389967854904483}

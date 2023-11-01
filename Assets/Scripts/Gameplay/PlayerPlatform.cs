@@ -18,11 +18,18 @@ public class PlayerPlatform : MonoBehaviour
     float jumpTime;
     bool isJumping;
 
-    [Header("Attack")]
+    [Header("Attack 1")]
     [SerializeField] Transform punchPivot;
     [SerializeField] float rayDistance;
     [SerializeField] LayerMask groundLayer;
+    [SerializeField] float timeToDisablePunch;
     Ray attackRayCast;
+    [Header("Attack 2")]
+    [SerializeField] GameObject bombObject;
+    [SerializeField] float bombDelay;
+    float bombTimer;
+    public static System.Action<float> OnSetBomTimer;
+    public static System.Action OnSpawnPlayerPlatform;
 
     [Header("Component")]
     [SerializeField] PhotonView view;
@@ -38,18 +45,35 @@ public class PlayerPlatform : MonoBehaviour
 
     private void Start()
     {
-        if(!view.IsMine) rig.simulated = false;
+        if (view.IsMine)
+        {
+            OnSpawnPlayerPlatform?.Invoke();
+        }
+        else
+        {
+            rig.simulated = false;
+        }
+
+
     }
     void Update()
     {
         if (!view.IsMine) return;
-
+        BombUpdate();
+        AnimationUpdate();
+        JumpUpdate();
+        PlayerAttackUpdate();
+    }
+    void AnimationUpdate()
+    {
         if (Input.GetButton("Horizontal"))
             lastInputX = Input.GetAxisRaw("Horizontal");
 
         if (lastInputX > 0) anim.SetBool(lookRightId, true);
         else if (lastInputX < 0) anim.SetBool(lookRightId, false);
-
+    }
+    void JumpUpdate()
+    {
         if (Input.GetButtonDown("Jump"))
         {
             if (InGrounded && !HasGroundAbove)
@@ -75,9 +99,24 @@ public class PlayerPlatform : MonoBehaviour
 
         if (Input.GetButtonUp("Jump"))
             isJumping = false;
-
-        if (Input.GetKeyDown(KeyCode.Space))
+    }
+    void PlayerAttackUpdate()
+    {
+        if (Input.GetButtonDown("Fire1"))
             Punch(new (Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")));
+    }
+    void BombUpdate()
+    {
+        if (Input.GetButtonDown("Fire2") && bombTimer >= bombDelay)
+        {
+            bombTimer = 0;
+            PhotonNetwork.Instantiate(bombObject.name,transform.position, Quaternion.identity);
+        }else
+        {
+            bombTimer += Time.deltaTime;
+            if (bombTimer > bombDelay) bombTimer = bombDelay;
+            OnSetBomTimer?.Invoke(bombTimer / bombDelay);
+        }
     }
     void SetJumpVelocity()
     {
@@ -93,7 +132,6 @@ public class PlayerPlatform : MonoBehaviour
         velocity.x = speed * Input.GetAxisRaw("Horizontal");
         rig.velocity = velocity;
     }
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.gameObject.CompareTag(Piece.MOVE_PIECE_TAG))
@@ -108,30 +146,18 @@ public class PlayerPlatform : MonoBehaviour
             MatchManager.Instance.PlayerPlatformWin();
         }
     }
-
     void Punch(Vector2 direction)
     {
         attackRayCast.origin = transform.position;
         attackRayCast.direction = direction;
         
         RaycastHit2D hit = Physics2D.Raycast(attackRayCast.origin,attackRayCast.direction,rayDistance,groundLayer);
-        
-        if(hit.collider )
-            if (hit.collider.gameObject.CompareTag(Piece.STOPED_PIECE_TAG))
-            {
-                object[] data =
-                {
-                    hit.transform.position
-                };
 
-                DestroyImmediate(hit.transform.gameObject);
-
-                NetworkEventSystem.CallEvent(NetworkEventSystem.PIECE_DESTROY_EVENT,data);
-            }
+        if (hit.collider)
+            MatchManager.Instance.DestroyBlock(hit.collider.gameObject);
         
         PunchRenderer(direction);
     }
-
     void PunchRenderer(Vector2 direction)
     {
         punchPivot.gameObject.SetActive(true);
@@ -153,7 +179,7 @@ public class PlayerPlatform : MonoBehaviour
             eulerX = 270;
 
         punchPivot.eulerAngles = new(0, 0, eulerX);
-        LeanTween.delayedCall(.1f, () => punchPivot.gameObject.SetActive(false));
+        LeanTween.delayedCall(timeToDisablePunch, () => punchPivot.gameObject.SetActive(false));
 
     }
     private void OnDrawGizmos()
