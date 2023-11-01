@@ -9,10 +9,10 @@ public class PieceController : MonoBehaviour
     float moveSpeedDelayTimer;
     float moveHoldTimer;
 
-    public float moveDelay;
-    public float moveHoldTimeToSpeedMove;
-    public float moveTimeToMoveSpeed;
-    public float timeToMoveDown;
+    public FloatVariable moveDelay;
+    public FloatVariable moveHoldTimeToSpeedMove;
+    public FloatVariable moveTimeToMoveSpeed;
+    public FloatVariable timeToMoveDown;
 
     [SerializeField] GameObject[] piecePrefabs;
     [SerializeField] Vector2 spawPiecePosition;
@@ -72,14 +72,14 @@ public class PieceController : MonoBehaviour
                 moveSpeedDelayTimer = 0;
             }
 
-            bool canMove = moveDelayTimer >= moveDelay;
-            bool isSpeedMoving = moveHoldTimer >= moveHoldTimeToSpeedMove;
+            bool canMove = moveDelayTimer >= moveDelay.Value;
+            bool isSpeedMoving = moveHoldTimer >= moveHoldTimeToSpeedMove.Value;
 
             if (isSpeedMoving)
             {
                 moveSpeedDelayTimer += Time.deltaTime;
 
-                if(moveSpeedDelayTimer >= moveTimeToMoveSpeed)
+                if(moveSpeedDelayTimer >= moveTimeToMoveSpeed.Value)
                 {
                     moveSpeedDelayTimer = 0;
                     if (Input.GetButton("Horizontal"))
@@ -110,13 +110,7 @@ public class PieceController : MonoBehaviour
     {
         print("Piece Controller Start Match");
         NextPiece();
-        InvokeRepeating(nameof(PieceGravity), timeToMoveDown, timeToMoveDown);
-    }
-    public void SetGravity(float gravity)
-    {
-        timeToMoveDown = gravity;
-        CancelInvoke(nameof(PieceGravity));
-        InvokeRepeating(nameof(PieceGravity), timeToMoveDown, timeToMoveDown);
+        InvokeRepeating(nameof(PieceGravity), timeToMoveDown.Value, timeToMoveDown.Value);
     }
     void NextPiece()
     {

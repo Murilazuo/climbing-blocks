@@ -8,13 +8,14 @@ public class PlayerPlatform : MonoBehaviour
     [SerializeField] Vector2 spawnPlatformPosition;
     
     [Header("Move")]
-    [SerializeField] float speed;
+    [SerializeField] FloatVariable speed;
     
     [Header("Jump")]
-    [SerializeField] float jumpForce;
+    [SerializeField] FloatVariable jumpForce;
+    [SerializeField] FloatVariable gravityScale;
     [SerializeField] float groundCheckDistance;
     [SerializeField] LayerMask layerMask;
-    [SerializeField] float startJumpTime;
+    [SerializeField] FloatVariable startJumpTime;
     float jumpTime;
     bool isJumping;
 
@@ -26,7 +27,7 @@ public class PlayerPlatform : MonoBehaviour
     Ray attackRayCast;
     [Header("Attack 2")]
     [SerializeField] GameObject bombObject;
-    [SerializeField] float bombDelay;
+    [SerializeField] FloatVariable bombDelay;
     float bombTimer;
     public static System.Action<float> OnSetBomTimer;
     public static System.Action OnSpawnPlayerPlatform;
@@ -47,6 +48,7 @@ public class PlayerPlatform : MonoBehaviour
     {
         if (view.IsMine)
         {
+            rig.gravityScale = gravityScale.Value;
             OnSpawnPlayerPlatform?.Invoke();
         }
         else
@@ -79,7 +81,7 @@ public class PlayerPlatform : MonoBehaviour
             if (InGrounded && !HasGroundAbove)
             {
                 isJumping = true;
-                jumpTime = startJumpTime;
+                jumpTime = startJumpTime.Value;
                 SetJumpVelocity();
             }
         }
@@ -107,21 +109,21 @@ public class PlayerPlatform : MonoBehaviour
     }
     void BombUpdate()
     {
-        if (Input.GetButtonDown("Fire2") && bombTimer >= bombDelay)
+        if (Input.GetButtonDown("Fire2") && bombTimer >= bombDelay.Value)
         {
             bombTimer = 0;
             PhotonNetwork.Instantiate(bombObject.name,transform.position, Quaternion.identity);
         }else
         {
             bombTimer += Time.deltaTime;
-            if (bombTimer > bombDelay) bombTimer = bombDelay;
-            OnSetBomTimer?.Invoke(bombTimer / bombDelay);
+            if (bombTimer > bombDelay.Value) bombTimer = bombDelay.Value;
+            OnSetBomTimer?.Invoke(bombTimer / bombDelay.Value);
         }
     }
     void SetJumpVelocity()
     {
         Vector2 velocity = rig.velocity;
-        velocity.y = jumpForce;
+        velocity.y = jumpForce.Value;
         rig.velocity = velocity;
     }
     private void FixedUpdate()
@@ -129,7 +131,7 @@ public class PlayerPlatform : MonoBehaviour
         if (!view.IsMine) return;
 
         Vector3 velocity = rig.velocity;
-        velocity.x = speed * Input.GetAxisRaw("Horizontal");
+        velocity.x = speed.Value * Input.GetAxisRaw("Horizontal");
         rig.velocity = velocity;
     }
     private void OnCollisionEnter2D(Collision2D collision)

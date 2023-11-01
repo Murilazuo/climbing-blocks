@@ -300,13 +300,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPlatformPosition: {x: 10, y: 2}
-  speed: 10
-  jumpForce: 15
+  speed: {fileID: 11400000, guid: 19b691a878bb7bd49b3a52806be4be72, type: 2}
+  jumpForce: {fileID: 11400000, guid: a1d7288e247ced84aaa9e65787b62ec7, type: 2}
+  gravityScale: {fileID: 11400000, guid: a1838e128b93f124a8462d164c8f8d4b, type: 2}
   groundCheckDistance: 0.73
   layerMask:
     serializedVersion: 2
     m_Bits: 8
-  startJumpTime: 0.2
+  startJumpTime: {fileID: 11400000, guid: e11b27a5385d6244aa36d621d55bf0c8, type: 2}
   punchPivot: {fileID: 3626101207575240909}
   rayDistance: 2
   groundLayer:
@@ -314,7 +315,7 @@ MonoBehaviour:
     m_Bits: 8
   timeToDisablePunch: 0.3
   bombObject: {fileID: 8350832146692561155, guid: 2a002d5b95d4d2243b27e71ef33bbdce, type: 3}
-  bombDelay: 3
+  bombDelay: {fileID: 11400000, guid: 14116a928379de1469af47f17b9d4a96, type: 2}
   view: {fileID: 7323254342142190606}
   rig: {fileID: 9179352317349263220}
   playerRenderer: {fileID: 2938389967854904483}

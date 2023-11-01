@@ -271,13 +271,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb06b19593c5bfb42a0cef6f2fc0a8bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosionSize: 2.11
+  explosionSize: {fileID: 11400000, guid: cba168b799d5e204da2187e65150eaf4, type: 2}
   blockLayer:
     serializedVersion: 2
     m_Bits: 8
   view: {fileID: -6439110251818716993}
   text: {fileID: 8566407464906890834}
-  secondsToExplode: 3
+  secondsToExplode: {fileID: 11400000, guid: 0c4c0676481d02e4982b4ab0a5467823, type: 2}
+  curretSecondsToExplode: 0
 --- !u!114 &-6439110251818716993
 MonoBehaviour:
   m_ObjectHideFlags: 0

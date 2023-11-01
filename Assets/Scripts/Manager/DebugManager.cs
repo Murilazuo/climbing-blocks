@@ -20,6 +20,7 @@ public class DebugManager : MonoBehaviour
         }
     }
 
+    /*
     public void SetInputDelay(string text)
     {
         PieceController.Instance.moveDelay = float.Parse(text);
@@ -36,6 +37,7 @@ public class DebugManager : MonoBehaviour
     {
         PieceController.Instance.SetGravity(float.Parse(text));
     }
+     */
 
     public void ToggleTimeScale(bool isPaused)
     {
