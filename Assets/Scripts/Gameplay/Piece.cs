@@ -51,7 +51,6 @@ public class Piece : MonoBehaviourPun
         transform.position = pos;
         if (PieceController.Instance.HasPiece(PartPosition))
         {
-            print("Has Piece");
             pos.x -= moveX;
             transform.position = pos;
         }

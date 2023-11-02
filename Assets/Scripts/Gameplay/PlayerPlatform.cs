@@ -43,9 +43,10 @@ public class PlayerPlatform : MonoBehaviour
     bool InGrounded { get => Physics2D.Raycast(rig.position, Vector2.down, groundCheckDistance, layerMask);}
     bool HasGroundAbove { get => Physics2D.Raycast(rig.position, Vector2.up, groundCheckDistance, layerMask); }
     float lastInputX;
-
+    bool canMove;
     private void Start()
     {
+        canMove = false;
         if (view.IsMine)
         {
             rig.gravityScale = gravityScale.Value;
@@ -55,12 +56,10 @@ public class PlayerPlatform : MonoBehaviour
         {
             rig.simulated = false;
         }
-
-
     }
     void Update()
     {
-        if (!view.IsMine) return;
+        if (!view.IsMine || !canMove) return;
         BombUpdate();
         AnimationUpdate();
         JumpUpdate();
@@ -128,7 +127,7 @@ public class PlayerPlatform : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (!view.IsMine) return;
+        if (!view.IsMine || !canMove) return;
 
         Vector3 velocity = rig.velocity;
         velocity.x = speed.Value * Input.GetAxisRaw("Horizontal");
@@ -187,5 +186,24 @@ public class PlayerPlatform : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.DrawRay(attackRayCast.origin,attackRayCast.direction * rayDistance);
+    }
+
+    private void OnEnable()
+    {
+        if(view.IsMine)
+        {
+            MatchManager.OnStarGame += OnStartMatch;
+        }
+    }
+    private void OnDisable()
+    {
+        if(view.IsMine)
+        {
+            MatchManager.OnStarGame -= OnStartMatch;
+        }
+    }
+    void OnStartMatch()
+    {
+        canMove = true;
     }
 }

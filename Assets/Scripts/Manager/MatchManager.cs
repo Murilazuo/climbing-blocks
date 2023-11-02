@@ -21,6 +21,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     }
 
     public static System.Action OnStarGame;
+    public static System.Action OnStarCounter;
     public static System.Action<int> OnEndGame;
     
     
@@ -46,6 +47,11 @@ public class MatchManager : MonoBehaviourPunCallbacks
         matchStarted = true;
         OnStarGame?.Invoke();
         NetworkEventSystem.CallEvent(NetworkEventSystem.START_MATCH_EVENT);
+    }
+    public void StartCounter()
+    {
+        OnStarCounter?.Invoke();
+        NetworkEventSystem.CallEvent(NetworkEventSystem.START_COUNTER_EVENT);
     }
     public void GoToMenu()
     {
@@ -87,6 +93,9 @@ public class MatchManager : MonoBehaviourPunCallbacks
                     matchStarted = true;
                     OnStarGame?.Invoke();
                 }
+                break;
+            case NetworkEventSystem.START_COUNTER_EVENT:
+                OnStarCounter?.Invoke();
                 break;
         }
 
