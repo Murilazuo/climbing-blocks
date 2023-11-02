@@ -64,16 +64,35 @@ public class Piece : MonoBehaviourPun
         transform.position = pos;
         if (PieceController.Instance.HasPiece(PartPosition))
         {
-            print("Has Piece");
             pos.y += 1;
             transform.position = pos;
-            currentPiece = null;
-            OnPieceStop?.Invoke();
-            PieceController.Instance.SetPiece(PartPosition);
-            StopPiece();
-
-            NetworkEventSystem.CallEvent(NetworkEventSystem.PIECE_STOP_EVENT);
+            CallStopPiece();
         }
+        else
+        {
+            pos.y -= 1;
+            transform.position = pos;
+            if (PieceController.Instance.HasPiece(PartPosition))
+            {
+                pos.y += 1;
+                transform.position = pos;
+                CallStopPiece();
+            }
+            else
+            {
+                pos.y += 1;
+                transform.position = pos;
+            }
+        }
+    }
+    void CallStopPiece()
+    {
+        currentPiece = null;
+        OnPieceStop?.Invoke();
+        PieceController.Instance.SetPiece(PartPosition);
+        StopPiece();
+
+        NetworkEventSystem.CallEvent(NetworkEventSystem.PIECE_STOP_EVENT);
     }
     void StopPiece()
     {
