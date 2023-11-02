@@ -14,8 +14,13 @@ public class PlayerPlatform : MonoBehaviour
     [SerializeField] FloatVariable jumpForce;
     [SerializeField] FloatVariable gravityScale;
     [SerializeField] float groundCheckDistance;
+    [SerializeField] float groundCheckUpDistance;
+    [SerializeField] float groundCheckUpDistanceBtweenRays;
+    [SerializeField] float groundCheckRadius;
     [SerializeField] LayerMask layerMask;
     [SerializeField] FloatVariable startJumpTime;
+    [SerializeField] FloatVariable coyoteJumpTime;
+    float coyoteJumpTimer;
     float jumpTime;
     bool isJumping;
 
@@ -40,13 +45,40 @@ public class PlayerPlatform : MonoBehaviour
     [Header("Anim")]
     [SerializeField] Animator anim;
     readonly int lookRightId = Animator.StringToHash("LookRight");
-    bool InGrounded { get => Physics2D.Raycast(rig.position, Vector2.down, groundCheckDistance, layerMask);}
-    bool HasGroundAbove { get => Physics2D.Raycast(rig.position, Vector2.up, groundCheckDistance, layerMask); }
+    Vector3 GroundCheckPosition
+    {
+        get
+        {
+            Vector3 pos = transform.position;
+            pos.y -= groundCheckDistance;
+            return pos;
+        }
+    }
+    bool InGrounded { get => Physics2D.OverlapCircle(GroundCheckPosition, groundCheckRadius, layerMask);}
+    bool HasGroundAbove
+    {
+        get
+        {
+            bool ray1, ray2;
+            Vector3 pos;
+            pos = transform.position;
+            pos.x -= groundCheckUpDistanceBtweenRays;
+            ray1 = Physics2D.Raycast(pos, Vector2.up, groundCheckUpDistance, layerMask);
+
+            pos = transform.position;
+            pos.x += groundCheckUpDistanceBtweenRays;
+            ray2 = Physics2D.Raycast(pos, Vector2.up, groundCheckUpDistance, layerMask);
+            print("Ray 1" +ray1);
+            print("Ray 2" + ray2);
+            
+            return ray1 || ray2;
+        }
+    }
     float lastInputX;
     bool canMove;
     private void Start()
     {
-        canMove = false;
+        canMove = Application.isEditor;
         if (view.IsMine)
         {
             rig.gravityScale = gravityScale.Value;
@@ -77,7 +109,7 @@ public class PlayerPlatform : MonoBehaviour
     {
         if (Input.GetButtonDown("Jump"))
         {
-            if (InGrounded && !HasGroundAbove)
+            if ((coyoteJumpTimer <= coyoteJumpTime.Value || InGrounded) && !HasGroundAbove)
             {
                 isJumping = true;
                 jumpTime = startJumpTime.Value;
@@ -100,6 +132,16 @@ public class PlayerPlatform : MonoBehaviour
 
         if (Input.GetButtonUp("Jump"))
             isJumping = false;
+
+
+        if (!InGrounded)
+        {
+            coyoteJumpTimer += Time.deltaTime;
+        }
+        else
+        {
+            coyoteJumpTimer = 0;
+        }
     }
     void PlayerAttackUpdate()
     {
@@ -128,7 +170,7 @@ public class PlayerPlatform : MonoBehaviour
     private void FixedUpdate()
     {
         if (!view.IsMine || !canMove) return;
-
+        
         Vector3 velocity = rig.velocity;
         velocity.x = speed.Value * Input.GetAxisRaw("Horizontal");
         rig.velocity = velocity;
@@ -185,7 +227,16 @@ public class PlayerPlatform : MonoBehaviour
     }
     private void OnDrawGizmos()
     {
-        Gizmos.DrawRay(attackRayCast.origin,attackRayCast.direction * rayDistance);
+        Vector3 pos = transform.position;
+        pos.y -= groundCheckDistance;
+        Gizmos.DrawWireSphere(GroundCheckPosition, groundCheckRadius);
+
+        pos = transform.position;
+        pos.x -= groundCheckUpDistanceBtweenRays;
+        Gizmos.DrawRay(pos, Vector2.up * groundCheckUpDistance);
+        pos = transform.position;
+        pos.x += groundCheckUpDistanceBtweenRays;
+        Gizmos.DrawRay(pos, Vector2.up * groundCheckUpDistance);
     }
 
     private void OnEnable()

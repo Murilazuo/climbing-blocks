@@ -216,6 +216,7 @@ GameObject:
   - component: {fileID: 9028425105534652682}
   - component: {fileID: 3020992245372107097}
   - component: {fileID: 1139916531776066836}
+  - component: {fileID: 7442221985411576790}
   m_Layer: 0
   m_Name: PlayerPlatform
   m_TagString: Player
@@ -274,7 +275,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.007114157}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -285,7 +286,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 0.98577166}
   m_EdgeRadius: 0
 --- !u!114 &1287699183863314150
 MonoBehaviour:
@@ -303,11 +304,15 @@ MonoBehaviour:
   speed: {fileID: 11400000, guid: 19b691a878bb7bd49b3a52806be4be72, type: 2}
   jumpForce: {fileID: 11400000, guid: a1d7288e247ced84aaa9e65787b62ec7, type: 2}
   gravityScale: {fileID: 11400000, guid: a1838e128b93f124a8462d164c8f8d4b, type: 2}
-  groundCheckDistance: 0.73
+  groundCheckDistance: 0.44
+  groundCheckUpDistance: 0.75
+  groundCheckUpDistanceBtweenRays: 0.45
+  groundCheckRadius: 0.13
   layerMask:
     serializedVersion: 2
     m_Bits: 8
   startJumpTime: {fileID: 11400000, guid: e11b27a5385d6244aa36d621d55bf0c8, type: 2}
+  coyoteJumpTime: {fileID: 11400000, guid: fee10bec3b9e822498d36d4827048473, type: 2}
   punchPivot: {fileID: 3626101207575240909}
   rayDistance: 2
   groundLayer:
@@ -403,3 +408,19 @@ MonoBehaviour:
     LayerIndex: 0
   - SynchronizeType: 2
     LayerIndex: 1
+--- !u!58 &7442221985411576790
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9179352317349263222}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
