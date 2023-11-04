@@ -9,9 +9,12 @@ public class Piece : MonoBehaviourPun
 {
     public const string STOPED_PIECE_TAG = "StopedPiece";
     public const string MOVE_PIECE_TAG = "MovePiece";
+
     [SerializeField] GameObject piecePart;
 
     [SerializeField] float endPositionY;
+
+    bool fixInGrid;
 
     Vector2Int[] PartPosition
     {
@@ -99,7 +102,7 @@ public class Piece : MonoBehaviourPun
         pieceIsStoped = true;
         foreach (Transform t in transform)
         {
-            t.gameObject.tag = STOPED_PIECE_TAG;
+            LeanTween.delayedCall(.1f, () => t.gameObject.tag = STOPED_PIECE_TAG);
 
             if (endPositionY <= t.transform.position.y)
                 MatchManager.Instance.PlayerPlatformWin();

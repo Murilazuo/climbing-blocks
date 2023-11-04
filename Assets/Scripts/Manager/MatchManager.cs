@@ -31,7 +31,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     }
     public void PlayerPiecesWin()
     {
-        OnEndGame?.Invoke(NetworkEventSystem.PLATFORM_WIN_GAME_EVENT );
+        OnEndGame?.Invoke(NetworkEventSystem.PIECE_WIN_GAME_EVENT);
         NetworkEventSystem.CallEvent(NetworkEventSystem.PIECE_WIN_GAME_EVENT);
     }
     public void PlayerPlatformWin()

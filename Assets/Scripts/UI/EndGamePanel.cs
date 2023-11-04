@@ -27,7 +27,7 @@ public class EndGamePanel : MonoBehaviour
     bool endGame;
     void OnEndGame(int eventCode)
     {
-        if (eventCode == NetworkEventSystem.PLATFORM_WIN_GAME_EVENT || eventCode == NetworkEventSystem.PIECE_WIN_GAME_EVENT && !endGame)
+        if (eventCode == NetworkEventSystem.PLATFORM_WIN_GAME_EVENT || eventCode == NetworkEventSystem.PIECE_WIN_GAME_EVENT)
         {
             endGame = true;
             ActivePanel();
