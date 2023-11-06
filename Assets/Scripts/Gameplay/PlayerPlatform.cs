@@ -44,7 +44,12 @@ public class PlayerPlatform : MonoBehaviour
     
     [Header("Anim")]
     [SerializeField] Animator anim;
+    [SerializeField] Transform rendererTransform;
+    bool lookRigh;
+    bool isMove;
+    readonly int isIdleId = Animator.StringToHash("IsIdle");
     readonly int lookRightId = Animator.StringToHash("LookRight");
+
     Vector3 GroundCheckPosition
     {
         get
@@ -54,7 +59,16 @@ public class PlayerPlatform : MonoBehaviour
             return pos;
         }
     }
-    bool InGrounded { get => Physics2D.OverlapCircle(GroundCheckPosition, groundCheckRadius, layerMask);}
+    bool lastInGround;
+    bool InGrounded
+    {
+        get
+        {
+            lastInGround = Physics2D.OverlapCircle(GroundCheckPosition, groundCheckRadius, layerMask);
+            return lastInGround;
+        }
+    }
+            
     bool HasGroundAbove
     {
         get
@@ -68,9 +82,6 @@ public class PlayerPlatform : MonoBehaviour
             pos = transform.position;
             pos.x += groundCheckUpDistanceBtweenRays;
             ray2 = Physics2D.Raycast(pos, Vector2.up, groundCheckUpDistance, layerMask);
-            print("Ray 1" +ray1);
-            print("Ray 2" + ray2);
-            
             return ray1 || ray2;
         }
     }
@@ -97,13 +108,24 @@ public class PlayerPlatform : MonoBehaviour
         JumpUpdate();
         PlayerAttackUpdate();
     }
+    bool lastLookRight;
     void AnimationUpdate()
     {
-        if (Input.GetButton("Horizontal"))
+        isMove = Input.GetButton("Horizontal");
+
+        if (isMove)
             lastInputX = Input.GetAxisRaw("Horizontal");
 
-        if (lastInputX > 0) anim.SetBool(lookRightId, true);
-        else if (lastInputX < 0) anim.SetBool(lookRightId, false);
+        lookRigh = lastInputX > 0;
+
+        if (lastLookRight != lookRigh)
+        {
+            lastLookRight = lookRigh;
+            anim.SetBool(lookRightId, lookRigh);
+            print("Test");
+        }
+
+        anim.SetBool(isIdleId, !isMove);
     }
     void JumpUpdate()
     {
@@ -125,9 +147,7 @@ public class PlayerPlatform : MonoBehaviour
                 jumpTime -= Time.deltaTime;
             }
             else
-            {
                 isJumping = false;
-            }
         }
 
         if (Input.GetButtonUp("Jump"))
@@ -135,18 +155,14 @@ public class PlayerPlatform : MonoBehaviour
 
 
         if (!InGrounded)
-        {
             coyoteJumpTimer += Time.deltaTime;
-        }
         else
-        {
             coyoteJumpTimer = 0;
-        }
     }
     void PlayerAttackUpdate()
     {
         if (Input.GetButtonDown("Fire1"))
-            Punch(new (Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")));
+            Punch(new (rendererTransform.localScale.x, Input.GetAxisRaw("Vertical")));
     }
     void BombUpdate()
     {
@@ -206,7 +222,11 @@ public class PlayerPlatform : MonoBehaviour
         punchPivot.gameObject.SetActive(true);
         float eulerX = 0;
 
-        if (direction.x > 0)
+        if (direction.y > 0)
+            eulerX = 90;
+        else if (direction.y < 0)
+            eulerX = 270;
+        else if (direction.x > 0)
         {
             direction.y = 0;
             eulerX = 0;
@@ -216,15 +236,12 @@ public class PlayerPlatform : MonoBehaviour
             direction.y = 0;
             eulerX = 180;
         }
-        else if (direction.y > 0)
-            eulerX = 90;
-        else if (direction.y < 0)
-            eulerX = 270;
 
         punchPivot.eulerAngles = new(0, 0, eulerX);
         LeanTween.delayedCall(timeToDisablePunch, () => punchPivot.gameObject.SetActive(false));
 
     }
+    [SerializeField] float collideGizmo;
     private void OnDrawGizmos()
     {
         Vector3 pos = transform.position;
@@ -237,6 +254,9 @@ public class PlayerPlatform : MonoBehaviour
         pos = transform.position;
         pos.x += groundCheckUpDistanceBtweenRays;
         Gizmos.DrawRay(pos, Vector2.up * groundCheckUpDistance);
+
+        Gizmos.DrawWireCube(transform.position, Vector3.one * collideGizmo);
+        Gizmos.DrawWireSphere(transform.position, 0.5f * collideGizmo);
     }
 
     private void OnEnable()
