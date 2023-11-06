@@ -1,12 +1,16 @@
+using Hierarchy2;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SpawnPlayers : MonoBehaviour
 {
-    [SerializeField] GameObject playerPlatform, playerPiece;
+    [SerializeField] GameObject playerPlatform, playerPiece, networkPlayer;
+    [SerializeField] Transform playerNetworkPlayer;
     [SerializeField] Vector3 playerPosition;
+
 
     private void Awake()
     {
@@ -14,7 +18,13 @@ public class SpawnPlayers : MonoBehaviour
     }
     public void SpawnPlayer()
     {
-        if(PhotonNetwork.CurrentRoom.PlayerCount == 1)
+        /*
+        int playerID = PhotonNetwork.CurrentRoom.PlayerCount -1;
+
+        PhotonNetwork.Instantiate(networkPlayer.name, Vector3.zero, Quaternion.identity).GetComponent<NetworkPlayer>().Init(playerID);
+
+         */
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
             Instantiate(playerPiece,Vector3.zero,Quaternion.identity);
         else 
             PhotonNetwork.Instantiate(playerPlatform.name, playerPosition, Quaternion.identity);

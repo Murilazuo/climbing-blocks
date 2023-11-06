@@ -11,6 +11,7 @@ public class NetworkEventSystem
     public const byte PIECE_WIN_GAME_EVENT = 2;
     public const byte PLATFORM_WIN_GAME_EVENT = 3;
     public const byte START_COUNTER_EVENT = 4;
+    public const byte SELECT_TEAM_EVENT = 4;
     public const byte PIECE_STOP_EVENT = 10;
     public const byte PIECE_DESTROY_EVENT = 11;
 
