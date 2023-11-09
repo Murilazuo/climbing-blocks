@@ -471,7 +471,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9179352317349263222}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 6200000, guid: 948d449b784ac1e46abae585a85af06a, type: 2}
   m_IsTrigger: 0
@@ -528,6 +528,7 @@ MonoBehaviour:
   playerRenderer: {fileID: 2938389967854904483}
   anim: {fileID: 3020992245372107097}
   rendererTransform: {fileID: 4125750965305010553}
+  timeToDieInDanger: 5
   collideGizmo: 0.9
 --- !u!114 &7323254342142190606
 MonoBehaviour:

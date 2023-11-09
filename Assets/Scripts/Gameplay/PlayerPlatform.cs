@@ -50,6 +50,10 @@ public class PlayerPlatform : MonoBehaviour
     readonly int isIdleId = Animator.StringToHash("IsIdle");
     readonly int lookRightId = Animator.StringToHash("LookRight");
 
+    [SerializeField] float timeToDieInDanger;
+    float timeInDanger;
+    bool inDanger;
+
     Vector3 GroundCheckPosition
     {
         get
@@ -107,6 +111,11 @@ public class PlayerPlatform : MonoBehaviour
         AnimationUpdate();
         JumpUpdate();
         PlayerAttackUpdate();
+
+        if (inDanger)
+        {
+            timeInDanger -= Time.deltaTime;
+        }
     }
     bool lastLookRight;
     void AnimationUpdate()
@@ -190,6 +199,7 @@ public class PlayerPlatform : MonoBehaviour
         Vector3 velocity = rig.velocity;
         velocity.x = speed.Value * Input.GetAxisRaw("Horizontal");
         rig.velocity = velocity;
+
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -200,9 +210,37 @@ public class PlayerPlatform : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("End"))
+        switch (collision.tag)
         {
-            MatchManager.Instance.PlayerPlatformWin();
+            case "End":
+                MatchManager.Instance.PlayerPlatformWin();
+                break;
+            case "Danger":
+                inDanger = true;
+                rig.gravityScale = gravityScale.Value / 2;
+                break;
+
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        switch (collision.tag)
+        {
+            case "Danger":
+                rig.gravityScale = gravityScale.Value;
+                inDanger = false;
+                break;
+        }
+    }
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        switch (collision.tag)
+        {
+            case "Danger":
+                timeInDanger += Time.deltaTime;
+                if(timeInDanger > timeToDieInDanger)
+                    MatchManager.Instance.PlayerPiecesWin();
+                break;
         }
     }
     void Punch(Vector2 direction)

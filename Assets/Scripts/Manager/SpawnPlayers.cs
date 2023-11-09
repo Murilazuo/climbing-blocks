@@ -18,17 +18,11 @@ public class SpawnPlayers : MonoBehaviour
     }
     public void SpawnPlayer()
     {
-        /*
-        int playerID = PhotonNetwork.CurrentRoom.PlayerCount -1;
-
-        PhotonNetwork.Instantiate(networkPlayer.name, Vector3.zero, Quaternion.identity).GetComponent<NetworkPlayer>().Init(playerID);
-
-         */
         if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
-            Instantiate(playerPiece,Vector3.zero,Quaternion.identity);
-        else 
+            Instantiate(playerPiece, Vector3.zero, Quaternion.identity);
+        else
             PhotonNetwork.Instantiate(playerPlatform.name, playerPosition, Quaternion.identity);
-        
+
         if (Application.isEditor)
             PhotonNetwork.Instantiate(playerPlatform.name, playerPosition, Quaternion.identity);
     }
