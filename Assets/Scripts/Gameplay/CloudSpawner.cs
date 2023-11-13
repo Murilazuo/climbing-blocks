@@ -19,13 +19,11 @@ public class CloudSpawner : MonoBehaviour
 
     void SpawnCloud()
     {
-        print("TEsts");
-
         GameObject obj = Instantiate(cloud, new(transform.position.x, Random.Range(minY, maxY)), Quaternion.identity);
 
         float timeToMove = Random.Range(minTimeSpawn, maxTimeToMove);
 
-        obj.transform.localScale = Vector2.one * ((scaleMult * timeToMove));
+        obj.transform.localScale = Vector2.one * (2 + (scaleMult * timeToMove));
         obj.GetComponent<SpriteRenderer>().sprite = sprites[Random.Range(0, sprites.Length)];
         LeanTween.moveX(obj, bounds, timeToMove).setOnComplete(()=>Destroy(obj));
 
