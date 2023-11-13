@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a19a35ed697dba94794528bd35ccfd3b, type: 3}
   m_Name: HoldMoveSpeed
   m_EditorClassIdentifier: 
-  value: 0.5
+  value: 0
