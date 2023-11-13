@@ -172,6 +172,7 @@ public class PlayerPlatform : MonoBehaviour
     {
         if (Input.GetButtonDown("Fire1"))
             Punch(new (rendererTransform.localScale.x, Input.GetAxisRaw("Vertical")));
+        
     }
     void BombUpdate()
     {

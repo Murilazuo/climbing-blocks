@@ -12,6 +12,7 @@ public class Bomb : MonoBehaviour
     [SerializeField] PhotonView view;
     [SerializeField] TMP_Text text;
     [SerializeField] IntVariable secondsToExplode;
+    [SerializeField] GameObject explosionObject;
     int curretSecondsToExplode;
 
 
@@ -42,6 +43,8 @@ public class Bomb : MonoBehaviour
         foreach(var coll in Physics2D.OverlapCircleAll(transform.position, explosionSize.Value))
             MatchManager.Instance.DestroyBlock(coll.gameObject);
 
+        
+        Instantiate(explosionObject,transform.position,Quaternion.identity);
         if(view.IsMine)
             PhotonNetwork.Destroy(gameObject);
     }
