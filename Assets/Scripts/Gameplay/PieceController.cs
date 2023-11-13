@@ -72,6 +72,11 @@ public class PieceController : MonoBehaviour
                 moveSpeedDelayTimer = 0;
             }
 
+            if (Input.GetButtonDown("Horizontal"))
+            {
+                Piece.currentPiece.MoveX((int)Input.GetAxisRaw("Horizontal"));
+            }
+
             bool canMove = moveDelayTimer >= moveDelay.Value;
             bool isSpeedMoving = moveHoldTimer >= moveHoldTimeToSpeedMove.Value;
 

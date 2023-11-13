@@ -18,13 +18,20 @@ public class SpawnPlayers : MonoBehaviour
     }
     public void SpawnPlayer()
     {
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
-            Instantiate(playerPiece, Vector3.zero, Quaternion.identity);
-        else
-            PhotonNetwork.Instantiate(playerPlatform.name, playerPosition, Quaternion.identity);
+        try
+        {
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+                Instantiate(playerPiece, Vector3.zero, Quaternion.identity);
+            else
+                PhotonNetwork.Instantiate(playerPlatform.name, playerPosition, Quaternion.identity);
 
-        if (Application.isEditor)
-            PhotonNetwork.Instantiate(playerPlatform.name, playerPosition, Quaternion.identity);
+            if (Application.isEditor)
+                PhotonNetwork.Instantiate(playerPlatform.name, playerPosition, Quaternion.identity);
+        }
+        catch
+        {
+            Instantiate(playerPiece, Vector3.zero, Quaternion.identity);
+        }
     }
     private void OnDrawGizmosSelected()
     {

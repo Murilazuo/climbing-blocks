@@ -221,13 +221,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cloud: {fileID: 5276559180387630603, guid: 7fbc24f94e1183e4e8dcb5af550c87f0, type: 3}
   maxTimeToMove: 60
-  minTimeToMove: 40
+  minTimeToMove: 50
   maxY: 16
   minY: 8
   maxTimeSpawn: 8
   minTimeSpawn: 4
   bounds: 36
-  scaleMult: 0.05
+  scaleMult: 0.01
   sprites:
   - {fileID: -1508434624, guid: fb488558432aff64c92779aa975ae5c5, type: 3}
   - {fileID: 878681154, guid: fb488558432aff64c92779aa975ae5c5, type: 3}
@@ -3388,7 +3388,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1107492364
 Transform:
   m_ObjectHideFlags: 0
@@ -3764,7 +3764,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1240576465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6657,7 +6657,7 @@ MonoBehaviour:
   maxTimeSpawn: 8
   minTimeSpawn: 4
   bounds: -21
-  scaleMult: 1
+  scaleMult: 0.01
   sprites:
   - {fileID: -1508434624, guid: fb488558432aff64c92779aa975ae5c5, type: 3}
   - {fileID: 878681154, guid: fb488558432aff64c92779aa975ae5c5, type: 3}
