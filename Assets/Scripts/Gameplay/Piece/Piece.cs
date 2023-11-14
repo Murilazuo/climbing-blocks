@@ -7,12 +7,22 @@ using UnityEngine;
 
 public class Piece : MonoBehaviourPun
 {
+    [System.Serializable]
+    struct PieceData
+    {
+        public Color color;
+        public Vector2[] positions;
+    }
+    [SerializeField] PieceData[] blockPositions;
+
     public const string STOPED_PIECE_TAG = "StopedPiece";
     public const string MOVE_PIECE_TAG = "MovePiece";
 
     [SerializeField] GameObject piecePart;
 
     [SerializeField] float endPositionY;
+
+
 
     bool fixInGrid;
 
@@ -37,6 +47,9 @@ public class Piece : MonoBehaviourPun
 
     static int pieceCount = 0;
     public int pieceId;
+
+    [SerializeField] PhotonView view;
+    [SerializeField] GameObject blockPrefab;
     private void Awake()
     {
         currentPiece = this;
@@ -45,6 +58,24 @@ public class Piece : MonoBehaviourPun
         tag = MOVE_PIECE_TAG;
         pieceCount++;
         pieceId = pieceCount;
+
+        if (view.IsMine)
+        {
+            view.RPC("SetBlock", RpcTarget.All, Random.Range(0, blockPositions.Length));
+        }
+    }
+    [PunRPC]
+    void SetBlock(int dataId)
+    {
+        int id = pieceId * 4;
+        PieceData data = blockPositions[dataId];
+        foreach (var pos in data.positions)
+        {
+            GameObject obj = Instantiate(blockPrefab, transform);
+            obj.transform.localPosition = pos;
+            obj.GetComponent<Block>().Init(id, data.color);
+            id++;
+        }
     }
 
     public void MoveX(int moveX)

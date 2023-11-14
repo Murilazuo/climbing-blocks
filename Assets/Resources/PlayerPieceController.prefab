@@ -48,10 +48,6 @@ MonoBehaviour:
   moveHoldTimeToSpeedMove: {fileID: 11400000, guid: 53a6137efb27d744587d82e0e944ed40, type: 2}
   moveTimeToMoveSpeed: {fileID: 11400000, guid: 3001852fae016374d92ba637ccc1a41a, type: 2}
   timeToMoveDown: {fileID: 11400000, guid: dc891c13fbb409f42b52b9a0b09a5135, type: 2}
-  piecePrefabs:
-  - {fileID: 1604894270055064239, guid: 70ade0753bafc1e43b06e200a82cbb4c, type: 3}
-  - {fileID: 1604894270055064239, guid: 3946ce5c6d2adbb45954996f6ddc49b7, type: 3}
-  - {fileID: 1604894270055064239, guid: 63844511298a43b43b926347d3a038b6, type: 3}
-  - {fileID: 1604894270055064239, guid: b114d6c6b61cfca48807c4b99dad3abd, type: 3}
+  piecePrefab: {fileID: 1604894270055064239, guid: f3feba841f1244a40a535e3bda0e06c8, type: 3}
   spawPiecePosition: {x: 10, y: 18}
   arenaSize: {x: 21, y: 24}

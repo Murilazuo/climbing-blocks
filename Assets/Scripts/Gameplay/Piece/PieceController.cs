@@ -14,7 +14,7 @@ public class PieceController : MonoBehaviour
     public FloatVariable moveTimeToMoveSpeed;
     public FloatVariable timeToMoveDown;
 
-    [SerializeField] GameObject[] piecePrefabs;
+    [SerializeField] GameObject piecePrefab;
     [SerializeField] Vector2 spawPiecePosition;
     Piece lastPiece;
     [SerializeField] Vector2Int arenaSize;
@@ -121,7 +121,7 @@ public class PieceController : MonoBehaviour
     {
         if (lastPiece) lastPiece.OnPieceStop -= NextPiece;
 
-        Piece piece = PhotonNetwork.Instantiate(piecePrefabs[Random.Range(0, piecePrefabs.Length)].name, spawPiecePosition, Quaternion.identity).GetComponent<Piece>();
+        Piece piece = PhotonNetwork.Instantiate(piecePrefab.name, spawPiecePosition, Quaternion.identity).GetComponent<Piece>();
         piece.OnPieceStop += NextPiece;
 
         lastPiece = piece;
