@@ -22,7 +22,7 @@ public class Piece : MonoBehaviourPun
 
     [SerializeField] float endPositionY;
 
-
+    public static System.Action OnStopPiece;
 
     bool fixInGrid;
 
@@ -138,6 +138,8 @@ public class Piece : MonoBehaviourPun
             if (endPositionY <= t.transform.position.y)
                 MatchManager.Instance.PlayerPlatformWin();
         }
+        print("Stop Piece");
+        OnStopPiece?.Invoke();    
     }
     private void OnEnable()
     {

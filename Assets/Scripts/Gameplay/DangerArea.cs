@@ -1,35 +1,52 @@
+using ExitGames.Client.Photon;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class DangerArea : MonoBehaviour
 {
-    [SerializeField] float timeToStart;
-    [SerializeField] float timeToMoveUp;
-    [SerializeField] float moveUpDelay;
-    [SerializeField] int maxFloor;
-    IEnumerator StartBehaviour()
+    [SerializeField] DangerAreaSettings settings;
+    int floor = 0;
+    int spawnedPieces = 0;
+    bool start = false;
+    void NextPiece()
     {
-        yield return new WaitForSeconds(timeToStart);
-        for(float i = 0; i < maxFloor; i++)
+        if (floor < settings.MaxFloor)
         {
-            LeanTween.scaleY(gameObject, i - .1f,timeToMoveUp);
-            yield return new WaitForSeconds(moveUpDelay);
+            spawnedPieces++;
+            if (!start)
+            {
+                if (spawnedPieces >= settings.PiecesToStart)
+                {
+                    NextFloor();
+                    start = true;
+                }
+            }
+            else
+            {
+                if (spawnedPieces >= settings.PiecesToMove)
+                    NextFloor();
+            }
         }
     }
-
-    void StartMatch()
+    void NextFloor()
     {
-        StartCoroutine(nameof(StartBehaviour));
+        spawnedPieces = 0;
+        floor++;
+        LeanTween.scaleY(gameObject, floor, settings.TimeToMoveUp);
     }
 
-    private void OnEnable()
+    public void OnEnable()
     {
-        MatchManager.OnStarGame += StartMatch;
+        Piece.OnStopPiece += NextPiece;
     }
-    private void OnDisable()
+    public void OnDisable()
     {
-        MatchManager.OnStarGame -= StartMatch;
+        Piece.OnStopPiece -= NextPiece;
     }
 }
+
+
 

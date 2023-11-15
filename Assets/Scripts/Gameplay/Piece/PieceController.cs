@@ -17,6 +17,8 @@ public class PieceController : MonoBehaviour
     [SerializeField] Vector2Int arenaSize;
     [SerializeField] bool[,] pieceMatrix;
 
+    public static System.Action OnNextPiece;
+
     public static PieceController Instance;
     bool GetTileState(Vector2Int index) => pieceMatrix[index.x, index.y];
     void SetTileState(Vector2Int index, bool value) => pieceMatrix[index.x, index.y] = value;
@@ -123,6 +125,7 @@ public class PieceController : MonoBehaviour
 
         lastPiece = piece;
     }
+
 
     private void OnDrawGizmosSelected()
     {

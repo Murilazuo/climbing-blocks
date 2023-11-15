@@ -1490,10 +1490,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44ad658b047156841936acd42283c0f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToStart: 20
-  timeToMoveUp: 3
-  moveUpDelay: 10
-  maxFloor: 13
+  settings: {fileID: 11400000, guid: b81252973eab6954c8572481abe53f7c, type: 2}
 --- !u!61 &1052846023
 BoxCollider2D:
   m_ObjectHideFlags: 0
