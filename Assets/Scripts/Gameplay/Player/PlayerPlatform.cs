@@ -54,6 +54,8 @@ public class PlayerPlatform : MonoBehaviour
     float timeInDanger;
     bool inDanger;
 
+    PostProcessVolumeController waterVolumeController;
+
     Vector3 GroundCheckPosition
     {
         get
@@ -72,7 +74,6 @@ public class PlayerPlatform : MonoBehaviour
             return lastInGround;
         }
     }
-            
     bool HasGroundAbove
     {
         get
@@ -103,6 +104,14 @@ public class PlayerPlatform : MonoBehaviour
         {
             rig.simulated = false;
         }
+
+        waterVolumeController = null;
+        foreach (var volume in FindObjectsOfType<PostProcessVolumeController>())
+        {
+            waterVolumeController = volume.GetVolumeByTag(PostProcessTag.WaterDamage);
+            if(waterVolumeController != null)
+                break;
+        }
     }
     void Update()
     {
@@ -112,10 +121,12 @@ public class PlayerPlatform : MonoBehaviour
         JumpUpdate();
         PlayerAttackUpdate();
 
-        if (inDanger)
-        {
+        if (!inDanger && timeInDanger > 0)
             timeInDanger -= Time.deltaTime;
-        }
+
+        float inDangerPercentage = timeInDanger / timeToDieInDanger;
+
+        waterVolumeController.SetWeight(inDangerPercentage);
     }
     bool lastLookRight;
     void AnimationUpdate()
