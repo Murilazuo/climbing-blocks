@@ -6,36 +6,30 @@ using Photon.Pun;
 
 public class Block : MonoBehaviour
 {
-    int id;
     int life = 3;
-    [SerializeField] PhotonView view;
     [SerializeField] SpriteRenderer spr;
-    public void Init(int id, Color color)
+    [SerializeField] GameObject particleHit;
+    [SerializeField] GameObject particleDeath;
+    public void Init(Color color)
     {
         spr.color = color;
-        this.id = id;
     }
-    
-    [PunRPC]
-    void SetLife(int newLife, int id)
-    {
-        if (this.id != id) return;
-
-        life = newLife;
-        print("New Life " +  life);
-        if (life <= 0)
-            Die();
-    }
-
     public void Hit()
     {
-        view.RPC("SetLife", RpcTarget.All, life - 1, id);
+        life--;
+        print("New Life " + life);
+        if (life <= 0)
+            Die();
+
+        ParticleSystem.MainModule main = Instantiate(particleHit, transform.position, Quaternion.identity).GetComponent<ParticleSystem>().main;
+
+        main.startColor = spr.color;
     }
     void Die()
     {
-        if(view.IsMine)
-        {
-            Destroy(gameObject);
-        }
+        Destroy(gameObject);
+        ParticleSystem.MainModule main = Instantiate(particleDeath, transform.position, Quaternion.identity).GetComponent<ParticleSystem>().main;
+
+        main.startColor = spr.color;
     }
 }

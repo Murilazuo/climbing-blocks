@@ -124,5 +124,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7a9c9bb51bb24747ba01fa4d8b746e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  view: {fileID: 0}
   spr: {fileID: 7262513710035777684}
+  particleHit: {fileID: 5528918588118772363, guid: 8e972208d6243c94b95b0fb09b9e3cfe, type: 3}
+  particleDeath: {fileID: 5528918588118772363, guid: 854fd13299e8d254c97e79c59c39ad60, type: 3}

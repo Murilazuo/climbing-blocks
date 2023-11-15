@@ -73,7 +73,7 @@ public class Piece : MonoBehaviourPun
         {
             GameObject obj = Instantiate(blockPrefab, transform);
             obj.transform.localPosition = pos;
-            obj.GetComponent<Block>().Init(id, data.color);
+            obj.GetComponent<Block>().Init(data.color);
             id++;
         }
     }
@@ -168,7 +168,7 @@ public class Piece : MonoBehaviourPun
             //print(Vector3.Distance(pos, t.position));
             if (Vector3.Distance(pos, t.position) < .3f)
             {
-                DestroyImmediate(t.gameObject);
+                t.gameObject.GetComponent<Block>().Hit();
             }
         }
     }
