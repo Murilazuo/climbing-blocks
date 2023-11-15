@@ -20,13 +20,13 @@ public class BombUI : MonoBehaviour
     void Init() => canvasGroup.alpha = 1f;
     private void OnEnable()
     {
-        PlayerPlatform.OnSetBomTimer += OnSetBombTimer;
+        PlayerPlatform.OnSetAttackTimer += OnSetBombTimer;
         PlayerPlatform.OnSpawnPlayerPlatform += Init;
         Bomb.OnBombExplode += DisableKey;
     }
     private void OnDisable()
     {
-        PlayerPlatform.OnSetBomTimer -= OnSetBombTimer;
+        PlayerPlatform.OnSetAttackTimer -= OnSetBombTimer;
         PlayerPlatform.OnSpawnPlayerPlatform -= Init;
         Bomb.OnBombExplode -= DisableKey;
     }

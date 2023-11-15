@@ -13,10 +13,6 @@ public class DebugManager : MonoBehaviour
     {
         if (PieceController.Instance)
         {
-            holdTime.text = PieceController.Instance.moveHoldTimeToSpeedMove.ToString();
-            inputDelay.text = PieceController.Instance.moveDelay.ToString();
-            speed.text = PieceController.Instance.moveTimeToMoveSpeed.ToString();
-            gravity.text = PieceController.Instance.timeToMoveDown.ToString();
         }
     }
 

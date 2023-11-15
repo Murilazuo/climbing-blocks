@@ -6,20 +6,17 @@ using UnityEngine;
 public class PlayerPlatform : MonoBehaviour
 {
     [SerializeField] Vector2 spawnPlatformPosition;
-    
+
+    [SerializeField] PlatformSettings settings;
+
     [Header("Move")]
-    [SerializeField] FloatVariable speed;
     
     [Header("Jump")]
-    [SerializeField] FloatVariable jumpForce;
-    [SerializeField] FloatVariable gravityScale;
     [SerializeField] float groundCheckDistance;
     [SerializeField] float groundCheckUpDistance;
     [SerializeField] float groundCheckUpDistanceBtweenRays;
     [SerializeField] float groundCheckRadius;
     [SerializeField] LayerMask layerMask;
-    [SerializeField] FloatVariable startJumpTime;
-    [SerializeField] FloatVariable coyoteJumpTime;
     float coyoteJumpTimer;
     float jumpTime;
     bool isJumping;
@@ -30,11 +27,8 @@ public class PlayerPlatform : MonoBehaviour
     [SerializeField] LayerMask groundLayer;
     [SerializeField] float timeToDisablePunch;
     Ray attackRayCast;
-    [Header("Attack 2")]
-    [SerializeField] GameObject bombObject;
-    [SerializeField] FloatVariable bombDelay;
-    float bombTimer;
-    public static System.Action<float> OnSetBomTimer;
+    float attackTimer;
+    public static System.Action<float> OnSetAttackTimer;
     public static System.Action OnSpawnPlayerPlatform;
 
     [Header("Component")]
@@ -97,7 +91,7 @@ public class PlayerPlatform : MonoBehaviour
         canMove = Application.isEditor;
         if (view.IsMine)
         {
-            rig.gravityScale = gravityScale.Value;
+            rig.gravityScale = settings.GravityScale;
             OnSpawnPlayerPlatform?.Invoke();
         }
         else
@@ -150,10 +144,10 @@ public class PlayerPlatform : MonoBehaviour
     {
         if (Input.GetButtonDown("Jump"))
         {
-            if ((coyoteJumpTimer <= coyoteJumpTime.Value || InGrounded) && !HasGroundAbove)
+            if ((coyoteJumpTimer <=  settings.CoyoteJumpTime || InGrounded) && !HasGroundAbove)
             {
                 isJumping = true;
-                jumpTime = startJumpTime.Value;
+                jumpTime = settings.StartJumpTime;
                 SetJumpVelocity();
             }
         }
@@ -180,36 +174,38 @@ public class PlayerPlatform : MonoBehaviour
     }
     void PlayerAttackUpdate()
     {
-        if (Input.GetButtonDown("Fire1") && bombTimer >= bombDelay.Value)
+        if (Input.GetButtonDown("Fire1") && attackTimer >= settings.AttackDelay)
         {
-            bombTimer = 0;
+            attackTimer = 0;
             Punch(new (rendererTransform.localScale.x, Input.GetAxisRaw("Vertical")));
         }
         else
         {
-            bombTimer += Time.deltaTime;
-            if (bombTimer > bombDelay.Value) bombTimer = bombDelay.Value;
-            OnSetBomTimer?.Invoke(bombTimer / bombDelay.Value);
+            attackTimer += Time.deltaTime;
+            if (attackTimer > settings.AttackDelay) attackTimer = settings.AttackDelay;
+            OnSetAttackTimer?.Invoke(attackTimer / settings.AttackDelay);
         }
         
     }
     void BombUpdate()
     {
-        if (Input.GetButtonDown("Fire2") && bombTimer >= bombDelay.Value)
+        /*
+        if (Input.GetButtonDown("Fire2") && attackTimer >= bombDelay.Value)
         {
-            bombTimer = 0;
+            attackTimer = 0;
             PhotonNetwork.Instantiate(bombObject.name,transform.position, Quaternion.identity);
         }else
         {
-            bombTimer += Time.deltaTime;
-            if (bombTimer > bombDelay.Value) bombTimer = bombDelay.Value;
-            OnSetBomTimer?.Invoke(bombTimer / bombDelay.Value);
+            attackTimer += Time.deltaTime;
+            if (attackTimer > bombDelay.Value) attackTimer = bombDelay.Value;
+            OnSetAttackTimer?.Invoke(attackTimer / bombDelay.Value);
         }
+         */
     }
     void SetJumpVelocity()
     {
         Vector2 velocity = rig.velocity;
-        velocity.y = jumpForce.Value;
+        velocity.y = settings.JumpForce;
         rig.velocity = velocity;
     }
     private void FixedUpdate()
@@ -217,7 +213,7 @@ public class PlayerPlatform : MonoBehaviour
         if (!view.IsMine || !canMove) return;
         
         Vector3 velocity = rig.velocity;
-        velocity.x = speed.Value * Input.GetAxisRaw("Horizontal");
+        velocity.x = settings.Speed * Input.GetAxisRaw("Horizontal");
         rig.velocity = velocity;
 
     }
@@ -237,9 +233,8 @@ public class PlayerPlatform : MonoBehaviour
                 break;
             case "Danger":
                 inDanger = true;
-                rig.gravityScale = gravityScale.Value / 2;
+                rig.gravityScale = settings.GravityScale;
                 break;
-
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
@@ -247,7 +242,7 @@ public class PlayerPlatform : MonoBehaviour
         switch (collision.tag)
         {
             case "Danger":
-                rig.gravityScale = gravityScale.Value;
+                rig.gravityScale = settings.GravityScale;
                 inDanger = false;
                 break;
         }

@@ -7,11 +7,9 @@ using UnityEngine;
 
 public class Bomb : MonoBehaviour
 {
-    [SerializeField] FloatVariable explosionSize;
     [SerializeField] LayerMask blockLayer;
     [SerializeField] PhotonView view;
     [SerializeField] TMP_Text text;
-    [SerializeField] IntVariable secondsToExplode;
     [SerializeField] GameObject explosionObject;
     int curretSecondsToExplode;
 
@@ -20,7 +18,7 @@ public class Bomb : MonoBehaviour
     private void Start()
     {
         LeanTween.delayedCall(1, PassOneSecond);
-        curretSecondsToExplode = secondsToExplode.Value;
+        curretSecondsToExplode = 3;
         text.text = curretSecondsToExplode.ToString();
     }
 
@@ -40,7 +38,7 @@ public class Bomb : MonoBehaviour
         OnBombExplode?.Invoke();
 
 
-        foreach(var coll in Physics2D.OverlapCircleAll(transform.position, explosionSize.Value))
+        foreach(var coll in Physics2D.OverlapCircleAll(transform.position,3))
             MatchManager.Instance.DestroyBlock(coll.gameObject);
 
         
@@ -50,6 +48,6 @@ public class Bomb : MonoBehaviour
     }
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position, explosionSize.Value);
+        Gizmos.DrawWireSphere(transform.position, 3);
     }
 }

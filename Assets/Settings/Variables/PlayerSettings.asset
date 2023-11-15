@@ -9,7 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a19a35ed697dba94794528bd35ccfd3b, type: 3}
-  m_Name: MoveDelay
+  m_Script: {fileID: 11500000, guid: a7a0901c24c8b6b46a762ccbed8341df, type: 3}
+  m_Name: PlayerSettings
   m_EditorClassIdentifier: 
-  value: 0.5
+  speed: 15
+  coyoteJumpTime: 0.15
+  gravityScale: 15
+  jumpForce: 15
+  startJumpTimer: 0.2
+  attackDelay: 0.5

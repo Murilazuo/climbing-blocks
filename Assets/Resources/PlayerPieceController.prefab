@@ -44,10 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 420667a6668c247479691a54686898b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveDelay: {fileID: 11400000, guid: c671d9ec98f4c5d47a854a2ef83cefa7, type: 2}
-  moveHoldTimeToSpeedMove: {fileID: 11400000, guid: 53a6137efb27d744587d82e0e944ed40, type: 2}
-  moveTimeToMoveSpeed: {fileID: 11400000, guid: 3001852fae016374d92ba637ccc1a41a, type: 2}
-  timeToMoveDown: {fileID: 11400000, guid: dc891c13fbb409f42b52b9a0b09a5135, type: 2}
+  settings: {fileID: 11400000, guid: 97f0e3584dc891240bfd60edb85bffc0, type: 2}
   piecePrefab: {fileID: 1604894270055064239, guid: f3feba841f1244a40a535e3bda0e06c8, type: 3}
   spawPiecePosition: {x: 10, y: 18}
   arenaSize: {x: 21, y: 24}

@@ -9,11 +9,8 @@ public class PieceController : MonoBehaviour
     float moveSpeedDelayTimer;
     float moveHoldTimer;
 
-    public FloatVariable moveDelay;
-    public FloatVariable moveHoldTimeToSpeedMove;
-    public FloatVariable moveTimeToMoveSpeed;
-    public FloatVariable timeToMoveDown;
-
+    public PieceSettings settings;
+    
     [SerializeField] GameObject piecePrefab;
     [SerializeField] Vector2 spawPiecePosition;
     Piece lastPiece;
@@ -77,14 +74,14 @@ public class PieceController : MonoBehaviour
                 Piece.currentPiece.MoveX((int)Input.GetAxisRaw("Horizontal"));
             }
 
-            bool canMove = moveDelayTimer >= moveDelay.Value;
-            bool isSpeedMoving = moveHoldTimer >= moveHoldTimeToSpeedMove.Value;
+            bool canMove = moveDelayTimer >= settings.MoveDelay;
+            bool isSpeedMoving = moveHoldTimer >= settings.HoldTimeToMove;
 
             if (isSpeedMoving)
             {
                 moveSpeedDelayTimer += Time.deltaTime;
 
-                if(moveSpeedDelayTimer >= moveTimeToMoveSpeed.Value)
+                if(moveSpeedDelayTimer >= settings.TimeToMoveInSpeed)
                 {
                     moveSpeedDelayTimer = 0;
                     if (Input.GetButton("Horizontal"))
@@ -115,7 +112,7 @@ public class PieceController : MonoBehaviour
     {
         print("Piece Controller Start Match");
         NextPiece();
-        InvokeRepeating(nameof(PieceGravity), timeToMoveDown.Value, timeToMoveDown.Value);
+        InvokeRepeating(nameof(PieceGravity), settings.PieceGravity, settings.PieceGravity);
     }
     void NextPiece()
     {
