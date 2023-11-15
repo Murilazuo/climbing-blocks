@@ -140,23 +140,19 @@ public class PieceController : MonoBehaviour
     public void OnEnable()
     {
         MatchManager.OnStarGame += StartMatch;
-        PhotonNetwork.NetworkingClient.EventReceived += NetworkCliente_RisedEvent;
+        MatchManager.OnDestroyBlock += OnDestroyBlock;
     }
 
     public void OnDisable()
     {
         MatchManager.OnStarGame -= StartMatch;
-        PhotonNetwork.NetworkingClient.EventReceived -= NetworkCliente_RisedEvent;
+        MatchManager.OnDestroyBlock -= OnDestroyBlock;
     }
 
-    private void NetworkCliente_RisedEvent(EventData eventData)
+    private void OnDestroyBlock(Vector2 blockPosition)
     {
-        if(eventData.Code == NetworkEventSystem.PIECE_DESTROY_EVENT)
-        {
-            object[] data = (object[])eventData.CustomData;
-            Vector3 blockPosition = (Vector3)data[0];
-         
-            SetTileState(new((int)blockPosition.x, (int)blockPosition.y), false);
-        }
+        print("DestroyBlock - piece controller");
+
+        SetTileState(new((int)blockPosition.x, (int)blockPosition.y), false);
     }
 }

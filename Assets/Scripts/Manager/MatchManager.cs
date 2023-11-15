@@ -58,17 +58,11 @@ public class MatchManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();
         SceneManager.LoadScene(1);
     }
-
-    public void DestroyBlock(GameObject block)
+    public static System.Action<Vector2> OnDestroyBlock;
+    public void DestroyBlock(int x, int y)
     {
-        if (block.CompareTag(Piece.STOPED_PIECE_TAG))
-        {
-            object[] data = { block.transform.position };
-
-            DestroyImmediate(block);
-
-            NetworkEventSystem.CallEvent(NetworkEventSystem.PIECE_DESTROY_EVENT, data);
-        }
+        Vector2 blockPosition = new Vector2(x, y);
+        OnDestroyBlock?.Invoke(blockPosition);
     }
 
     public override void OnEnable()

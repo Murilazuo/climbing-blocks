@@ -42,6 +42,8 @@ MonoBehaviour:
   - SetLife
   - InitRPC
   - SetBlock
+  - PunchRenderer
+  - DestroyBlock
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

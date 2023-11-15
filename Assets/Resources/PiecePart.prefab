@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 7262513710035777684}
   - component: {fileID: 2025602940197647260}
   - component: {fileID: 1891720892774926230}
-  - component: {fileID: 5726275222875434067}
   m_Layer: 3
   m_Name: PiecePart
   m_TagString: MovePiece
@@ -125,27 +124,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7a9c9bb51bb24747ba01fa4d8b746e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  view: {fileID: 5726275222875434067}
+  view: {fileID: 0}
   spr: {fileID: 7262513710035777684}
---- !u!114 &5726275222875434067
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7262513710035777682}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents: []
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0

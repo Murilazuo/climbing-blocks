@@ -39,7 +39,7 @@ public class Bomb : MonoBehaviour
 
 
         foreach(var coll in Physics2D.OverlapCircleAll(transform.position,3))
-            MatchManager.Instance.DestroyBlock(coll.gameObject);
+            MatchManager.Instance.DestroyBlock((int)coll.gameObject.transform.position.x, (int)coll.gameObject.transform.position.y);
 
         
         Instantiate(explosionObject,transform.position,Quaternion.identity);

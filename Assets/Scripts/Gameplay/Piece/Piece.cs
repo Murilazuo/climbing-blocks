@@ -61,7 +61,7 @@ public class Piece : MonoBehaviourPun
 
         if (view.IsMine)
         {
-            view.RPC("SetBlock", RpcTarget.All, Random.Range(0, blockPositions.Length));
+            view.RPC(nameof(SetBlock), RpcTarget.All, Random.Range(0, blockPositions.Length));
         }
     }
     [PunRPC]
@@ -144,10 +144,12 @@ public class Piece : MonoBehaviourPun
     private void OnEnable()
     {
         PhotonNetwork.NetworkingClient.EventReceived += NetworkCliente_RisedEvent;
+        MatchManager.OnDestroyBlock += DestroyBlock;
     }
     private void OnDisable()
     {
         PhotonNetwork.NetworkingClient.EventReceived -= NetworkCliente_RisedEvent;
+        MatchManager.OnDestroyBlock -= DestroyBlock;
     }
     void NetworkCliente_RisedEvent(EventData eventData)
     {
@@ -156,18 +158,19 @@ public class Piece : MonoBehaviourPun
             case NetworkEventSystem.PIECE_STOP_EVENT:
                 StopPiece();
                 break;
-            case NetworkEventSystem.PIECE_DESTROY_EVENT:
-                object[] data = (object[])eventData.CustomData;
-                Vector3 piecePosition = (Vector3)data[0];
-
-                foreach (Transform t in transform)
-                {
-                    if (V3ToV3Int(t.position) == V3ToV3Int(piecePosition))
-                        DestroyImmediate(t.gameObject);
-                }
-                break;
         }
     }
-
+    void DestroyBlock(Vector2 pos)
+    {
+            print(pos);
+        foreach(Transform t in transform)
+        {
+            //print(Vector3.Distance(pos, t.position));
+            if (Vector3.Distance(pos, t.position) < .3f)
+            {
+                DestroyImmediate(t.gameObject);
+            }
+        }
+    }
     Vector2Int V3ToV3Int(Vector3 value) => new((int)value.x, (int)value.y);
 }

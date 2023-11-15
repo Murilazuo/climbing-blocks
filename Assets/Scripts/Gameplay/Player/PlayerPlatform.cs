@@ -2,6 +2,7 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngineInternal;
 
 public class PlayerPlatform : MonoBehaviour
 {
@@ -110,7 +111,6 @@ public class PlayerPlatform : MonoBehaviour
     void Update()
     {
         if (!view.IsMine || !canMove) return;
-        //BombUpdate();
         AnimationUpdate();
         JumpUpdate();
         PlayerAttackUpdate();
@@ -187,21 +187,7 @@ public class PlayerPlatform : MonoBehaviour
         }
         
     }
-    void BombUpdate()
-    {
-        /*
-        if (Input.GetButtonDown("Fire2") && attackTimer >= bombDelay.Value)
-        {
-            attackTimer = 0;
-            PhotonNetwork.Instantiate(bombObject.name,transform.position, Quaternion.identity);
-        }else
-        {
-            attackTimer += Time.deltaTime;
-            if (attackTimer > bombDelay.Value) attackTimer = bombDelay.Value;
-            OnSetAttackTimer?.Invoke(attackTimer / bombDelay.Value);
-        }
-         */
-    }
+   
     void SetJumpVelocity()
     {
         Vector2 velocity = rig.velocity;
@@ -265,13 +251,23 @@ public class PlayerPlatform : MonoBehaviour
         
         RaycastHit2D hit = Physics2D.Raycast(attackRayCast.origin,attackRayCast.direction,rayDistance,groundLayer);
 
-        if (hit.collider)
-            MatchManager.Instance.DestroyBlock(hit.collider.gameObject);
-        
-        PunchRenderer(direction);
+        if (hit.collider && hit.transform.gameObject.CompareTag(Piece.STOPED_PIECE_TAG))
+            view.RPC(nameof(DestroyBlock), RpcTarget.All, (int)hit.transform.position.x, (int)hit.transform.position.y);
+            
+        if (view.IsMine)
+            view.RPC(nameof(PunchRenderer), RpcTarget.All, direction.x,direction.y);
     }
-    void PunchRenderer(Vector2 direction)
+    [PunRPC]
+    void DestroyBlock(int x, int y)
     {
+        print("DestroyBlock - player platform");
+        MatchManager.Instance.DestroyBlock(x,y);
+    }
+    [PunRPC]
+    void PunchRenderer(float x, float y)
+    {
+        Vector2 direction = new(x, y);
+
         punchPivot.gameObject.SetActive(true);
         float eulerX = 0;
 
