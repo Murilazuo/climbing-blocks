@@ -116,7 +116,7 @@ public class PlayerPlatform : MonoBehaviour
     void Update()
     {
         if (!view.IsMine || !canMove) return;
-        BombUpdate();
+        //BombUpdate();
         AnimationUpdate();
         JumpUpdate();
         PlayerAttackUpdate();
@@ -142,7 +142,6 @@ public class PlayerPlatform : MonoBehaviour
         {
             lastLookRight = lookRigh;
             anim.SetBool(lookRightId, lookRigh);
-            print("Test");
         }
 
         anim.SetBool(isIdleId, !isMove);
@@ -181,8 +180,17 @@ public class PlayerPlatform : MonoBehaviour
     }
     void PlayerAttackUpdate()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") && bombTimer >= bombDelay.Value)
+        {
+            bombTimer = 0;
             Punch(new (rendererTransform.localScale.x, Input.GetAxisRaw("Vertical")));
+        }
+        else
+        {
+            bombTimer += Time.deltaTime;
+            if (bombTimer > bombDelay.Value) bombTimer = bombDelay.Value;
+            OnSetBomTimer?.Invoke(bombTimer / bombDelay.Value);
+        }
         
     }
     void BombUpdate()
