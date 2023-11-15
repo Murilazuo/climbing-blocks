@@ -2,7 +2,6 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngineInternal;
 
 public class PlayerPlatform : MonoBehaviour
 {
@@ -87,6 +86,7 @@ public class PlayerPlatform : MonoBehaviour
     }
     float lastInputX;
     bool canMove;
+    bool lookVertical;
     private void Start()
     {
         canMove = Application.isEditor;
@@ -114,6 +114,12 @@ public class PlayerPlatform : MonoBehaviour
         AnimationUpdate();
         JumpUpdate();
         PlayerAttackUpdate();
+
+        if (Input.GetButtonDown("Horizontal"))
+            lookVertical = false;
+        if (Input.GetButtonDown("Vertical"))
+            lookVertical = true;
+
 
         if (!inDanger && timeInDanger > 0)
             timeInDanger -= Time.deltaTime;
@@ -246,6 +252,13 @@ public class PlayerPlatform : MonoBehaviour
     }
     void Punch(Vector2 direction)
     {
+        if(lookVertical && direction.y != 0)
+            direction.x = 0;
+        else
+        {
+            direction.y = 0;
+        }
+
         attackRayCast.origin = transform.position;
         attackRayCast.direction = direction;
         
@@ -276,19 +289,12 @@ public class PlayerPlatform : MonoBehaviour
         else if (direction.y < 0)
             eulerX = 270;
         else if (direction.x > 0)
-        {
-            direction.y = 0;
             eulerX = 0;
-        }
         else if (direction.x < 0)
-        {
-            direction.y = 0;
             eulerX = 180;
-        }
 
         punchPivot.eulerAngles = new(0, 0, eulerX);
         LeanTween.delayedCall(timeToDisablePunch, () => punchPivot.gameObject.SetActive(false));
-
     }
     [SerializeField] float collideGizmo;
     private void OnDrawGizmos()
