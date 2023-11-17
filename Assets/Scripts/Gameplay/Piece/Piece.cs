@@ -44,6 +44,7 @@ public class Piece : MonoBehaviourPun
     bool pieceIsStoped;
     public System.Action OnPieceStop;
     public static Piece currentPiece;
+    public static Piece lastPieceStoped;
 
     static int pieceCount = 0;
     public int pieceId;
@@ -136,9 +137,9 @@ public class Piece : MonoBehaviourPun
             LeanTween.delayedCall(.1f, () => t.gameObject.tag = STOPED_PIECE_TAG);
 
             if (endPositionY <= t.transform.position.y)
-                MatchManager.Instance.PlayerPlatformWin();
+                MatchManager.Instance.PieceReachTop();
         }
-        print("Stop Piece");
+        lastPieceStoped = this;
         OnStopPiece?.Invoke();    
     }
     private void OnEnable()
@@ -148,6 +149,7 @@ public class Piece : MonoBehaviourPun
     }
     private void OnDisable()
     {
+        LeanTween.cancel(gameObject);
         PhotonNetwork.NetworkingClient.EventReceived -= NetworkCliente_RisedEvent;
         MatchManager.OnDestroyBlock -= DestroyBlock;
     }
@@ -162,7 +164,6 @@ public class Piece : MonoBehaviourPun
     }
     void DestroyBlock(Vector2 pos)
     {
-            print(pos);
         foreach(Transform t in transform)
         {
             //print(Vector3.Distance(pos, t.position));

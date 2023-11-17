@@ -1,5 +1,6 @@
 using ExitGames.Client.Photon;
 using Photon.Pun;
+using System;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
 
@@ -16,6 +17,8 @@ public class PieceController : MonoBehaviour
     Piece lastPiece;
     [SerializeField] Vector2Int arenaSize;
     [SerializeField] bool[,] pieceMatrix;
+
+    bool canMove;
 
     public static System.Action OnNextPiece;
 
@@ -43,6 +46,7 @@ public class PieceController : MonoBehaviour
                     pieceMatrix[x, y] = true;
 
         Instance = this;
+        canMove = true;
     }
     private void OnDestroy()
     {
@@ -55,7 +59,7 @@ public class PieceController : MonoBehaviour
     }
     private void Update()
     {
-        if (Piece.currentPiece)
+        if (Piece.currentPiece && canMove)
         {
             
             moveDelayTimer += Time.deltaTime;
@@ -125,7 +129,12 @@ public class PieceController : MonoBehaviour
 
         lastPiece = piece;
     }
-
+    private void EndGame(int i)
+    {
+        canMove = false;
+        CancelInvoke(nameof(PieceGravity));
+        
+    }
 
     private void OnDrawGizmosSelected()
     {
@@ -141,12 +150,15 @@ public class PieceController : MonoBehaviour
     {
         MatchManager.OnStarGame += StartMatch;
         MatchManager.OnDestroyBlock += OnDestroyBlock;
+        MatchManager.OnEndGame += EndGame;
     }
 
+ 
     public void OnDisable()
     {
         MatchManager.OnStarGame -= StartMatch;
         MatchManager.OnDestroyBlock -= OnDestroyBlock;
+        MatchManager.OnEndGame -= EndGame;
     }
 
     private void OnDestroyBlock(Vector2 blockPosition)

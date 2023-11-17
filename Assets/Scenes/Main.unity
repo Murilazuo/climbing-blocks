@@ -175,6 +175,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   titleText: {fileID: 1588652900}
   canvasGroup: {fileID: 456063136}
+  timeToEnable: 2
+  alphCanvasTime: 0.5
 --- !u!1 &79945795
 GameObject:
   m_ObjectHideFlags: 0
@@ -860,7 +862,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 4f654403bfc72644f9ab6c0e0a9afa10, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1387,6 +1389,7 @@ GameObject:
   - component: {fileID: 1050609729}
   - component: {fileID: 1050609728}
   - component: {fileID: 1050609731}
+  - component: {fileID: 1050609732}
   m_Layer: 6
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1520,6 +1523,23 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
+--- !u!114 &1050609732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1050609727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ff169efdfc4c204db15c2af2ef8ef5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeToMove: 0.5
+  timeToZoom: 0.5
+  finalOrthographicsSize: 4
+  ease: 6
+  endY: 12
 --- !u!1 &1052846021
 GameObject:
   m_ObjectHideFlags: 0

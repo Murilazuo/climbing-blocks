@@ -29,16 +29,30 @@ public class MatchManager : MonoBehaviourPunCallbacks
     {
         instance = this;
     }
-    public void PlayerPiecesWin()
+
+    public const byte PIECE_COLIDE_WITH_PLATFORM_EVENT = 3;
+
+    public void PlayerDrowned()
     {
-        OnEndGame?.Invoke(NetworkEventSystem.PIECE_WIN_GAME_EVENT);
-        NetworkEventSystem.CallEvent(NetworkEventSystem.PIECE_WIN_GAME_EVENT);
+        OnEndGame?.Invoke(NetworkEventSystem.PLATFORM_DROWNED_EVENT);
+        NetworkEventSystem.CallEvent(NetworkEventSystem.PLATFORM_DROWNED_EVENT);
     }
-    public void PlayerPlatformWin()
+    public void PlatformReachTop()
     {
-        OnEndGame?.Invoke(NetworkEventSystem.PLATFORM_WIN_GAME_EVENT);
-        NetworkEventSystem.CallEvent(NetworkEventSystem.PLATFORM_WIN_GAME_EVENT);
+        OnEndGame?.Invoke(NetworkEventSystem.PLATFORM_REACH_TOP_EVENT);
+        NetworkEventSystem.CallEvent(NetworkEventSystem.PLATFORM_REACH_TOP_EVENT);
     }
+    public void PieceCollideWithPieceReachTop()
+    {
+        OnEndGame?.Invoke(NetworkEventSystem.PIECE_COLIDE_WITH_PLATFORM_EVENT);
+        NetworkEventSystem.CallEvent(NetworkEventSystem.PIECE_COLIDE_WITH_PLATFORM_EVENT);
+    }
+    public void PieceReachTop()
+    {
+        OnEndGame?.Invoke(NetworkEventSystem.PIECE_REACH_TOP_EVENT);
+        NetworkEventSystem.CallEvent(NetworkEventSystem.PIECE_REACH_TOP_EVENT);
+    }
+
     bool matchStarted = false;
     public void StartMatch()
     {
@@ -77,8 +91,10 @@ public class MatchManager : MonoBehaviourPunCallbacks
     {
         switch (eventData.Code)
         {
-            case NetworkEventSystem.PLATFORM_WIN_GAME_EVENT:
-            case NetworkEventSystem.PIECE_WIN_GAME_EVENT:
+            case NetworkEventSystem.PIECE_COLIDE_WITH_PLATFORM_EVENT:
+            case NetworkEventSystem.PLATFORM_REACH_TOP_EVENT:
+            case NetworkEventSystem.PIECE_REACH_TOP_EVENT:
+            case NetworkEventSystem.PLATFORM_DROWNED_EVENT:
                 OnEndGame?.Invoke(eventData.Code);
                 break;
             case NetworkEventSystem.START_MATCH_EVENT:

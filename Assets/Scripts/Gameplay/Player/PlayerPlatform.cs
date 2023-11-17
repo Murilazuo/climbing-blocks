@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -213,7 +214,7 @@ public class PlayerPlatform : MonoBehaviour
     {
         if(collision.gameObject.CompareTag(Piece.MOVE_PIECE_TAG))
         {
-            MatchManager.Instance.PlayerPiecesWin();
+            MatchManager.Instance.PieceCollideWithPieceReachTop();
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
@@ -221,7 +222,7 @@ public class PlayerPlatform : MonoBehaviour
         switch (collision.tag)
         {
             case "End":
-                MatchManager.Instance.PlayerPlatformWin();
+                MatchManager.Instance.PlatformReachTop();
                 break;
             case "Danger":
                 inDanger = true;
@@ -246,7 +247,7 @@ public class PlayerPlatform : MonoBehaviour
             case "Danger":
                 timeInDanger += Time.deltaTime;
                 if(timeInDanger > timeToDieInDanger)
-                    MatchManager.Instance.PlayerPiecesWin();
+                    MatchManager.Instance.PlayerDrowned();
                 break;
         }
     }
@@ -316,9 +317,11 @@ public class PlayerPlatform : MonoBehaviour
 
     private void OnEnable()
     {
+        LeanTween.cancel(gameObject);
         if(view.IsMine)
         {
             MatchManager.OnStarGame += OnStartMatch;
+            MatchManager.OnEndGame += EndGame;
         }
     }
     private void OnDisable()
@@ -326,10 +329,18 @@ public class PlayerPlatform : MonoBehaviour
         if(view.IsMine)
         {
             MatchManager.OnStarGame -= OnStartMatch;
+            MatchManager.OnEndGame -= EndGame;
         }
     }
     void OnStartMatch()
     {
         canMove = true;
+    }
+    private void EndGame(int obj)
+    {
+        anim.speed = 0;
+        canMove = false;
+        rig.isKinematic = true;
+        rig.simulated = false;
     }
 }

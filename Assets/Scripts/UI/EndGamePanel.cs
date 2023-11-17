@@ -9,6 +9,9 @@ public class EndGamePanel : MonoBehaviour
 {
     [SerializeField] TMP_Text titleText;
     [SerializeField] CanvasGroup canvasGroup;
+    [SerializeField] float timeToEnable;
+    [SerializeField] float alphCanvasTime;
+
 
     public static EndGamePanel instance;
     private void Awake()
@@ -29,17 +32,23 @@ public class EndGamePanel : MonoBehaviour
     {
         if (endGame) return;
 
-        if (eventCode == NetworkEventSystem.PLATFORM_WIN_GAME_EVENT || eventCode == NetworkEventSystem.PIECE_WIN_GAME_EVENT)
-        {
-            endGame = true;
-            ActivePanel();
-
-            titleText.text = eventCode == NetworkEventSystem.PLATFORM_WIN_GAME_EVENT ? "Platformers Win" : "Pieces Win";
+        print(eventCode);
+        print(NetworkEventSystem.IsEndGame((byte)eventCode));
+        if (NetworkEventSystem.IsEndGame((byte)eventCode))
+        { 
+            LeanTween.delayedCall(timeToEnable, () => OpenPanel(eventCode));
         }
+    }
+    void OpenPanel(int eventCode)
+    {
+        endGame = true;
+        ActivePanel();
+
+        titleText.text = NetworkEventSystem.PlatfomrWin((byte)eventCode) ? "Platformers Win" : "Pieces Win";
     }
     void ActivePanel()
     {
-        canvasGroup.alpha = 1;
+        LeanTween.alphaCanvas(canvasGroup, 1, alphCanvasTime);
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
     }
