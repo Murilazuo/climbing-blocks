@@ -12,7 +12,7 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     [SerializeField] TMP_Text warnigTMP;
 
     [Header("Panel")]
-    [SerializeField] GameObject panel;
+    [SerializeField] RectTransform panel;
     [SerializeField] GameObject createContent;
     [SerializeField] GameObject lobbyContent;
     [SerializeField] CanvasGroup buttonsCanvasGroup;
@@ -22,6 +22,12 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     [SerializeField] LeanTweenType ease;
 
     List<RoomInfo> roomList = new List<RoomInfo>();
+
+    static CreateAndJoinRooms Instance;
+    private void Awake()
+    {
+        Instance = this;
+    }
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
         base.OnRoomListUpdate(roomList);
@@ -92,12 +98,19 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     public void ClosedPanel()
     {
         buttonsCanvasGroup.interactable = true;
-        LeanTween.moveY(panel, closedPositionY, timeToMove).setEase(ease);
+        LeanTween.value(panel.gameObject,MoveRectTransformY,  openPositionY, closedPositionY, timeToMove).setEase(ease);
+
     }
     void OpenPanel()
     {
         buttonsCanvasGroup.interactable = false;
-        LeanTween.moveY(panel, openPositionY, timeToMove).setEase(ease);
+        LeanTween.value(panel.gameObject,MoveRectTransformY, closedPositionY, openPositionY,timeToMove).setEase(ease);
+    }
+    
+    void MoveRectTransformY(float pos)
+    {
+        Vector2 rect = Instance.panel.anchoredPosition;
+        Instance.panel.anchoredPosition = new Vector2(rect.x, pos);
     }
 
 }
