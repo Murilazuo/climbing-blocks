@@ -33,7 +33,6 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
         base.OnRoomListUpdate(roomList);
 
         this.roomList = roomList;
-        print("Room list Updated");
     }
     public void CreateRoom()
     {
@@ -41,19 +40,22 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
         if (roomName == "")
             ShowWarning("Room name invalid");
         else if (RoomExist(roomName))
-            ShowWarning("Room doesn't exist");
+            ShowWarning("Room already exist");
         else
-            PhotonNetwork.CreateRoom(createRoomInput.text);
+            PhotonNetwork.CreateRoom(roomName);
     }
     public void JoinRoom()
     {
-        string roomName = createRoomInput.text;
-        if (!RoomExist(roomName))
-            PhotonNetwork.JoinRoom(joinRoomInput.text);
-        else if (roomName == "")
+        string roomName = joinRoomInput.text;
+
+        if (roomName == "")
             ShowWarning("Room name invalid");
-        else
+        else if (!RoomExist(roomName))
+        {
             ShowWarning("Room doesn't exist");
+        }
+        else
+            PhotonNetwork.JoinRoom(roomName);
     }
     void ShowWarning(string warningText)
     {

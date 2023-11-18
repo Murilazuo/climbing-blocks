@@ -2556,6 +2556,7 @@ MonoBehaviour:
   - name: UIClick
     sound: 2
     clip: {fileID: 8300000, guid: 393d3214c135f2f448df6c7c3a5fe376, type: 3}
+    clientOnly: 0
     volume: 0.2
   view: {fileID: 0}
   source: {fileID: 1274002272}
