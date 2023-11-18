@@ -45,7 +45,6 @@ public class PlayerPlatform : MonoBehaviour
     readonly int isIdleId = Animator.StringToHash("IsIdle");
     readonly int lookRightId = Animator.StringToHash("LookRight");
 
-    [SerializeField] float timeToDieInDanger;
     float timeInDanger;
     bool inDanger;
 
@@ -121,11 +120,19 @@ public class PlayerPlatform : MonoBehaviour
         if (Input.GetButtonDown("Vertical"))
             lookVertical = true;
 
+        if (Input.GetButtonUp("Horizontal"))
+            if (Input.GetButton("Vertical"))
+                lookVertical = true;
+
+        if (Input.GetButtonUp("Vertical"))
+            if (Input.GetButtonDown("Horizontal"))
+                lookVertical = false;
+
 
         if (!inDanger && timeInDanger > 0)
             timeInDanger -= Time.deltaTime;
 
-        float inDangerPercentage = timeInDanger / timeToDieInDanger;
+        float inDangerPercentage = timeInDanger / settings.TimeToDieInDangerZone;
 
         waterVolumeController.SetWeight(inDangerPercentage);
     }
@@ -246,7 +253,7 @@ public class PlayerPlatform : MonoBehaviour
         {
             case "Danger":
                 timeInDanger += Time.deltaTime;
-                if(timeInDanger > timeToDieInDanger)
+                if(timeInDanger > settings.TimeToDieInDangerZone)
                     MatchManager.Instance.PlayerDrowned();
                 break;
         }

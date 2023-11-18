@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: PlayerSettings
   m_EditorClassIdentifier: 
   speed: 15
+  timeToDie: 3
   coyoteJumpTime: 0.15
   gravityScale: 15
   jumpForce: 15
