@@ -38,21 +38,19 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     public void CreateRoom()
     {
         string roomName = createRoomInput.text;
-
-        if (RoomExist(roomName))
-            if (roomName == "")
-                ShowWarning("Room name invalid");
-            else
-                ShowWarning("Room doesn't exist");
+        if (roomName == "")
+            ShowWarning("Room name invalid");
+        else if (RoomExist(roomName))
+            ShowWarning("Room doesn't exist");
         else
             PhotonNetwork.CreateRoom(createRoomInput.text);
     }
     public void JoinRoom()
     {
         string roomName = createRoomInput.text;
-        if (RoomExist(roomName))
+        if (!RoomExist(roomName))
             PhotonNetwork.JoinRoom(joinRoomInput.text);
-        if (roomName == "")
+        else if (roomName == "")
             ShowWarning("Room name invalid");
         else
             ShowWarning("Room doesn't exist");

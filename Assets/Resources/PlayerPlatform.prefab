@@ -522,7 +522,6 @@ MonoBehaviour:
   playerRenderer: {fileID: 2938389967854904483}
   anim: {fileID: 3020992245372107097}
   rendererTransform: {fileID: 4125750965305010553}
-  timeToDieInDanger: 2
   collideGizmo: 0.9
 --- !u!114 &7323254342142190606
 MonoBehaviour:
