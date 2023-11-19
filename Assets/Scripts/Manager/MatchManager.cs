@@ -10,6 +10,7 @@ using UnityEngine.SceneManagement;
 
 public class MatchManager : MonoBehaviourPunCallbacks
 {
+    [SerializeField] PhotonView view;
     static MatchManager instance;
     public static MatchManager Instance
     {
@@ -78,7 +79,29 @@ public class MatchManager : MonoBehaviourPunCallbacks
         Vector2 blockPosition = new Vector2(x, y);
         OnDestroyBlock?.Invoke(blockPosition);
     }
-
+    bool[] playersReady = new bool[2];
+    int count = 0;
+    public void SerIsReady(bool isReady, int playerId)
+    {
+        view.RPC(nameof(RPCSetIsReady),RpcTarget.All, isReady, playerId);
+        if (Application.isEditor)
+        {
+            count++;
+            if(count >= 5)
+                StartCounter();
+        }
+    }
+    [PunRPC]
+    void RPCSetIsReady(bool isReady, int playerId)
+    {
+        playersReady[playerId-1] = isReady;
+        print($"Player {playerId} isRead {isReady}");
+        print($"Player 0 isRead {playersReady[0]}");
+        print($"Player 1 isRead {playersReady[1]}");
+            
+        if (playersReady[0] && playersReady[1])
+            StartCounter();
+    }
     public override void OnEnable()
     {
         PhotonNetwork.NetworkingClient.EventReceived += OnEndGameEvent;

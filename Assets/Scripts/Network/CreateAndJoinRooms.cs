@@ -103,6 +103,7 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     }
     void OpenPanel()
     {
+        warnigTMP.gameObject.SetActive(false);
         buttonsCanvasGroup.interactable = false;
         LeanTween.value(panel.gameObject,MoveRectTransformY, closedPositionY, openPositionY,timeToMove).setEase(ease);
     }
