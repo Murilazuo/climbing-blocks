@@ -9,8 +9,7 @@ public class ReadyButton : MonoBehaviour
     [SerializeField] TMP_Text buttonText;
     private void Start()
     {
-        buttonText.text = "Not Ready";
-        isReady = false;
+        ResetButton();
     }
     bool isReady;
     public void SetReady()
@@ -20,6 +19,18 @@ public class ReadyButton : MonoBehaviour
         buttonText.text = isReady ? "Ready" : "Not Ready";
         buttonText.color = isReady ? Color.green : Color.red;
 
-        MatchManager.Instance.SerIsReady(isReady, PhotonNetwork.LocalPlayer.ActorNumber);
+        MatchManager.Instance.SerIsReady(isReady);
+    }
+    void ResetButton()
+    {
+        buttonText.text = "Not Ready";
+        isReady = false;
+        buttonText.color = Color.red;
+
+    }
+
+    private void OnDisable()
+    {
+        ResetButton();
     }
 }

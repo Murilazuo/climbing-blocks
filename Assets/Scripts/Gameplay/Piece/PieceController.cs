@@ -154,7 +154,7 @@ public class PieceController : MonoBehaviour
         MatchManager.OnStarGame += StartMatch;
         MatchManager.OnDestroyBlock += OnDestroyBlock;
         MatchManager.OnEndGame += EndGame;
-        EndGamePanel.OnOpenEndGaemPanel += OnOpenEndGamePanel;
+        EndGamePanel.OnOpenEndGamePanel += OnOpenEndGamePanel;
     }
 
 
@@ -163,7 +163,7 @@ public class PieceController : MonoBehaviour
         MatchManager.OnStarGame -= StartMatch;
         MatchManager.OnDestroyBlock -= OnDestroyBlock;
         MatchManager.OnEndGame -= EndGame;
-        EndGamePanel.OnOpenEndGaemPanel -= OnOpenEndGamePanel;
+        EndGamePanel.OnOpenEndGamePanel -= OnOpenEndGamePanel;
     }
 
     private void OnDestroyBlock(Vector2 blockPosition)

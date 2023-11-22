@@ -151,14 +151,14 @@ public class Piece : MonoBehaviourPun
     {
         PhotonNetwork.NetworkingClient.EventReceived += NetworkCliente_RisedEvent;
         MatchManager.OnDestroyBlock += DestroyBlock;
-        EndGamePanel.OnOpenEndGaemPanel += OnOpenEndGamePanel;
+        EndGamePanel.OnOpenEndGamePanel += OnOpenEndGamePanel;
     }
     private void OnDisable()
     {
         LeanTween.cancel(gameObject);
         PhotonNetwork.NetworkingClient.EventReceived -= NetworkCliente_RisedEvent;
         MatchManager.OnDestroyBlock -= DestroyBlock;
-        EndGamePanel.OnOpenEndGaemPanel -= OnOpenEndGamePanel;
+        EndGamePanel.OnOpenEndGamePanel -= OnOpenEndGamePanel;
     }
     void NetworkCliente_RisedEvent(EventData eventData)
     {

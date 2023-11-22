@@ -15,10 +15,6 @@ public class MatchManager : MonoBehaviourPunCallbacks
     [SerializeField] PhotonView view;
     static MatchManager instance;
 
-    [SerializeField] CanvasGroup endGameCanvasGroup;
-    [SerializeField] GameObject tutorialPanel;
-    [SerializeField] SelectTeamController selectTeamController;
-
     public static MatchManager Instance
     {
         get
@@ -32,6 +28,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     public static System.Action OnStarCounter;
     public static System.Action<int> OnEndGame;
     public static System.Action OnUpdatePlayerSelect;
+    public static System.Action OnPlayAgain;
     public static System.Action<PlayerType> OnSelectPlayerType;
 
     public bool HasSpaceToCharacters { get
@@ -42,16 +39,9 @@ public class MatchManager : MonoBehaviourPunCallbacks
     PlayerSelect currentSelect;
     [SerializeField] GameObject selectCharacter;
     [SerializeField] GameObject selectPiece;
-    [SerializeField] GameObject playAgain;
-   
     private void Awake()
     {
         instance = this;
-
-        print("Players Count in room" + PhotonNetwork.CurrentRoom.PlayerCount);
-
-        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
-            playersReady.Add(false);
     }
 
     public const byte PIECE_COLIDE_WITH_PLATFORM_EVENT = 3;
@@ -98,20 +88,8 @@ public class MatchManager : MonoBehaviourPunCallbacks
     }
     public void PlayAgain()
     {
-        /*
-        tutorialPanel.SetActive(true);
-        endGameCanvasGroup.blocksRaycasts = false;
-        endGameCanvasGroup.alpha = 0;
-        selectTeamController.ActivePanel();
-
-        if (currentSelect)
-            PhotonNetwork.Destroy(currentSelect.gameObject);
-         */
-        //PhotonNetwork.DestroyAll();
-
-
-
-        PhotonNetwork.LoadLevel(2);
+        OnPlayAgain?.Invoke();
+        matchStarted = false;
     }
 
     public static System.Action<Vector2> OnDestroyBlock;
@@ -120,11 +98,9 @@ public class MatchManager : MonoBehaviourPunCallbacks
         Vector2 blockPosition = new Vector2(x, y);
         OnDestroyBlock?.Invoke(blockPosition);
     }
-    List<bool> playersReady = new List<bool>();
-    int count = 0;
     PlayerReady playerReady;
     [SerializeField] GameObject playerReadyPrefab;
-    public void SerIsReady(bool isReady, int playerId)
+    public void SerIsReady(bool isReady)
     {
         if(isReady)
         {
@@ -138,36 +114,12 @@ public class MatchManager : MonoBehaviourPunCallbacks
                 playerReady = null;
             }
         }
+
         if(PhotonNetwork.CurrentRoom.PlayerCount > 1 && FindObjectsOfType<PlayerReady>().Length == PhotonNetwork.CurrentRoom.PlayerCount)
         {
             StartCounter();
         }
-
-        //view.RPC(nameof(RPCSetIsReady),RpcTarget.All, isReady, playerId);
-        if (Application.isEditor)
-        {
-            count++;
-            if(count >= 5)
-                StartCounter();
-        }
     }
-    [PunRPC]
-    void RPCSetIsReady(bool isReady, int playerId)
-    {
-        
-
-        if(playersReady.Count < PhotonNetwork.CurrentRoom.PlayerCount)
-        {
-            for(int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount - playersReady.Count; i++)
-                playersReady.Add(false);
-        }
-            
-        playersReady[playerId-1] = isReady;
-
-        if (!(playersReady.Contains(false)))
-            StartCounter();
-    }
-
 
     public void SelectPlayerType(PlayerType newPlayerType)
     {

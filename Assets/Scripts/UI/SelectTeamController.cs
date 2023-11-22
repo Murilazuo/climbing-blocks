@@ -1,5 +1,6 @@
 using ExitGames.Client.Photon;
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -24,9 +25,14 @@ public class SelectTeamController : MonoBehaviour
         character.button.interactable = false;
         piece.button.interactable = false;
 
-        ActivePanel();
-        yield return new WaitForSeconds(.3f);
-        UpdateButtons();
+        if (FindObjectsOfType<PlayerPlatform>().Length > 0)
+            DisablePanel();
+        else
+        {
+            ActivePanel();
+            yield return new WaitForSeconds(.3f);
+            UpdateButtons();
+        }
     }
 
     void UpdateButtons()
@@ -63,7 +69,6 @@ public class SelectTeamController : MonoBehaviour
         canvasGroup.blocksRaycasts = false;
         canvasGroup.alpha = 0;
     }
-
     public void SelectPlayerType(int playerTypeId)
     {
         MatchManager.Instance.SelectPlayerType((PlayerType)playerTypeId);
@@ -78,10 +83,13 @@ public class SelectTeamController : MonoBehaviour
     public void OnEnable()
     {
         PhotonNetwork.NetworkingClient.EventReceived += OnReceiveNetworkEvent;
+        MatchManager.OnPlayAgain += ActivePanel;
     }
     public void OnDisable()
     {
         PhotonNetwork.NetworkingClient.EventReceived -= OnReceiveNetworkEvent;
+        MatchManager.OnPlayAgain -= ActivePanel;
     }
 
+    
 }

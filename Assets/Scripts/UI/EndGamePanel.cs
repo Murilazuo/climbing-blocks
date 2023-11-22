@@ -1,5 +1,6 @@
 using ExitGames.Client.Photon;
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -11,9 +12,10 @@ public class EndGamePanel : MonoBehaviour
     [SerializeField] CanvasGroup canvasGroup;
     [SerializeField] float timeToEnable;
     [SerializeField] float alphCanvasTime;
-    public static System.Action OnOpenEndGaemPanel;
+    public static System.Action OnOpenEndGamePanel;
 
     public static EndGamePanel instance;
+
     private void Awake()
     {
         instance = this; 
@@ -21,19 +23,24 @@ public class EndGamePanel : MonoBehaviour
     private void OnEnable()
     {
         MatchManager.OnEndGame += OnEndGame;
-
+        MatchManager.OnPlayAgain += OnPlayAgain;
     }
     private void OnDisable()
     {
         MatchManager.OnEndGame -= OnEndGame;
+        MatchManager.OnPlayAgain -= OnPlayAgain;
     }
+
+    private void OnPlayAgain()
+    {
+        DisablePanel();
+    }
+
     bool endGame;
     void OnEndGame(int eventCode)
     {
         if (endGame) return;
 
-        print(eventCode);
-        print(NetworkEventSystem.IsEndGame((byte)eventCode));
         if (NetworkEventSystem.IsEndGame((byte)eventCode))
         { 
             LeanTween.delayedCall(timeToEnable, () => OpenPanel(eventCode));
@@ -45,11 +52,10 @@ public class EndGamePanel : MonoBehaviour
         ActivePanel();
 
         titleText.text = NetworkEventSystem.PlatfomrWin((byte)eventCode) ? "Platformers Win" : "Pieces Win";
-        OnOpenEndGaemPanel?.Invoke();
     }
     void ActivePanel()
     {
-        LeanTween.alphaCanvas(canvasGroup, 1, alphCanvasTime);
+        LeanTween.alphaCanvas(canvasGroup, 1, alphCanvasTime).setOnComplete(() => OnOpenEndGamePanel?.Invoke());
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
     }

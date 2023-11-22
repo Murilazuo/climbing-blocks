@@ -11,7 +11,7 @@ public class RegressiveCounter : MonoBehaviour
     readonly int countTrigger = Animator.StringToHash("Count");
     private void Awake()
     {
-        transform.GetChild(0).gameObject.SetActive(false);
+        ResetCounter();
     }
     void StartCount()
     {
@@ -38,13 +38,19 @@ public class RegressiveCounter : MonoBehaviour
 
         count--;
     }
-    
+    void ResetCounter()
+    {
+        transform.GetChild(0).gameObject.SetActive(false);
+        count = 3;
+    }
     private void OnEnable()
     {
         MatchManager.OnStarCounter += StartCount;
+        MatchManager.OnPlayAgain += ResetCounter;
     }
     private void OnDisable()
     {
         MatchManager.OnStarCounter -= StartCount;
+        MatchManager.OnPlayAgain -= ResetCounter;
     }
 }

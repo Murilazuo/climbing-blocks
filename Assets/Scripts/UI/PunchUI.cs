@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BombUI : MonoBehaviour
+public class PunchUI : MonoBehaviour
 {
     [SerializeField] Image image;
     [SerializeField] GameObject keyObject;
@@ -18,14 +18,17 @@ public class BombUI : MonoBehaviour
         keyObject.SetActive(false);
     }
     void Init() => canvasGroup.alpha = 1f;
+    void Disable(int eventId) => canvasGroup.alpha = 0f;
     private void OnEnable()
     {
+        MatchManager.OnEndGame += Disable;
         PlayerPlatform.OnSetAttackTimer += OnSetBombTimer;
         PlayerPlatform.OnSpawnPlayerPlatform += Init;
         Bomb.OnBombExplode += DisableKey;
     }
     private void OnDisable()
     {
+        MatchManager.OnEndGame -= Disable;
         PlayerPlatform.OnSetAttackTimer -= OnSetBombTimer;
         PlayerPlatform.OnSpawnPlayerPlatform -= Init;
         Bomb.OnBombExplode -= DisableKey;

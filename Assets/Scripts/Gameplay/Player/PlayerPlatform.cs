@@ -325,7 +325,13 @@ public class PlayerPlatform : MonoBehaviour
         Gizmos.DrawWireCube(transform.position, Vector3.one * collideGizmo);
         Gizmos.DrawWireSphere(transform.position, 0.5f * collideGizmo);
     }
-
+    void OpenEndGamePanel()
+    {
+        if (view.IsMine)
+        {
+            PhotonNetwork.Destroy(gameObject);
+        }
+    }
     private void OnEnable()
     {
         LeanTween.cancel(gameObject);
@@ -333,6 +339,7 @@ public class PlayerPlatform : MonoBehaviour
         {
             MatchManager.OnStarGame += OnStartMatch;
             MatchManager.OnEndGame += EndGame;
+            EndGamePanel.OnOpenEndGamePanel += OpenEndGamePanel;
         }
     }
     private void OnDisable()
@@ -341,6 +348,7 @@ public class PlayerPlatform : MonoBehaviour
         {
             MatchManager.OnStarGame -= OnStartMatch;
             MatchManager.OnEndGame -= EndGame;
+            EndGamePanel.OnOpenEndGamePanel -= OpenEndGamePanel;
         }
     }
     void OnStartMatch()
