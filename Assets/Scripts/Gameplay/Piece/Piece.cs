@@ -144,7 +144,8 @@ public class Piece : MonoBehaviourPun
     }
     void OnOpenEndGamePanel()
     {
-        PhotonNetwork.Destroy(gameObject);
+        if(view.IsMine)
+            PhotonNetwork.Destroy(gameObject);
     }
     private void OnEnable()
     {
