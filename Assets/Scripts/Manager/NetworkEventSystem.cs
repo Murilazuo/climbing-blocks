@@ -19,6 +19,8 @@ public class NetworkEventSystem
     
     public const byte PIECE_STOP_EVENT = 10;
 
+    public const byte UPDATE_PLAYERS_SELECT_EVENT = 20;
+
     public const byte START_COUNTER_EVENT = 99;
     public const byte SELECT_TEAM_EVENT = 98;
 

@@ -6,15 +6,11 @@ public class TutorialPanel : MonoBehaviour
 {
     [SerializeField] GameObject panel;
     [SerializeField] GameObject[] tutorials;
-    private void Start()
+    
+    void SetPlayer(PlayerType playerType)
     {
-        SetPlayer(SpawnPlayers.Instance.playerId);
-    }
-    void SetPlayer(int id)
-    {
-        tutorials[0].SetActive(false);
-        tutorials[1].SetActive(false);
-        tutorials[id-1].SetActive(true);
+        tutorials[0].SetActive((int)playerType == 0);
+        tutorials[1].SetActive((int)playerType == 1);
     }
 
     void OnStartConter()
@@ -24,12 +20,12 @@ public class TutorialPanel : MonoBehaviour
     private void OnEnable()
     {
         MatchManager.OnStarCounter += OnStartConter;
-        SpawnPlayers.OnSpawnPlayer += SetPlayer;
+        MatchManager.OnSelectPlayerType += SetPlayer;
     }
     private void OnDisable()
     {
         MatchManager.OnStarCounter -= OnStartConter;
-        SpawnPlayers.OnSpawnPlayer -= SetPlayer;
+        MatchManager.OnSelectPlayerType -= SetPlayer;
         
     }
 }

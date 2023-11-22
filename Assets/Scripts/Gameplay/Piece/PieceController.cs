@@ -145,20 +145,25 @@ public class PieceController : MonoBehaviour
                 if (y == 0 || x == 0 || x == (arenaSize.x - 1))
                     Gizmos.DrawWireCube(new(x, y), new(1, 1));
     }
-
+    void OnOpenEndGamePanel()
+    {
+        Destroy(gameObject);
+    }
     public void OnEnable()
     {
         MatchManager.OnStarGame += StartMatch;
         MatchManager.OnDestroyBlock += OnDestroyBlock;
         MatchManager.OnEndGame += EndGame;
+        EndGamePanel.OnOpenEndGaemPanel += OnOpenEndGamePanel;
     }
 
- 
+
     public void OnDisable()
     {
         MatchManager.OnStarGame -= StartMatch;
         MatchManager.OnDestroyBlock -= OnDestroyBlock;
         MatchManager.OnEndGame -= EndGame;
+        EndGamePanel.OnOpenEndGaemPanel -= OnOpenEndGamePanel;
     }
 
     private void OnDestroyBlock(Vector2 blockPosition)

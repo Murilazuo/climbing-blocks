@@ -11,7 +11,7 @@ public class EndGamePanel : MonoBehaviour
     [SerializeField] CanvasGroup canvasGroup;
     [SerializeField] float timeToEnable;
     [SerializeField] float alphCanvasTime;
-
+    public static System.Action OnOpenEndGaemPanel;
 
     public static EndGamePanel instance;
     private void Awake()
@@ -45,6 +45,7 @@ public class EndGamePanel : MonoBehaviour
         ActivePanel();
 
         titleText.text = NetworkEventSystem.PlatfomrWin((byte)eventCode) ? "Platformers Win" : "Pieces Win";
+        OnOpenEndGaemPanel?.Invoke();
     }
     void ActivePanel()
     {

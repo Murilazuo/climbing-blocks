@@ -142,16 +142,22 @@ public class Piece : MonoBehaviourPun
         lastPieceStoped = this;
         OnStopPiece?.Invoke();    
     }
+    void OnOpenEndGamePanel()
+    {
+        PhotonNetwork.Destroy(gameObject);
+    }
     private void OnEnable()
     {
         PhotonNetwork.NetworkingClient.EventReceived += NetworkCliente_RisedEvent;
         MatchManager.OnDestroyBlock += DestroyBlock;
+        EndGamePanel.OnOpenEndGaemPanel += OnOpenEndGamePanel;
     }
     private void OnDisable()
     {
         LeanTween.cancel(gameObject);
         PhotonNetwork.NetworkingClient.EventReceived -= NetworkCliente_RisedEvent;
         MatchManager.OnDestroyBlock -= DestroyBlock;
+        EndGamePanel.OnOpenEndGaemPanel -= OnOpenEndGamePanel;
     }
     void NetworkCliente_RisedEvent(EventData eventData)
     {

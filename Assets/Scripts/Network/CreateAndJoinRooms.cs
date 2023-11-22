@@ -29,34 +29,34 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     {
         Instance = this;
     }
-    public override void OnRoomListUpdate(List<RoomInfo> roomList)
-    {
-        base.OnRoomListUpdate(roomList);
 
-        this.roomList = roomList;
-    }
     public void CreateRoom()
     {
         string roomName = createRoomInput.text;
+
         if (roomName == "")
             ShowWarning("Room name invalid");
-        else if (RoomExist(roomName))
-            ShowWarning("Room already exist");
         else
+
             PhotonNetwork.CreateRoom(roomName);
     }
     public void JoinRoom()
     {
         string roomName = joinRoomInput.text;
-
         if (roomName == "")
             ShowWarning("Room name invalid");
-        else if (!RoomExist(roomName))
-        {
-            ShowWarning("Room doesn't exist");
-        }
         else
             PhotonNetwork.JoinRoom(roomName);
+    }
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        if (returnCode == 32758)
+            ShowWarning("Room doesn't exist");
+    }
+    public override void OnCreateRoomFailed(short returnCode, string message)
+    {
+        if (returnCode == 32766)
+            ShowWarning("Room already exist");
     }
     void ShowWarning(string warningText)
     {
@@ -83,11 +83,7 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.LoadLevel(2);
     }
-    public override void OnDisconnected(DisconnectCause cause)
-    {
-        base.OnDisconnected(cause);
-        SceneManager.LoadScene("Loading");
-    }
+    
 
     public void OpenPanelCreate()
     {
