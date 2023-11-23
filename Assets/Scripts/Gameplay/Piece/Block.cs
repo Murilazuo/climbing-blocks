@@ -6,13 +6,15 @@ using Photon.Pun;
 
 public class Block : MonoBehaviour
 {
-    int life = 3;
+    int life = 2;
+    [SerializeField] PieceSettings settings;
     [SerializeField] SpriteRenderer spr;
     [SerializeField] GameObject particleHit;
     [SerializeField] GameObject particleDeath;
     public void Init(Color color)
     {
         spr.color = color;
+        life = settings.BlockLife;
     }
     public void Hit()
     {

@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e3feb843d7d2904d9063f611a0b9a4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  view: {fileID: -2766002569957324152}
 --- !u!114 &-2766002569957324152
 MonoBehaviour:
   m_ObjectHideFlags: 0

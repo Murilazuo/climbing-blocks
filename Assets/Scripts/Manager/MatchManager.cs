@@ -104,14 +104,17 @@ public class MatchManager : MonoBehaviourPunCallbacks
     {
         if(isReady)
         {
-            PhotonNetwork.Instantiate(playerReadyPrefab.name, Vector2.zero, Quaternion.identity);
+            playerReady = PhotonNetwork.Instantiate(playerReadyPrefab.name, Vector2.zero, Quaternion.identity).GetComponent<PlayerReady>();
         }
         else
         {
             if (playerReady)
             {
-                PhotonNetwork.Destroy(playerReady.gameObject);
-                playerReady = null;
+                if (playerReady.IsMine)
+                {
+                    PhotonNetwork.Destroy(playerReady.gameObject);
+                    playerReady = null;
+                }
             }
         }
 
@@ -142,8 +145,13 @@ public class MatchManager : MonoBehaviourPunCallbacks
                 }
                 break;
             case PlayerType.None:
-                if(currentSelect)
-                    PhotonNetwork.Destroy(currentSelect.gameObject);
+                if (currentSelect)
+                {
+                    if (currentSelect.IsMine)
+                    {
+                        PhotonNetwork.Destroy(currentSelect.gameObject);
+                    }
+                }
                 OnSelectPlayerType?.Invoke(PlayerType.None);
                 NetworkEventSystem.CallEvent(NetworkEventSystem.UPDATE_PLAYERS_SELECT_EVENT);
                 break;

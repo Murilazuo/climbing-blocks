@@ -18,4 +18,4 @@ MonoBehaviour:
   gravityScale: 15
   jumpForce: 15
   startJumpTimer: 0.2
-  attackDelay: 0.5
+  attackDelay: 0.3

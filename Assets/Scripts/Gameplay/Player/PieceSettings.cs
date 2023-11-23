@@ -13,4 +13,6 @@ public class PieceSettings : ScriptableObject
     [SerializeField] float pieceGravity;
     public float TimeToMoveInSpeed { get => timeToMoveInSpeed; }
     [SerializeField] float timeToMoveInSpeed;
+    public int BlockLife { get => blockLife; }
+    [SerializeField] int blockLife;
 }

@@ -45,6 +45,20 @@ public class PlayerPlatform : MonoBehaviour
     readonly int isIdleId = Animator.StringToHash("IsIdle");
     readonly int lookRightId = Animator.StringToHash("LookRight");
 
+    [Header("Color")]
+    [SerializeField] Color[] colors;
+    [SerializeField] SpriteRenderer[] spriteRenderers;
+    int GetColorId(int actorNumber)
+    {
+        for (int i = 1; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+        {
+            if (actorNumber == PhotonNetwork.CurrentRoom.Players[i].ActorNumber)
+                return i;
+        }
+        return 0;
+    }
+    bool IsLastCharcter { get => FindObjectsOfType<PlayerPlatform>().Length == 1; }
+
     float timeInDanger;
     bool inDanger;
 
@@ -106,6 +120,16 @@ public class PlayerPlatform : MonoBehaviour
             waterVolumeController = volume.GetVolumeByTag(PostProcessTag.WaterDamage);
             if(waterVolumeController != null)
                 break;
+        }
+
+        SetColor();
+    }
+    void SetColor()
+    {
+        Color color = colors[GetColorId(view.OwnerActorNr)];
+        foreach(var spr in spriteRenderers)
+        {
+            spr.color = color;
         }
     }
     void Update()
@@ -223,7 +247,27 @@ public class PlayerPlatform : MonoBehaviour
     {
         if(collision.gameObject.CompareTag(Piece.MOVE_PIECE_TAG))
         {
-            MatchManager.Instance.PieceCollideWithPieceReachTop();
+            if (colideWithPiece) return;
+                colideWithPiece = true;
+
+            if (IsLastCharcter)
+                MatchManager.Instance.PieceCollideWithPieceReachTop();
+            else
+                PlayerDie();
+        }
+    }
+    bool colideWithPiece = false;
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag(Piece.MOVE_PIECE_TAG))
+        {
+            if (colideWithPiece) return;
+                colideWithPiece = true;
+
+            if (IsLastCharcter)
+                MatchManager.Instance.PieceCollideWithPieceReachTop();
+            else
+                PlayerDie();
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
@@ -255,9 +299,20 @@ public class PlayerPlatform : MonoBehaviour
         {
             case "Danger":
                 timeInDanger += Time.deltaTime;
-                if(timeInDanger > settings.TimeToDieInDangerZone)
-                    MatchManager.Instance.PlayerDrowned();
+                if (timeInDanger > settings.TimeToDieInDangerZone)
+                    if (IsLastCharcter)
+                        MatchManager.Instance.PlayerDrowned();
+                    else
+                        PlayerDie();
+                   
                 break;
+        }
+    }
+    void PlayerDie()
+    {
+        if(view.IsMine)
+        {
+            PhotonNetwork.Destroy(gameObject);
         }
     }
     void Punch(Vector2 direction)

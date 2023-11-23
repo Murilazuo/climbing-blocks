@@ -54,14 +54,16 @@ public class PieceController : MonoBehaviour
     }
     void PieceGravity()
     {
-        if(Piece.currentPiece)
-            Piece.currentPiece.MoveDown();
+        if (Piece.currentPiece)
+        {
+            MoveDown();
+            Invoke(nameof(PieceGravity), settings.PieceGravity);
+        } 
     }
     private void Update()
     {
         if (Piece.currentPiece && canMove)
         {
-            
             moveDelayTimer += Time.deltaTime;
             
             if(Input.GetButton("Horizontal") || Input.GetButton("MoveDown"))
@@ -79,6 +81,10 @@ public class PieceController : MonoBehaviour
             {
                 Piece.currentPiece.MoveX((int)Input.GetAxisRaw("Horizontal"));
             }
+            if (Input.GetButtonDown("MoveDown"))
+            {
+                MoveDown();
+            }
 
             bool canMove = moveDelayTimer >= settings.MoveDelay;
             bool isSpeedMoving = moveHoldTimer >= settings.HoldTimeToMove;
@@ -94,31 +100,38 @@ public class PieceController : MonoBehaviour
                         Piece.currentPiece.MoveX((int)Input.GetAxisRaw("Horizontal"));
 
                     if (Input.GetButton("MoveDown"))
-                        Piece.currentPiece.MoveDown();
+                        MoveDown();
                 }
             }
             else
             {
-                if (Input.GetButtonDown("Horizontal") && canMove)
+                /*
+                if (Input.GetButtonDown("Horizontal"))
                 {
                     moveDelayTimer = 0;
                     Piece.currentPiece.MoveX((int)Input.GetAxisRaw("Horizontal"));
 
                 }
 
-                if (Input.GetButtonDown("MoveDown") && canMove)
+                if (Input.GetButtonDown("MoveDown"))
                 {
                     moveDelayTimer = 0;
-                    Piece.currentPiece.MoveDown();
+                    MoveDown();
                 } 
+                 */
             }
         }
     }
+    void MoveDown()
+    {
+        Piece.currentPiece.MoveDown();
+        CancelInvoke(nameof(PieceGravity));
+        Invoke(nameof(PieceGravity), settings.PieceGravity);
+    }
     public void StartMatch()
     {
-        print("Piece Controller Start Match");
         NextPiece();
-        InvokeRepeating(nameof(PieceGravity), settings.PieceGravity, settings.PieceGravity);
+        Invoke(nameof(PieceGravity), settings.PieceGravity);
     }
     void NextPiece()
     {
@@ -133,7 +146,6 @@ public class PieceController : MonoBehaviour
     {
         canMove = false;
         CancelInvoke(nameof(PieceGravity));
-        
     }
 
     private void OnDrawGizmosSelected()

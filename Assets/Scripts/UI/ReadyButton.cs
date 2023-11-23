@@ -26,7 +26,6 @@ public class ReadyButton : MonoBehaviour
         buttonText.text = "Not Ready";
         isReady = false;
         buttonText.color = Color.red;
-
     }
 
     private void OnDisable()

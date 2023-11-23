@@ -6,10 +6,10 @@ using UnityEngine;
 public class PlayerReady : MonoBehaviour
 {
     [SerializeField] PhotonView view;
-
+    public bool IsMine { get => view.IsMine; }
     void StartCounter()
     {
-        if(view.IsMine)
+        if(IsMine)
             PhotonNetwork.Destroy(gameObject);
     }
     private void OnEnable()
