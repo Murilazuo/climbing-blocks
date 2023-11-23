@@ -7365,8 +7365,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1052846021}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.992, y: 0.445, z: 0}
-  m_LocalScale: {x: 20.119982, y: 0, z: 1}
+  m_LocalPosition: {x: 10.000001, y: 0.445, z: 0}
+  m_LocalScale: {x: 19, y: 0.64, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -7624,12 +7624,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   view: {fileID: 1102556781}
-  endGameCanvasGroup: {fileID: 456063136}
-  tutorialPanel: {fileID: 1877066867}
-  selectTeamController: {fileID: 0}
   selectCharacter: {fileID: 1200974431612351989, guid: 4f78befb6e01ebe4bac583cf92f5453d, type: 3}
   selectPiece: {fileID: 4841556880959217208, guid: e693f24199330a244ba5cdede84f5faf, type: 3}
-  playAgain: {fileID: 0}
   playerReadyPrefab: {fileID: 1662687838705236668, guid: 944fa49d366a59647abf2618d6f579c6, type: 3}
 --- !u!4 &1102556780
 Transform:
