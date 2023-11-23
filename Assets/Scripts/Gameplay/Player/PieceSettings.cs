@@ -7,8 +7,6 @@ public class PieceSettings : ScriptableObject
 {
     public float HoldTimeToMove { get => holdTimeToMove; }
     [SerializeField] float holdTimeToMove;
-    public float MoveDelay { get => moveDalay; }
-    [SerializeField] float moveDalay;
     public float PieceGravity { get => pieceGravity; }
     [SerializeField] float pieceGravity;
     public float TimeToMoveInSpeed { get => timeToMoveInSpeed; }

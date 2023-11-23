@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0513a798b735f9d44945a644f37dec0c, type: 3}
   m_Name: PieceSettings
   m_EditorClassIdentifier: 
-  holdTimeToMove: 2
-  moveDalay: 0.5
+  holdTimeToMove: 0.2
   pieceGravity: 1
-  timeToMoveInSpeed: 0.3
-  blockLife: 0
+  timeToMoveInSpeed: 0.2
+  blockLife: 2
