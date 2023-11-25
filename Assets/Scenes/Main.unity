@@ -7712,7 +7712,8 @@ MonoBehaviour:
   playerPiece: {fileID: 9179352317349263222, guid: 066e002668d6b6942b3a72b72027bb0d, type: 3}
   networkPlayer: {fileID: 5337497635566519924, guid: ed00ee167e2adad419b0d6b9655ea3fc, type: 3}
   playerNetworkPlayer: {fileID: 0}
-  playerPosition: {x: 10, y: 1.1, z: 0}
+  positionY: 1.5
+  maxX: 20
 --- !u!1 &1112260194
 GameObject:
   m_ObjectHideFlags: 0

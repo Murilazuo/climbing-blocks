@@ -48,12 +48,12 @@ public class PlayerPlatform : MonoBehaviour
     [Header("Color")]
     [SerializeField] Color[] colors;
     [SerializeField] SpriteRenderer[] spriteRenderers;
-    int GetColorId(int actorNumber)
+    public static int GetPlayerId(int playerNumber)
     {
         for (int i = 1; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
         {
-            if (actorNumber == PhotonNetwork.CurrentRoom.Players[i].ActorNumber)
-                return i;
+            if (playerNumber == PhotonNetwork.CurrentRoom.Players[i].ActorNumber)
+                return i-1;
         }
         return 0;
     }
@@ -108,9 +108,13 @@ public class PlayerPlatform : MonoBehaviour
         {
             rig.gravityScale = settings.GravityScale;
             OnSpawnPlayerPlatform?.Invoke();
+            view.RPC(nameof(SetColor), RpcTarget.All, GetPlayerId(PhotonNetwork.LocalPlayer.ActorNumber));
+            rig.simulated = true;
+            rig.isKinematic = false;
         }
         else
         {
+            rig.isKinematic = true;
             rig.simulated = false;
         }
 
@@ -122,11 +126,11 @@ public class PlayerPlatform : MonoBehaviour
                 break;
         }
 
-        SetColor();
     }
-    void SetColor()
+    [PunRPC]
+    void SetColor(int colorId)
     {
-        Color color = colors[GetColorId(view.OwnerActorNr)];
+        Color color = colors[colorId];
         foreach(var spr in spriteRenderers)
         {
             spr.color = color;

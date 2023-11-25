@@ -9,7 +9,8 @@ public class SpawnPlayers : MonoBehaviour
 {
     [SerializeField] GameObject playerPlatform, playerPiece, networkPlayer;
     [SerializeField] Transform playerNetworkPlayer;
-    [SerializeField] Vector3 playerPosition;
+    [SerializeField] float positionY;
+    [SerializeField] float maxX;
 
     public static SpawnPlayers Instance;
     PlayerType playerType;   
@@ -21,12 +22,20 @@ public class SpawnPlayers : MonoBehaviour
     {
         Instance = this;
     }
+    Vector2 PlatformSpawnPosition()
+    {
+        float part = maxX / (float)PhotonNetwork.CurrentRoom.PlayerCount;
+
+        Vector2 result = new(part* (PlayerPlatform.GetPlayerId(PhotonNetwork.LocalPlayer.ActorNumber)+1f), positionY);
+
+        return result;
+    }
     public void SpawnPlayer()
     {
         if (playerType == PlayerType.Piece)
             Instantiate(playerPiece, Vector3.zero, Quaternion.identity);
         else if (playerType == PlayerType.Character)
-            PhotonNetwork.Instantiate(playerPlatform.name, playerPosition, Quaternion.identity);
+            PhotonNetwork.Instantiate(playerPlatform.name, PlatformSpawnPosition(), Quaternion.identity);
     }
     private void OnEnable()
     {
@@ -38,8 +47,9 @@ public class SpawnPlayers : MonoBehaviour
         MatchManager.OnSelectPlayerType -= SetPlayerType;
         MatchManager.OnStarCounter -= SpawnPlayer;
     }
-    private void OnDrawGizmosSelected()
+
+    private void OnDrawGizmos()
     {
-        Gizmos.DrawSphere(playerPosition, .5f);
+        Gizmos.DrawSphere(new(maxX, positionY), .3f);
     }
 }

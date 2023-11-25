@@ -118,8 +118,9 @@ public class Piece : MonoBehaviourPun
                 transform.position = pos;
             }
         }
-
     }
+
+    
     void CallStopPiece()
     {
         currentPiece = null;
