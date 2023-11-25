@@ -69,12 +69,16 @@ public class PieceController : MonoBehaviour
             if(Input.GetButton("Horizontal") || Input.GetButton("MoveDown"))
             {
                 moveHoldTimer += Time.deltaTime;
+
             }
 
             if (Input.GetButtonUp("Horizontal") || Input.GetButtonUp("MoveDown"))
             {
-                moveHoldTimer = 0;
-                moveSpeedDelayTimer = 0;
+                if (!Input.GetButton("Horizontal") && !Input.GetButton("MoveDown"))
+                {
+                    moveHoldTimer = 0;
+                    moveSpeedDelayTimer = 0;
+                }
             }
 
             if (Input.GetButtonDown("Horizontal"))
@@ -86,7 +90,6 @@ public class PieceController : MonoBehaviour
                 MoveDown();
             }
 
-            bool canMove = moveDelayTimer >= settings.MoveDelay;
             bool isSpeedMoving = moveHoldTimer >= settings.HoldTimeToMove;
 
             if (isSpeedMoving)
@@ -96,29 +99,13 @@ public class PieceController : MonoBehaviour
                 if(moveSpeedDelayTimer >= settings.TimeToMoveInSpeed)
                 {
                     moveSpeedDelayTimer = 0;
+
                     if (Input.GetButton("Horizontal"))
                         Piece.currentPiece.MoveX((int)Input.GetAxisRaw("Horizontal"));
 
                     if (Input.GetButton("MoveDown"))
                         MoveDown();
                 }
-            }
-            else
-            {
-                /*
-                if (Input.GetButtonDown("Horizontal"))
-                {
-                    moveDelayTimer = 0;
-                    Piece.currentPiece.MoveX((int)Input.GetAxisRaw("Horizontal"));
-
-                }
-
-                if (Input.GetButtonDown("MoveDown"))
-                {
-                    moveDelayTimer = 0;
-                    MoveDown();
-                } 
-                 */
             }
         }
     }
