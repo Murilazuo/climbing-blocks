@@ -46,6 +46,8 @@ public class SelectTeamController : MonoBehaviour
             SetChosable(character);
         else
             SetFull(character);
+
+        SetChosable(character);
     }
     void SetFull(ButtonChose buttonChose)
     {

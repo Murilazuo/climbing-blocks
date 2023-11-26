@@ -183,8 +183,10 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
                 characterCount++;
         }
 
-        hasPiecePlayer = pieceCount == 0 || PhotonNetwork.CurrentRoom.PlayerCount == 1;
-        hasSpaceToCharacters = characterCount < PhotonNetwork.CurrentRoom.PlayerCount - 1;
+        hasPiecePlayer = pieceCount == 0;
+        hasSpaceToCharacters = true;
+            
+            //characterCount < PhotonNetwork.CurrentRoom.PlayerCount - 1 || PhotonNetwork.CurrentRoom.PlayerCount == 1;
 
         OnPlayerSetTeam?.Invoke();
     }

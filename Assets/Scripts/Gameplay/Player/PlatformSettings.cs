@@ -8,6 +8,8 @@ public class PlatformSettings : ScriptableObject
     [Header("Move")]
     [SerializeField] float speed;
     public float Speed { get => speed; }
+    public float TimeToSnap { get => TimeToSnap; }
+    [SerializeField] float timeToSnap;
     [Header("Danger Area")]
     [SerializeField] float timeToDie;
     public float TimeToDieInDangerZone { get => timeToDie; }

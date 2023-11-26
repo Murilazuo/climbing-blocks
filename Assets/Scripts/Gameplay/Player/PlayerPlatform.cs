@@ -139,8 +139,14 @@ public class PlayerPlatform : MonoBehaviour
             lookVertical = true;
 
         if (Input.GetButtonUp("Horizontal"))
+        {
             if (Input.GetButton("Vertical"))
                 lookVertical = true;
+        
+            Vector2 snapPosition = new((int)transform.position.x,transform.transform.position.y);
+
+            transform.position = snapPosition;
+        }
 
         if (Input.GetButtonUp("Vertical"))
             if (Input.GetButtonDown("Horizontal"))
