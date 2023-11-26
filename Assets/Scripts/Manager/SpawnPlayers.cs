@@ -7,8 +7,7 @@ using UnityEngine.UI;
 
 public class SpawnPlayers : MonoBehaviour
 {
-    [SerializeField] GameObject playerPlatform, playerPiece, networkPlayer;
-    [SerializeField] Transform playerNetworkPlayer;
+    [SerializeField] GameObject playerPlatform, playerPiece;
     [SerializeField] float positionY;
     [SerializeField] float maxX;
 

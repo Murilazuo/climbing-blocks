@@ -33,6 +33,7 @@ public class EndGamePanel : MonoBehaviour
 
     private void OnPlayAgain()
     {
+        endGame = false;
         DisablePanel();
     }
 

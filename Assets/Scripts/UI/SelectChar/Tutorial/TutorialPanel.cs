@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,10 +14,12 @@ public class TutorialPanel : MonoBehaviour
             ClosePanel();
     }
 
-    void SetPlayer(PlayerType playerType)
+    void SetPlayer()
     {
-        tutorials[0].SetActive((int)playerType == 0);
-        tutorials[1].SetActive((int)playerType == 1);
+        PlayerType playerType = MasterClientManager.Instance.playersType[PhotonNetwork.LocalPlayer];
+
+        tutorials[0].SetActive(playerType == PlayerType.Piece);
+        tutorials[1].SetActive(playerType == PlayerType.Character);
     }
 
     void ClosePanel()
@@ -30,13 +33,13 @@ public class TutorialPanel : MonoBehaviour
     private void OnEnable()
     {
         MatchManager.OnStarCounter += ClosePanel;
-        MatchManager.OnSelectPlayerType += SetPlayer;
+        MasterClientManager.OnPlayerSetTeam += SetPlayer;
         MatchManager.OnPlayAgain += OpenPanel;
     }
     private void OnDisable()
     {
         MatchManager.OnStarCounter -= ClosePanel;
-        MatchManager.OnSelectPlayerType -= SetPlayer;
+        MasterClientManager.OnPlayerSetTeam -= SetPlayer;
         MatchManager.OnPlayAgain -= OpenPanel;
         
     }

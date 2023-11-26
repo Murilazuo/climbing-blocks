@@ -20,6 +20,7 @@ public class CamAnimController : MonoBehaviour
     }
     void ResetCam()
     {
+        endGame = false;
         transform.position = originalPosition;
         Camera.main.orthographicSize = originalSize;
     }

@@ -117,6 +117,7 @@ public class PieceController : MonoBehaviour
     }
     public void StartMatch()
     {
+        canMove = true;
         NextPiece();
         Invoke(nameof(PieceGravity), settings.PieceGravity);
     }

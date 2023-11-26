@@ -25,10 +25,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     public static System.Action<int> OnEndGame;
     public static System.Action OnUpdatePlayerSelect;
     public static System.Action OnPlayAgain;
-    public static System.Action<PlayerType> OnSelectPlayerType;
 
-    [SerializeField] GameObject selectCharacter;
-    [SerializeField] GameObject selectPiece;
     private void Awake()
     {
         instance = this;
@@ -105,6 +102,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
             case NetworkEventSystem.PLATFORM_REACH_TOP_EVENT:
             case NetworkEventSystem.PIECE_REACH_TOP_EVENT:
             case NetworkEventSystem.PLATFORM_DROWNED_EVENT:
+                print("EndGame");
                 OnEndGame?.Invoke(eventData.Code);
                 break;
             case NetworkEventSystem.START_MATCH_EVENT:
