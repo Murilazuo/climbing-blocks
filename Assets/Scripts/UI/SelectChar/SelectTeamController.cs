@@ -65,6 +65,11 @@ public class SelectTeamController : MonoBehaviour
 
         ActivePanel();
     }
+
+    void PlayAgain()
+    {
+        ActivePanel();
+    }
     public void ActivePanel()
     {
         UpdateButtons();
@@ -85,12 +90,12 @@ public class SelectTeamController : MonoBehaviour
     public void OnEnable()
     {
         MasterClientManager.OnPlayerSetTeam += UpdateButtons;
-        MatchManager.OnPlayAgain += ActivePanel;
+        MatchManager.OnPlayAgain += PlayAgain;
     }
     public void OnDisable()
     {
         MasterClientManager.OnPlayerSetTeam -= UpdateButtons;
-        MatchManager.OnPlayAgain -= ActivePanel;
+        MatchManager.OnPlayAgain -= PlayAgain;
     }
 
     

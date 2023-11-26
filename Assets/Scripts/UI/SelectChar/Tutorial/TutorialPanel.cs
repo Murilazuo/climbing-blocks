@@ -10,8 +10,8 @@ public class TutorialPanel : MonoBehaviour
 
     private void Start()
     {
-        if (FindObjectsOfType<PlayerPlatform>().Length > 0)
-            ClosePanel();
+        tutorials[0].SetActive(false);
+        tutorials[1].SetActive(false);
     }
 
     void SetPlayer()
@@ -30,17 +30,24 @@ public class TutorialPanel : MonoBehaviour
     {
         panel.SetActive(true);
     }
+    void PlayAgain()
+    {
+        OpenPanel();
+
+        tutorials[0].SetActive(false);
+        tutorials[1].SetActive(false);
+    }
     private void OnEnable()
     {
         MatchManager.OnStarCounter += ClosePanel;
         MasterClientManager.OnPlayerSetTeam += SetPlayer;
-        MatchManager.OnPlayAgain += OpenPanel;
+        MatchManager.OnPlayAgain += PlayAgain;
     }
     private void OnDisable()
     {
         MatchManager.OnStarCounter -= ClosePanel;
         MasterClientManager.OnPlayerSetTeam -= SetPlayer;
-        MatchManager.OnPlayAgain -= OpenPanel;
+        MatchManager.OnPlayAgain -= PlayAgain;
         
     }
 }
