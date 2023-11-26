@@ -45,18 +45,8 @@ public class PlayerPlatform : MonoBehaviour
     readonly int isIdleId = Animator.StringToHash("IsIdle");
     readonly int lookRightId = Animator.StringToHash("LookRight");
 
-    [Header("Color")]
-    [SerializeField] Color[] colors;
     [SerializeField] SpriteRenderer[] spriteRenderers;
-    public static int GetPlayerId(int playerNumber)
-    {
-        for (int i = 1; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
-        {
-            if (playerNumber == PhotonNetwork.CurrentRoom.Players[i].ActorNumber)
-                return i-1;
-        }
-        return 0;
-    }
+    
     bool IsLastCharcter { get => FindObjectsOfType<PlayerPlatform>().Length == 1; }
 
     float timeInDanger;
@@ -108,7 +98,7 @@ public class PlayerPlatform : MonoBehaviour
         {
             rig.gravityScale = settings.GravityScale;
             OnSpawnPlayerPlatform?.Invoke();
-            view.RPC(nameof(SetColor), RpcTarget.All, GetPlayerId(PhotonNetwork.LocalPlayer.ActorNumber));
+            view.RPC(nameof(SetColor), RpcTarget.All, MasterClientManager.GetPlayerId(PhotonNetwork.LocalPlayer.ActorNumber));
             rig.simulated = true;
             rig.isKinematic = false;
         }
@@ -130,7 +120,7 @@ public class PlayerPlatform : MonoBehaviour
     [PunRPC]
     void SetColor(int colorId)
     {
-        Color color = colors[colorId];
+        Color color = MasterClientManager.Instance.GetPlayerColor(colorId);
         foreach(var spr in spriteRenderers)
         {
             spr.color = color;

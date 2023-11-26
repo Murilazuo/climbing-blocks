@@ -26,7 +26,7 @@ public class SpawnPlayers : MonoBehaviour
     {
         float part = maxX / (float)PhotonNetwork.CurrentRoom.PlayerCount;
 
-        Vector2 result = new(part* (PlayerPlatform.GetPlayerId(PhotonNetwork.LocalPlayer.ActorNumber)+1f), positionY);
+        Vector2 result = new(part* (MasterClientManager.GetPlayerId(PhotonNetwork.LocalPlayer.ActorNumber)+1f), positionY);
 
         return result;
     }

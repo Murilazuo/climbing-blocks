@@ -37,12 +37,12 @@ public class SelectTeamController : MonoBehaviour
 
     void UpdateButtons()
     {
-        if (MatchManager.Instance.HasPiecePlayer)
+        if (MasterClientManager.Instance.hasPiecePlayer)
             SetFull(piece);
         else
             SetChosable(piece);
 
-        if (MatchManager.Instance.HasSpaceToCharacters)
+        if (MasterClientManager.Instance.hasSpaceToCharacters)
             SetChosable(character);
         else
             SetFull(character);
@@ -82,12 +82,14 @@ public class SelectTeamController : MonoBehaviour
     }
     public void OnEnable()
     {
-        PhotonNetwork.NetworkingClient.EventReceived += OnReceiveNetworkEvent;
+        // PhotonNetwork.NetworkingClient.EventReceived += OnReceiveNetworkEvent;
+        MasterClientManager.OnPlayerSetTeam += UpdateButtons;
         MatchManager.OnPlayAgain += ActivePanel;
     }
     public void OnDisable()
     {
-        PhotonNetwork.NetworkingClient.EventReceived -= OnReceiveNetworkEvent;
+        //PhotonNetwork.NetworkingClient.EventReceived -= OnReceiveNetworkEvent;
+        MasterClientManager.OnPlayerSetTeam -= UpdateButtons;
         MatchManager.OnPlayAgain -= ActivePanel;
     }
 

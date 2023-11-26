@@ -19,7 +19,7 @@ public class ReadyButton : MonoBehaviour
         buttonText.text = isReady ? "Ready" : "Not Ready";
         buttonText.color = isReady ? Color.green : Color.red;
 
-        MatchManager.Instance.SerIsReady(isReady);
+        MasterClientManager.Instance.ClienteSetReady(isReady);
     }
     void ResetButton()
     {

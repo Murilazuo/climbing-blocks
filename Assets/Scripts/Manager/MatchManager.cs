@@ -42,8 +42,6 @@ public class MatchManager : MonoBehaviourPunCallbacks
     private void Awake()
     {
         instance = this;
-
-        print("Is Master " + PhotonNetwork.IsMasterClient);
     }
 
     public const byte PIECE_COLIDE_WITH_PLATFORM_EVENT = 3;
