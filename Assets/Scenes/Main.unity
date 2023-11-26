@@ -10909,7 +10909,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 994856092}
         m_TargetAssemblyTypeName: SelectTeamController, Assembly-CSharp
-        m_MethodName: ActivePanel
+        m_MethodName: ChangeTeam
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

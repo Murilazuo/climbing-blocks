@@ -59,6 +59,12 @@ public class SelectTeamController : MonoBehaviour
         buttonChose.buttonText.text = "Chose";
         buttonChose.button.interactable = true;
     }
+    public void ChangeTeam()
+    {
+        MasterClientManager.Instance.ClientSetTeam(PlayerType.None);
+
+        ActivePanel();
+    }
     public void ActivePanel()
     {
         UpdateButtons();
