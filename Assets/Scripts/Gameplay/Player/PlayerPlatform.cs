@@ -39,6 +39,7 @@ public class PlayerPlatform : MonoBehaviour
     [Header("Anim")]
     [SerializeField] Animator anim;
     [SerializeField] Transform rendererTransform;
+    [SerializeField] GameObject[] outlineObjects;
     bool lookRigh;
     bool isMove;
     readonly int isIdleId = Animator.StringToHash("IsIdle");
@@ -100,9 +101,15 @@ public class PlayerPlatform : MonoBehaviour
             view.RPC(nameof(SetColor), RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber-1);
             rig.simulated = true;
             rig.isKinematic = false;
+
+            foreach(var outline in outlineObjects)
+                outline.SetActive(true);
         }
         else
         {
+            foreach (var outline in outlineObjects)
+                Destroy(outline);
+
             rig.isKinematic = true;
             rig.simulated = false;
         }
