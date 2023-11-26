@@ -1,5 +1,4 @@
 using Photon.Pun;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +10,7 @@ public class PlayerPlatform : MonoBehaviour
     [SerializeField] PlatformSettings settings;
 
     [Header("Move")]
-    
+    [SerializeField] float rayMoveDistance;
     [Header("Jump")]
     [SerializeField] float groundCheckDistance;
     [SerializeField] float groundCheckUpDistance;
@@ -98,7 +97,7 @@ public class PlayerPlatform : MonoBehaviour
         {
             rig.gravityScale = settings.GravityScale;
             OnSpawnPlayerPlatform?.Invoke();
-            view.RPC(nameof(SetColor), RpcTarget.All, MasterClientManager.GetPlayerId(PhotonNetwork.LocalPlayer.ActorNumber));
+            view.RPC(nameof(SetColor), RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber-1);
             rig.simulated = true;
             rig.isKinematic = false;
         }
@@ -118,9 +117,9 @@ public class PlayerPlatform : MonoBehaviour
 
     }
     [PunRPC]
-    void SetColor(int colorId)
+    void SetColor(int playerId)
     {
-        Color color = MasterClientManager.Instance.GetPlayerColor(colorId);
+        Color color = MasterClientManager.Instance.GetPlayerColor(playerId);
         foreach(var spr in spriteRenderers)
         {
             spr.color = color;
@@ -133,8 +132,12 @@ public class PlayerPlatform : MonoBehaviour
         JumpUpdate();
         PlayerAttackUpdate();
 
+
         if (Input.GetButtonDown("Horizontal"))
+        {
+            LeanTween.cancel(gameObject);
             lookVertical = false;
+        }
         if (Input.GetButtonDown("Vertical"))
             lookVertical = true;
 
@@ -142,16 +145,16 @@ public class PlayerPlatform : MonoBehaviour
         {
             if (Input.GetButton("Vertical"))
                 lookVertical = true;
-        
-            Vector2 snapPosition = new((int)transform.position.x,transform.transform.position.y);
 
-            transform.position = snapPosition;
+            if (!Input.GetButton("Horizontal"))
+            {
+                LeanTween.moveX(gameObject, Mathf.Round(transform.position.x), settings.TimeToSnap);
+            }
         }
 
         if (Input.GetButtonUp("Vertical"))
             if (Input.GetButtonDown("Horizontal"))
                 lookVertical = false;
-
 
         if (!inDanger && timeInDanger > 0)
             timeInDanger -= Time.deltaTime;
@@ -379,6 +382,9 @@ public class PlayerPlatform : MonoBehaviour
 
         Gizmos.DrawWireCube(transform.position, Vector3.one * collideGizmo);
         Gizmos.DrawWireSphere(transform.position, 0.5f * collideGizmo);
+
+
+        Gizmos.DrawRay(transform.position, rendererTransform.localScale.x * rayMoveDistance * transform.right);
     }
     void OpenEndGamePanel()
     {

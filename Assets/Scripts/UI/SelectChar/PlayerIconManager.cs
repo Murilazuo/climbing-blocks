@@ -12,20 +12,25 @@ public class PlayerIconManager : MonoBehaviour
     [SerializeField] Sprite readyButton, notReadyButton;
     [SerializeField] Sprite[] teamsSprites;
 
+    [SerializeField] Transform otherPlayersHolder;
+    [SerializeField] Transform myPlayersHolder;
+
     public static PlayerIconManager Instance;
     private void Awake()
     {
         Instance = this;
     }
 
+    bool meWasAdd;
+
     public void AddPlayer(Player player)
     {
-        PlayersIcon playerIcon = Instantiate(playerIconPrefab,transform).GetComponent<PlayersIcon>();
+        Transform holder = meWasAdd ? otherPlayersHolder : myPlayersHolder;
+        meWasAdd = true;
+
+        PlayersIcon playerIcon = Instantiate(playerIconPrefab,holder).GetComponent<PlayersIcon>();
 
         playerIcon.SetColor(MasterClientManager.Instance.GetPlayerColor(player.ActorNumber-1));
-        print("Is Mine " + (player == PhotonNetwork.LocalPlayer));
-        print("Player actor num " + player.ActorNumber);
-        print("Player Id " + MasterClientManager.GetPlayerId(player.ActorNumber));
         playerIcons.Add(player, playerIcon);
     }
     public void RemovePlayer(Player player)

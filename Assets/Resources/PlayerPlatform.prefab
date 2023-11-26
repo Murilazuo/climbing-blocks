@@ -536,6 +536,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPlatformPosition: {x: 10, y: 2}
   settings: {fileID: 11400000, guid: 3bd8bd4104afefd49bc0db89e3f3d82a, type: 2}
+  rayMoveDistance: 0.53
   groundCheckDistance: 0.44
   groundCheckUpDistance: 0.75
   groundCheckUpDistanceBtweenRays: 0.45
@@ -554,24 +555,6 @@ MonoBehaviour:
   playerRenderer: {fileID: 2938389967854904483}
   anim: {fileID: 3020992245372107097}
   rendererTransform: {fileID: 4125750965305010553}
-  colors:
-  - {r: 1, g: 0, b: 0, a: 1}
-  - {r: 1, g: 0.6156863, b: 0.2784314, a: 1}
-  - {r: 0, g: 1, b: 0.17717361, a: 1}
-  - {r: 0.5729389, g: 0, b: 1, a: 1}
-  - {r: 0, g: 0.09169245, b: 1, a: 1}
-  - {r: 0, g: 1, b: 0.50540185, a: 1}
-  - {r: 1, g: 0, b: 0.8499565, a: 1}
-  - {r: 1, g: 1, b: 1, a: 1}
-  - {r: 1, g: 0, b: 0.28693438, a: 1}
-  - {r: 1, g: 0.3054906, b: 0, a: 1}
-  - {r: 1, g: 1, b: 0, a: 1}
-  - {r: 1, g: 0.2980392, b: 0.965184, a: 1}
-  - {r: 1, g: 0.29803938, b: 0.2980392, a: 1}
-  - {r: 0.2980392, g: 1, b: 0.6822239, a: 1}
-  - {r: 0.60899335, g: 0.2980392, b: 1, a: 1}
-  - {r: 1, g: 0.88441455, b: 0.2980392, a: 1}
-  - {r: 0.59732103, g: 1, b: 0.2971698, a: 1}
   spriteRenderers:
   - {fileID: 4314464110419858293}
   - {fileID: 2938389967854904483}

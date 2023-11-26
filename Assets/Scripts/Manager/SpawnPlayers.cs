@@ -14,19 +14,22 @@ public class SpawnPlayers : MonoBehaviour
 
     public static SpawnPlayers Instance;
     PlayerType playerType;   
-    void SetPlayerType(PlayerType playerType)
-    {
-        this.playerType = playerType;
-    }
     private void Awake()
     {
         Instance = this;
+    }
+    void SetPlayerType()
+    {
+        if(MasterClientManager.Instance.playersType.ContainsKey(PhotonNetwork.LocalPlayer))
+            playerType = MasterClientManager.Instance.playersType[PhotonNetwork.LocalPlayer];
+        else
+            playerType = PlayerType.None;
     }
     Vector2 PlatformSpawnPosition()
     {
         float part = maxX / (float)PhotonNetwork.CurrentRoom.PlayerCount;
 
-        Vector2 result = new(part* (MasterClientManager.GetPlayerId(PhotonNetwork.LocalPlayer.ActorNumber)+1f), positionY);
+        Vector2 result = new(part* PhotonNetwork.LocalPlayer.ActorNumber-1f, positionY);
 
         return result;
     }
@@ -39,12 +42,12 @@ public class SpawnPlayers : MonoBehaviour
     }
     private void OnEnable()
     {
+        MasterClientManager.OnPlayerSetTeam += SetPlayerType;
         MatchManager.OnStarCounter += SpawnPlayer;
-        MatchManager.OnSelectPlayerType += SetPlayerType;
     }
     private void OnDisable()
     {
-        MatchManager.OnSelectPlayerType -= SetPlayerType;
+        MasterClientManager.OnPlayerSetTeam -= SetPlayerType;
         MatchManager.OnStarCounter -= SpawnPlayer;
     }
 

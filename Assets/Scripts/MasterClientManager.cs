@@ -44,16 +44,6 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
 
     public bool hasSpaceToCharacters;
 
-    public static int GetPlayerId(int playerNumber)
-    {
-        for (int i = 1; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
-        {
-            if (playerNumber == PhotonNetwork.CurrentRoom.Players[i].ActorNumber)
-                return i - 1;
-        }
-        return 0;
-    }
-
     public Color GetPlayerColor(int playerID)
     {
         return playerColors[playerID];
@@ -102,6 +92,12 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
 
         PlayerIconManager.Instance.RemovePlayer(otherPlayer);
     }
+    public void StartMatch()
+    {
+        MatchManager.Instance.StartCounter();
+    }
+
+    #region Ready
     void UpdateIsReady()
     {
         List<object> data = new List<object>();
@@ -148,6 +144,9 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
 
         UpdateIsReady();
     }
+    #endregion
+
+    #region Team
     void UpdatePlayersTeam()
     {
         List<object> data = new List<object>();
@@ -168,7 +167,7 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
             playersType.Clear();
             for (int i = 0; i < newPlayersType.Length; i += 2)
             {
-                playersType.Add((Player)newPlayersType[0], (PlayerType)newPlayersType[1]);
+                playersType.Add((Player)newPlayersType[i], (PlayerType)newPlayersType[i+1]);
             }
         }
 
@@ -183,10 +182,8 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
                 characterCount++;
         }
 
-        hasPiecePlayer = pieceCount == 0;
-        hasSpaceToCharacters = true;
-            
-            //characterCount < PhotonNetwork.CurrentRoom.PlayerCount - 1 || PhotonNetwork.CurrentRoom.PlayerCount == 1;
+        hasPiecePlayer = pieceCount >= 1;
+        hasSpaceToCharacters = characterCount < PhotonNetwork.CurrentRoom.PlayerCount - 1 || PhotonNetwork.CurrentRoom.PlayerCount == 1;
 
         OnPlayerSetTeam?.Invoke();
     }
@@ -195,10 +192,11 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
         object[] data = new object[2];
 
         data[0] = MyPlayer;
-        data[1] = playersType;
-
+        data[1] = playerType;
+        
         view.RPC(nameof(SetTeam), RpcTarget.MasterClient, data);
     }
+    [PunRPC]
     void SetTeam(object[] data)
     {
         Player playerToSet = (Player)data[0];
@@ -206,9 +204,7 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
 
         UpdatePlayersTeam();
     }
-    public void StartMatch()
-    {
-        if(IsAllPlayersReady)
-            MatchManager.Instance.StartCounter();
-    }
+
+    #endregion
+
 }

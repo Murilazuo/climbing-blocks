@@ -7,6 +7,11 @@ public class StartMatchButton : MonoBehaviour
 {
     [SerializeField] CanvasGroup canvasGroup;
     bool isMaster;
+
+    private void Start()
+    {
+        OnSetPlayerReady(false);
+    }
     void UpdateMasterClient(bool isMaster)
     {
         this.isMaster = isMaster;
@@ -15,7 +20,7 @@ public class StartMatchButton : MonoBehaviour
     }
     void OnSetPlayerReady(bool allPlayerReady)
     {
-        canvasGroup.interactable = allPlayerReady;
+        canvasGroup.interactable = allPlayerReady || Application.isEditor;
     }
     public void StartMatch()
     {

@@ -34,11 +34,13 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     {
         string roomName = createRoomInput.text;
 
+        RoomOptions roomOptions = new RoomOptions();
+        roomOptions.MaxPlayers = 11;
+
         if (roomName == "")
             ShowWarning("Room name invalid");
         else
-
-            PhotonNetwork.CreateRoom(roomName);
+            PhotonNetwork.CreateRoom(roomName, roomOptions, null);
     }
     public void JoinRoom()
     {
@@ -52,6 +54,8 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     {
         if (returnCode == 32758)
             ShowWarning("Room doesn't exist");
+        if (returnCode == 32765)
+            ShowWarning("Room is full");
     }
     public override void OnCreateRoomFailed(short returnCode, string message)
     {

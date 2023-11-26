@@ -13,7 +13,7 @@ public class PlayersIcon : MonoBehaviour
     }
     public void SetTeam(Sprite spriteTeam)
     {
-        readyImage.sprite = spriteTeam;
+        teamIcon.sprite = spriteTeam;
     }
     public void SetColor(Color color)
     {

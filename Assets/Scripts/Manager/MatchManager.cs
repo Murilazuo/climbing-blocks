@@ -1,11 +1,7 @@
 using ExitGames.Client.Photon;
 using Photon.Pun;
-using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Tracing;
-using Unity.Burst.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -31,12 +27,6 @@ public class MatchManager : MonoBehaviourPunCallbacks
     public static System.Action OnPlayAgain;
     public static System.Action<PlayerType> OnSelectPlayerType;
 
-    public bool HasSpaceToCharacters { get
-        {
-            return FindObjectsOfType<CharacterSelect>().Length < PhotonNetwork.CurrentRoom.PlayerCount-1 || PhotonNetwork.CurrentRoom.PlayerCount == 1;
-        } }
-    public bool HasPiecePlayer { get => FindObjectsOfType<PieceSelect>().Length == 1; }
-    PlayerSelect currentSelect;
     [SerializeField] GameObject selectCharacter;
     [SerializeField] GameObject selectPiece;
     private void Awake()
@@ -98,66 +88,6 @@ public class MatchManager : MonoBehaviourPunCallbacks
         Vector2 blockPosition = new Vector2(x, y);
         OnDestroyBlock?.Invoke(blockPosition);
     }
-    PlayerReady playerReady;
-    [SerializeField] GameObject playerReadyPrefab;
-    public void SerIsReady(bool isReady)
-    {
-        if(isReady)
-        {
-            playerReady = PhotonNetwork.Instantiate(playerReadyPrefab.name, Vector2.zero, Quaternion.identity).GetComponent<PlayerReady>();
-        }
-        else
-        {
-            if (playerReady)
-            {
-                if (playerReady.IsMine)
-                {
-                    PhotonNetwork.Destroy(playerReady.gameObject);
-                    playerReady = null;
-                }
-            }
-        }
-
-        if(PhotonNetwork.CurrentRoom.PlayerCount > 1 && FindObjectsOfType<PlayerReady>().Length == PhotonNetwork.CurrentRoom.PlayerCount)
-        {
-            StartCounter();
-        }
-    }
-
-    public void SelectPlayerType(PlayerType newPlayerType)
-    {
-        switch (newPlayerType)
-        {
-            case PlayerType.Piece:
-                if (!HasPiecePlayer)
-                {
-                    currentSelect = PhotonNetwork.Instantiate(selectPiece.name, Vector3.zero, Quaternion.identity).GetComponent<PlayerSelect>();
-                    OnSelectPlayerType?.Invoke(PlayerType.Piece);
-                    NetworkEventSystem.CallEvent(NetworkEventSystem.UPDATE_PLAYERS_SELECT_EVENT);
-                }
-                break;
-            case PlayerType.Character:
-                if (HasSpaceToCharacters)
-                {
-                    currentSelect = PhotonNetwork.Instantiate(selectCharacter.name, Vector3.zero, Quaternion.identity).GetComponent<PlayerSelect>();
-                    OnSelectPlayerType?.Invoke(PlayerType.Character);
-                    NetworkEventSystem.CallEvent(NetworkEventSystem.UPDATE_PLAYERS_SELECT_EVENT);
-                }
-                break;
-            case PlayerType.None:
-                if (currentSelect)
-                {
-                    if (currentSelect.IsMine)
-                    {
-                        PhotonNetwork.Destroy(currentSelect.gameObject);
-                    }
-                }
-                OnSelectPlayerType?.Invoke(PlayerType.None);
-                NetworkEventSystem.CallEvent(NetworkEventSystem.UPDATE_PLAYERS_SELECT_EVENT);
-                break;
-        }
-    }
-    
 
     public override void OnEnable()
     {

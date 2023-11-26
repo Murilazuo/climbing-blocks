@@ -61,7 +61,6 @@ public class SelectTeamController : MonoBehaviour
     }
     public void ActivePanel()
     {
-        MatchManager.Instance.SelectPlayerType(PlayerType.None);
         UpdateButtons();
         canvasGroup.blocksRaycasts = true;
         canvasGroup.alpha = 1;
@@ -73,24 +72,17 @@ public class SelectTeamController : MonoBehaviour
     }
     public void SelectPlayerType(int playerTypeId)
     {
-        MatchManager.Instance.SelectPlayerType((PlayerType)playerTypeId);
+        MasterClientManager.Instance.ClientSetTeam((PlayerType)playerTypeId);
         DisablePanel();
     }
 
-    void OnReceiveNetworkEvent(EventData eventData)
-    {
-        if(eventData.Code == NetworkEventSystem.UPDATE_PLAYERS_SELECT_EVENT)
-            UpdateButtons();
-    }
     public void OnEnable()
     {
-        // PhotonNetwork.NetworkingClient.EventReceived += OnReceiveNetworkEvent;
         MasterClientManager.OnPlayerSetTeam += UpdateButtons;
         MatchManager.OnPlayAgain += ActivePanel;
     }
     public void OnDisable()
     {
-        //PhotonNetwork.NetworkingClient.EventReceived -= OnReceiveNetworkEvent;
         MasterClientManager.OnPlayerSetTeam -= UpdateButtons;
         MatchManager.OnPlayAgain -= ActivePanel;
     }
