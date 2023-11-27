@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,20 +21,26 @@ public class StartMatchButton : MonoBehaviour
     }
     void OnSetPlayerReady(bool allPlayerReady)
     {
-        canvasGroup.interactable = allPlayerReady || Application.isEditor;
+        canvasGroup.interactable = allPlayerReady || (Application.isEditor && PhotonNetwork.CurrentRoom.PlayerCount == 1);
     }
     public void StartMatch()
     {
         MasterClientManager.Instance.StartMatch();
     }
+    void PlayAgain()
+    {
+        canvasGroup.interactable = false;
+    }
     private void OnEnable()
     {
         MasterClientManager.OnSetMasterClient += UpdateMasterClient;
         MasterClientManager.OnPlayersReady += OnSetPlayerReady;
+        MatchManager.OnPlayAgain += PlayAgain;
     }
     private void OnDisable()
     {
         MasterClientManager.OnSetMasterClient -= UpdateMasterClient;
         MasterClientManager.OnPlayersReady -= OnSetPlayerReady;
+        MatchManager.OnPlayAgain -= PlayAgain;
     }
 }
