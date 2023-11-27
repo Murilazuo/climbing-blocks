@@ -1,24 +1,27 @@
-using ExitGames.Client.Photon;
-using Photon.Pun;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EndGamePanel : MonoBehaviour
 {
     [SerializeField] TMP_Text titleText;
-    [SerializeField] CanvasGroup canvasGroup;
+    [SerializeField] GameObject panel;
     [SerializeField] float timeToEnable;
     [SerializeField] float alphCanvasTime;
+    [SerializeField] float showPosition, hidePosition;
+    [SerializeField] float timeToMove;
+
     public static System.Action OnOpenEndGamePanel;
 
     public static EndGamePanel instance;
 
     private void Awake()
     {
-        instance = this; 
+        instance = this;
+
+        panel.transform.localPosition = new(0, hidePosition, 0);
     }
     private void OnEnable()
     {
@@ -57,14 +60,10 @@ public class EndGamePanel : MonoBehaviour
     }
     void ActivePanel()
     {
-        LeanTween.alphaCanvas(canvasGroup, 1, alphCanvasTime).setOnComplete(() => OnOpenEndGamePanel?.Invoke());
-        canvasGroup.interactable = true;
-        canvasGroup.blocksRaycasts = true;
+        LeanTween.moveLocalY(panel, showPosition, timeToMove).setOnComplete(() => OnOpenEndGamePanel?.Invoke());
     }
     public void DisablePanel()
     {
-        canvasGroup.alpha = 0;
-        canvasGroup.interactable = false;
-        canvasGroup.blocksRaycasts = false;
+        LeanTween.moveLocalY(panel, hidePosition, timeToMove);
     }
 }
