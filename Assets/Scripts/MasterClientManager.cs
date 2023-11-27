@@ -189,7 +189,7 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
 
         hasPiecePlayer = pieceCount >= 1;
 
-        characterIsFull = characterCount == PhotonNetwork.CurrentRoom.PlayerCount-1;
+        characterIsFull = characterCount == PhotonNetwork.CurrentRoom.PlayerCount-1 && PhotonNetwork.CurrentRoom.PlayerCount > 1;
     }
     public void ClientSetTeam(PlayerType playerType)
     {
