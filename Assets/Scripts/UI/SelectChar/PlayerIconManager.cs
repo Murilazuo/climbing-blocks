@@ -52,14 +52,25 @@ public class PlayerIconManager : MonoBehaviour
             playerIcons[playerType.Key].SetTeam(teamsSprites[(int)playerType.Value]);
     }
 
+    void EndGame(int endId)
+    {
+        foreach(var icon in playerIcons)
+        {
+            icon.Value.SetReady(notReadyButton);
+            icon.Value.SetTeam(teamsSprites[2]);
+        }
+    }
+
     private void OnEnable()
     {
         MasterClientManager.OnPlayersReady += UpdatePlayerReady;
         MasterClientManager.OnPlayerSetTeam += UpdatePlayerTeam;
+        MatchManager.OnEndGame += EndGame;
     }
     private void OnDisable()
     {
         MasterClientManager.OnPlayersReady -= UpdatePlayerReady;
         MasterClientManager.OnPlayerSetTeam -= UpdatePlayerTeam;
+        MatchManager.OnEndGame -= EndGame;
     }
 }

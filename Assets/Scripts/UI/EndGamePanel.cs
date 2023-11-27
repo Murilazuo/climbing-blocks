@@ -46,6 +46,7 @@ public class EndGamePanel : MonoBehaviour
         { 
             LeanTween.delayedCall(timeToEnable, () => OpenPanel(eventCode));
         }
+
     }
     void OpenPanel(int eventCode)
     {

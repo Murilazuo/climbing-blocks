@@ -110,6 +110,9 @@ public class PlayerPlatform : MonoBehaviour
             foreach (var outline in outlineObjects)
                 Destroy(outline);
 
+            foreach (var spr in spriteRenderers)
+                spr.sortingOrder = spr.sortingOrder - 1 - view.OwnerActorNr;
+
             rig.isKinematic = true;
             rig.simulated = false;
         }

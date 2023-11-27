@@ -2,7 +2,6 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class MasterClientManager : MonoBehaviourPunCallbacks
@@ -212,4 +211,32 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
 
     #endregion
 
+    void EndGame(int endId)
+    {
+        if (IsMaster)
+        {
+            int i = 0;
+            foreach(var player in PhotonNetwork.CurrentRoom.Players)
+            {
+                print(i++);
+                playersType[player.Value] = PlayerType.None;
+                playersReady[player.Value] = false;
+            }
+
+            UpdateIsReady();
+            UpdatePlayersTeam();
+        }
+    }
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        MatchManager.OnEndGame += EndGame;
+    }
+
+    public override void OnDisable()
+    {
+        base.OnDisable();
+
+        MatchManager.OnEndGame -= EndGame;
+    }
 }

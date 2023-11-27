@@ -11,6 +11,8 @@ public class DangerArea : MonoBehaviour
     int floor = 0;
     int spawnedPieces = 0;
     bool start = false;
+
+    public static System.Action<int,int> OnSetDangerArea;
     void NextPiece()
     {
         if (floor < settings.MaxFloor)
@@ -23,12 +25,15 @@ public class DangerArea : MonoBehaviour
                     NextFloor();
                     start = true;
                 }
+                OnSetDangerArea?.Invoke(spawnedPieces, settings.PiecesToStart);
             }
             else
             {
                 if (spawnedPieces >= settings.PiecesToMove)
                     NextFloor();
+                OnSetDangerArea?.Invoke(spawnedPieces, settings.PiecesToMove);
             }
+
         }
     }
     void NextFloor()
@@ -42,6 +47,7 @@ public class DangerArea : MonoBehaviour
     {
         floor = 0;
         spawnedPieces = 0;
+
         transform.localScale = new(transform.localScale.x,0);
     }
     public void OnEnable()

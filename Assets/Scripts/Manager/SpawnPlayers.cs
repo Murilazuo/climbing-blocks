@@ -10,6 +10,7 @@ public class SpawnPlayers : MonoBehaviour
     [SerializeField] GameObject playerPlatform, playerPiece;
     [SerializeField] float positionY;
     [SerializeField] float maxX;
+    [SerializeField] float minX;
 
     public static SpawnPlayers Instance;
     PlayerType playerType;   
@@ -26,9 +27,9 @@ public class SpawnPlayers : MonoBehaviour
     }
     Vector2 PlatformSpawnPosition()
     {
-        float part = maxX / (float)PhotonNetwork.CurrentRoom.PlayerCount+1;
+        float positionX = Random.Range( minX,  maxX);
 
-        Vector2 result = new( part * PhotonNetwork.LocalPlayer.ActorNumber, positionY);
+        Vector2 result = new(positionX, positionY);
 
         return result;
     }
@@ -53,5 +54,6 @@ public class SpawnPlayers : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.DrawSphere(new(maxX, positionY), .3f);
+        Gizmos.DrawSphere(new(minX, positionY), .3f);
     }
 }
