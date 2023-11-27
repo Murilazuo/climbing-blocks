@@ -8,16 +8,15 @@ public class TutorialPanel : MonoBehaviour
     [SerializeField] GameObject panel;
     [SerializeField] GameObject[] tutorials;
 
+
     private void Start()
     {
         tutorials[0].SetActive(false);
         tutorials[1].SetActive(false);
     }
 
-    void SetPlayer()
+    void SetPlayer(PlayerType playerType)
     {
-        PlayerType playerType = MasterClientManager.Instance.playersType[PhotonNetwork.LocalPlayer];
-
         tutorials[0].SetActive(playerType == PlayerType.Piece);
         tutorials[1].SetActive(playerType == PlayerType.Character);
     }
@@ -40,13 +39,13 @@ public class TutorialPanel : MonoBehaviour
     private void OnEnable()
     {
         MatchManager.OnStarCounter += ClosePanel;
-        MasterClientManager.OnPlayerSetTeam += SetPlayer;
+        SelectTeamController.OnClientSelectTeam += SetPlayer;
         MatchManager.OnPlayAgain += PlayAgain;
     }
     private void OnDisable()
     {
         MatchManager.OnStarCounter -= ClosePanel;
-        MasterClientManager.OnPlayerSetTeam -= SetPlayer;
+        SelectTeamController.OnClientSelectTeam -= SetPlayer;
         MatchManager.OnPlayAgain -= PlayAgain;
         
     }

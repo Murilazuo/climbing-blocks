@@ -42,7 +42,7 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
 
     public bool hasPiecePlayer;
 
-    public bool hasSpaceToCharacters;
+    public bool characterIsFull;
 
     public Color GetPlayerColor(int playerID)
     {
@@ -72,14 +72,14 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
     {
         PlayerIconManager.Instance.AddPlayer(newPlayer);
 
-        if (IsMaster)
-        {
-            playersReady.Add(newPlayer, false);
-            playersType.Add(newPlayer, PlayerType.None);
-        }
+        playersReady.Add(newPlayer, false);
+        playersType.Add(newPlayer, PlayerType.None);
 
-        UpdateIsReady();
-        UpdatePlayersTeam();
+        OnPlayersReady?.Invoke(false);
+
+        CheckPlayerTeam();
+
+        OnPlayerSetTeam?.Invoke();
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
@@ -171,6 +171,12 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
             }
         }
 
+        CheckPlayerTeam();
+
+        OnPlayerSetTeam?.Invoke();
+    }
+    void CheckPlayerTeam()
+    {
         int pieceCount = 0;
         int characterCount = 0;
 
@@ -181,11 +187,12 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
             else if (playersType.Value == PlayerType.Character)
                 characterCount++;
         }
+        print("CharCount count " + characterCount);
+        print("None count " + PhotonNetwork.CurrentRoom.PlayerCount);
 
         hasPiecePlayer = pieceCount >= 1;
-        hasSpaceToCharacters = characterCount < PhotonNetwork.CurrentRoom.PlayerCount - 1 || PhotonNetwork.CurrentRoom.PlayerCount == 1;
 
-        OnPlayerSetTeam?.Invoke();
+        characterIsFull = characterCount == PhotonNetwork.CurrentRoom.PlayerCount-1;
     }
     public void ClientSetTeam(PlayerType playerType)
     {

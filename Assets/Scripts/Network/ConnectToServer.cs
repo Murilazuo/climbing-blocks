@@ -1,5 +1,6 @@
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 public class ConnectToServer : MonoBehaviourPunCallbacks
 {
@@ -28,7 +29,9 @@ public class ConnectToServer : MonoBehaviourPunCallbacks
 
     public override void OnDisconnected(DisconnectCause cause)
     {
-        SceneManager.LoadScene(0);
+        if(!Application.isEditor)
+            SceneManager.LoadScene(0);
+        
         PhotonNetwork.ConnectUsingSettings();
     }
 }

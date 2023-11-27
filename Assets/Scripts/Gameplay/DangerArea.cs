@@ -38,13 +38,21 @@ public class DangerArea : MonoBehaviour
         LeanTween.scaleY(gameObject, floor, settings.TimeToMoveUp);
     }
 
+    void ResetDanger(int endId)
+    {
+        floor = 0;
+        spawnedPieces = 0;
+        transform.localScale = new(transform.localScale.x,0);
+    }
     public void OnEnable()
     {
         Piece.OnStopPiece += NextPiece;
+        MatchManager.OnEndGame += ResetDanger;
     }
     public void OnDisable()
     {
         Piece.OnStopPiece -= NextPiece;
+        MatchManager.OnEndGame -= ResetDanger;
     }
 }
 

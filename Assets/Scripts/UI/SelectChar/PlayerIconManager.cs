@@ -60,6 +60,6 @@ public class PlayerIconManager : MonoBehaviour
     private void OnDisable()
     {
         MasterClientManager.OnPlayersReady -= UpdatePlayerReady;
-        MasterClientManager.OnPlayerSetTeam += UpdatePlayerTeam;
+        MasterClientManager.OnPlayerSetTeam -= UpdatePlayerTeam;
     }
 }

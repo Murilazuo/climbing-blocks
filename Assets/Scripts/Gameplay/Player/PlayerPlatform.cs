@@ -425,6 +425,8 @@ public class PlayerPlatform : MonoBehaviour
     }
     private void EndGame(int obj)
     {
+        waterVolumeController.SetWeight(0);
+
         canMove = false;
         rig.isKinematic = true;
         rig.simulated = false;

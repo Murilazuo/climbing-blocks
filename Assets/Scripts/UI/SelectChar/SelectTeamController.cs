@@ -1,8 +1,4 @@
-using ExitGames.Client.Photon;
-using Photon.Pun;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +9,8 @@ public class SelectTeamController : MonoBehaviour
 
     [SerializeField] ButtonChose character;
     [SerializeField] ButtonChose piece;
+
+    public static System.Action<PlayerType> OnClientSelectTeam;
 
     [System.Serializable]
     struct ButtonChose
@@ -42,12 +40,10 @@ public class SelectTeamController : MonoBehaviour
         else
             SetChosable(piece);
 
-        if (MasterClientManager.Instance.hasSpaceToCharacters)
-            SetChosable(character);
-        else
+        if (MasterClientManager.Instance.characterIsFull)
             SetFull(character);
-
-        SetChosable(character);
+        else
+            SetChosable(character);
     }
     void SetFull(ButtonChose buttonChose)
     {
@@ -84,6 +80,7 @@ public class SelectTeamController : MonoBehaviour
     public void SelectPlayerType(int playerTypeId)
     {
         MasterClientManager.Instance.ClientSetTeam((PlayerType)playerTypeId);
+        OnClientSelectTeam?.Invoke((PlayerType)playerTypeId);
         DisablePanel();
     }
 
