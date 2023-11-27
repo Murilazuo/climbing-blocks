@@ -13,4 +13,10 @@ public class PieceSettings : ScriptableObject
     [SerializeField] float timeToMoveInSpeed;
     public int BlockLife { get => blockLife; }
     [SerializeField] int blockLife;
+
+    public Sprite[] SpritesBreakBlock { get => spritesBreakBlock; }
+    [SerializeField] Sprite[] spritesBreakBlock;
+    public Sprite StopBlockSprite { get => blockSprites; }
+    [SerializeField] Sprite blockSprites;
 }
+

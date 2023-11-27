@@ -26,9 +26,9 @@ public class SpawnPlayers : MonoBehaviour
     }
     Vector2 PlatformSpawnPosition()
     {
-        float part = maxX / (float)PhotonNetwork.CurrentRoom.PlayerCount;
+        float part = maxX / (float)PhotonNetwork.CurrentRoom.PlayerCount+1;
 
-        Vector2 result = new( part* PhotonNetwork.LocalPlayer.ActorNumber, positionY);
+        Vector2 result = new( part * PhotonNetwork.LocalPlayer.ActorNumber, positionY);
 
         return result;
     }

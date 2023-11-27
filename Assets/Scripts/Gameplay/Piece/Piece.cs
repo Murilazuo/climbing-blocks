@@ -15,6 +15,8 @@ public class Piece : MonoBehaviourPun
     }
     [SerializeField] PieceData[] blockPositions;
 
+    [SerializeField] List<Block> blocks = new List<Block>();
+
     public const string STOPED_PIECE_TAG = "StopedPiece";
     public const string MOVE_PIECE_TAG = "MovePiece";
 
@@ -74,8 +76,15 @@ public class Piece : MonoBehaviourPun
         {
             GameObject obj = Instantiate(blockPrefab, transform);
             obj.transform.localPosition = pos;
-            obj.GetComponent<Block>().Init(data.color);
+
+            Block block = obj.GetComponent<Block>();
+
+            block.Init(data.color);
+
+            blocks.Add(block);
+
             id++;
+
         }
     }
 
@@ -134,6 +143,12 @@ public class Piece : MonoBehaviourPun
     {
         if (pieceIsStoped) return;
         pieceIsStoped = true;
+
+        foreach (var block in blocks)
+        {
+            block.StopPiece();
+        }
+
         foreach (Transform t in transform)
         {
             LeanTween.delayedCall(.1f, () => t.gameObject.tag = STOPED_PIECE_TAG);

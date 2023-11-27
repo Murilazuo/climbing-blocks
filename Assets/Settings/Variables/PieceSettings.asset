@@ -16,3 +16,7 @@ MonoBehaviour:
   pieceGravity: 1
   timeToMoveInSpeed: 0.2
   blockLife: 2
+  spritesBreakBlock:
+  - {fileID: 21300000, guid: 360bc44e7a4253847a9a06dd08476129, type: 3}
+  - {fileID: 21300000, guid: 3c5db7341c3853f458d6142f081c2d91, type: 3}
+  blockSprites: {fileID: 21300000, guid: bed98ba28c66d4245821007e9eb6c13f, type: 3}

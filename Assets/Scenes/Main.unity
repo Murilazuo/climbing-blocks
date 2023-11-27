@@ -8118,7 +8118,7 @@ MonoBehaviour:
   playerPlatform: {fileID: 9179352317349263222, guid: dee8d2af8fe0e7f49aa0f324cdad6714, type: 3}
   playerPiece: {fileID: 9179352317349263222, guid: 066e002668d6b6942b3a72b72027bb0d, type: 3}
   positionY: 1.5
-  maxX: 20
+  maxX: 18
 --- !u!1 &1112260194
 GameObject:
   m_ObjectHideFlags: 0

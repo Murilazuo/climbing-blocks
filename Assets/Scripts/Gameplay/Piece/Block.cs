@@ -19,9 +19,10 @@ public class Block : MonoBehaviour
     public void Hit()
     {
         life--;
-        print("New Life " + life);
         if (life <= 0)
             Die();
+
+        spr.sprite = settings.SpritesBreakBlock[life];
 
         ParticleSystem.MainModule main = Instantiate(particleHit, transform.position, Quaternion.identity).GetComponent<ParticleSystem>().main;
 
@@ -33,5 +34,9 @@ public class Block : MonoBehaviour
         ParticleSystem.MainModule main = Instantiate(particleDeath, transform.position, Quaternion.identity).GetComponent<ParticleSystem>().main;
 
         main.startColor = spr.color;
+    }
+    public void StopPiece()
+    {
+        spr.sprite = settings.StopBlockSprite;
     }
 }

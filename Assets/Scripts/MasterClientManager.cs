@@ -187,8 +187,6 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
             else if (playersType.Value == PlayerType.Character)
                 characterCount++;
         }
-        print("CharCount count " + characterCount);
-        print("None count " + PhotonNetwork.CurrentRoom.PlayerCount);
 
         hasPiecePlayer = pieceCount >= 1;
 

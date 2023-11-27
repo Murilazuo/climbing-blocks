@@ -71,6 +71,7 @@ MonoBehaviour:
     - {x: 0, y: 1}
     - {x: 1, y: 0}
     - {x: 1, y: 1}
+  blocks: []
   piecePart: {fileID: 7262513710035777682, guid: 5d7a69df5fa5fe343ae3f50cd5101ec1, type: 3}
   endPositionY: 12
   pieceId: 0
