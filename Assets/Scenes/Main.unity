@@ -4093,6 +4093,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fill: {fileID: 440165321}
   timeToFill: 0.5
+  canvasGroup: {fileID: 2053514792}
 --- !u!114 &440165321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16052,6 +16053,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2053514791}
+  - component: {fileID: 2053514792}
   m_Layer: 5
   m_Name: Water level
   m_TagString: Untagged
@@ -16083,6 +16085,18 @@ RectTransform:
   m_AnchoredPosition: {x: 332.58502, y: 9.890411}
   m_SizeDelta: {x: 77.84003, y: 243.7}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &2053514792
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2053514790}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2067334303
 GameObject:
   m_ObjectHideFlags: 0

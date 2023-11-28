@@ -1014,13 +1014,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Developed by:
+  m_text: '<b>Developed by:</b>
 
     Murilo Bezerra
 
     Arthur Oliveira
 
-    Luca Martins'
+    Luca
+    Martins'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0073b4097a9b99042972fbf931bede4b, type: 2}
   m_sharedMaterial: {fileID: -5915048461236106897, guid: 0073b4097a9b99042972fbf931bede4b, type: 2}
@@ -1053,7 +1054,7 @@ MonoBehaviour:
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535

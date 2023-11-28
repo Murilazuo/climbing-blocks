@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   holdTimeToMove: 0.2
   pieceGravity: 1
-  timeToMoveInSpeed: 0.2
+  timeToMoveInSpeed: 0.15
   blockLife: 2
   spritesBreakBlock:
   - {fileID: 21300000, guid: 360bc44e7a4253847a9a06dd08476129, type: 3}

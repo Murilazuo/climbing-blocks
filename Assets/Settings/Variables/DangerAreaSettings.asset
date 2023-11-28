@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49bba3750ad89c647be4e29c875018eb, type: 3}
   m_Name: DangerAreaSettings
   m_EditorClassIdentifier: 
-  piecesToStart: 10
-  piecesToMove: 6
+  piecesToStart: 8
+  piecesToMove: 5
   timeToMoveUp: 0.5
   maxFloor: 16
