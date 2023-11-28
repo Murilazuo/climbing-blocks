@@ -4,14 +4,15 @@ using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Array2DEditor;
 public class Piece : MonoBehaviourPun
 {
     [System.Serializable]
-    struct PieceData
+    public struct PieceData
     {
         public Color color;
-        public Vector2[] positions;
+        public Array2DBool shape;
+        //public Vector2[] positions;
     }
     [SerializeField] PieceData[] blockPositions;
 
@@ -72,19 +73,27 @@ public class Piece : MonoBehaviourPun
     {
         int id = pieceId * 4;
         PieceData data = blockPositions[dataId];
-        foreach (var pos in data.positions)
+
+        var cells = data.shape.GetCells();
+
+        for (var y = 0; y < data.shape.GridSize.y; y++)
         {
-            GameObject obj = Instantiate(blockPrefab, transform);
-            obj.transform.localPosition = pos;
+            for (var x = 0; x < data.shape.GridSize.x; x++)
+            {
+                if (cells[y, x])
+                {
+                    GameObject obj = Instantiate(blockPrefab, transform);
+                    obj.transform.localPosition = new(x, y);
 
-            Block block = obj.GetComponent<Block>();
+                    Block block = obj.GetComponent<Block>();
 
-            block.Init(data.color);
+                    block.Init(data.color);
 
-            blocks.Add(block);
+                    blocks.Add(block);
 
-            id++;
-
+                    id++;
+                }
+            }
         }
     }
 

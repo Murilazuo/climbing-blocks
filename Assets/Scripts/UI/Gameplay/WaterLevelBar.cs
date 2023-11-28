@@ -15,12 +15,19 @@ public class WaterLevelBar : MonoBehaviour
     {
         fill.fillAmount = fillAmount;
     }
+    void ResetBar()
+    {
+        LeanTween.cancel(gameObject);
+        fill.fillAmount = 0;
+    }
     private void OnEnable()
     {
         DangerArea.OnSetDangerArea += SetFill;
+        MatchManager.OnPlayAgain += ResetBar;
     }
     private void OnDisable()
     {
         DangerArea.OnSetDangerArea -= SetFill;
+        MatchManager.OnPlayAgain -= ResetBar;
     }
 }

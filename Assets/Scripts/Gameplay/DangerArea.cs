@@ -45,10 +45,12 @@ public class DangerArea : MonoBehaviour
 
     void ResetDanger(int endId)
     {
+        start = false;
         floor = 0;
         spawnedPieces = 0;
-
+        LeanTween.cancel(gameObject);
         transform.localScale = new(transform.localScale.x,0);
+        OnSetDangerArea?.Invoke(0, settings.PiecesToMove);
     }
     public void OnEnable()
     {

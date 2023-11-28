@@ -48,29 +48,275 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockPositions:
   - color: {r: 1, g: 0, b: 0, a: 1}
-    positions:
-    - {x: 0, y: -1}
-    - {x: 0, y: 0}
-    - {x: 0, y: 1}
-    - {x: 0, y: 2}
-  - color: {r: 0, g: 1, b: 0.07561898, a: 1}
-    positions:
-    - {x: -1, y: 0}
-    - {x: 0, y: 0}
-    - {x: 1, y: 0}
-    - {x: 0, y: 1}
-  - color: {r: 1, g: 0.89133024, b: 0, a: 1}
-    positions:
-    - {x: 0, y: 0}
-    - {x: 0, y: 1}
-    - {x: 0, y: 2}
-    - {x: 1, y: 0}
-  - color: {r: 0, g: 1, b: 0.91090965, a: 1}
-    positions:
-    - {x: 0, y: 0}
-    - {x: 0, y: 1}
-    - {x: 1, y: 0}
-    - {x: 1, y: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 01000000
+      - row: 01000000
+      - row: 01000000
+      - row: 01000000
+  - color: {r: 1, g: 0, b: 0, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00000000
+      - row: 00000000
+      - row: 01010101
+      - row: 00000000
+  - color: {r: 1, g: 0, b: 0, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00000000
+      - row: 01010101
+      - row: 00000000
+      - row: 00000000
+  - color: {r: 1, g: 0, b: 0, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00010000
+      - row: 00010000
+      - row: 00010000
+      - row: 00010000
+  - color: {r: 1, g: 0.53390247, b: 0, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00000000
+      - row: 01010000
+      - row: 00010100
+      - row: 00000000
+  - color: {r: 1, g: 0.53390247, b: 0, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00000100
+      - row: 00010100
+      - row: 00010000
+      - row: 00000000
+  - color: {r: 1, g: 0.53390247, b: 0, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00000000
+      - row: 00010100
+      - row: 00000101
+      - row: 00000000
+  - color: {r: 1, g: 0.53390247, b: 0, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00000000
+      - row: 00010100
+      - row: 00000101
+      - row: 00000000
+  - color: {r: 1, g: 0.53390247, b: 0, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00000100
+      - row: 00010100
+      - row: 00010000
+      - row: 00000000
+  - color: {r: 1, g: 0.89550054, b: 0, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00000000
+      - row: 00010100
+      - row: 01010000
+      - row: 00000000
+  - color: {r: 1, g: 0.89550054, b: 0, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00000000
+      - row: 00010100
+      - row: 01010000
+      - row: 00000000
+  - color: {r: 1, g: 0.89550054, b: 0, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00010000
+      - row: 00010100
+      - row: 00000100
+      - row: 00000000
+  - color: {r: 1, g: 0.89550054, b: 0, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00010000
+      - row: 00010100
+      - row: 00000100
+      - row: 00000000
+  - color: {r: 1, g: 0.89550054, b: 0, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00010000
+      - row: 00010100
+      - row: 00000100
+      - row: 00000000
+  - color: {r: 0, g: 1, b: 0.782413, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00000000
+      - row: 00010100
+      - row: 00010100
+      - row: 00000000
+  - color: {r: 0, g: 1, b: 0.782413, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00000000
+      - row: 00010100
+      - row: 00010100
+      - row: 00000000
+  - color: {r: 0, g: 1, b: 0.782413, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00000000
+      - row: 00010100
+      - row: 00010100
+      - row: 00000000
+  - color: {r: 0, g: 1, b: 0.782413, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00000000
+      - row: 00010100
+      - row: 00010100
+      - row: 00000000
+  - color: {r: 0.6589742, g: 0, b: 1, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00000000
+      - row: 00010000
+      - row: 01010100
+      - row: 00000000
+  - color: {r: 0.6589742, g: 0, b: 1, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00000000
+      - row: 00010000
+      - row: 00010100
+      - row: 00010000
+  - color: {r: 0.6589742, g: 0, b: 1, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00000000
+      - row: 00000000
+      - row: 01010100
+      - row: 00010000
+  - color: {r: 0.6589742, g: 0, b: 1, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00000000
+      - row: 00010000
+      - row: 01010000
+      - row: 00010000
+  - color: {r: 0.14528918, g: 1, b: 0, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00010000
+      - row: 00010000
+      - row: 01010000
+      - row: 00000000
+  - color: {r: 0.14528918, g: 1, b: 0, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00000000
+      - row: 01000000
+      - row: 01010100
+      - row: 00000000
+  - color: {r: 0.14528918, g: 1, b: 0, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00000000
+      - row: 00010100
+      - row: 00010000
+      - row: 00010000
+  - color: {r: 0.14528918, g: 1, b: 0, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00000000
+      - row: 01010100
+      - row: 00000100
+      - row: 00000000
+  - color: {r: 0, g: 1, b: 0.57512, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00000100
+      - row: 01010100
+      - row: 00000000
+      - row: 00000000
+  - color: {r: 0, g: 1, b: 0.57512, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00010000
+      - row: 00010000
+      - row: 00010100
+      - row: 00000000
+  - color: {r: 0, g: 1, b: 0.57512, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00000000
+      - row: 01010100
+      - row: 00000100
+      - row: 00000000
+  - color: {r: 0, g: 1, b: 0.57512, a: 1}
+    shape:
+      gridSize: {x: 4, y: 4}
+      cellSize: {x: 16, y: 16}
+      cells:
+      - row: 00000100
+      - row: 00000100
+      - row: 00010100
+      - row: 00000000
   blocks: []
   piecePart: {fileID: 7262513710035777682, guid: 5d7a69df5fa5fe343ae3f50cd5101ec1, type: 3}
   endPositionY: 12
