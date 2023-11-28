@@ -758,13 +758,13 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9179352317349263222}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 6200000, guid: 948d449b784ac1e46abae585a85af06a, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.007114157}
+  m_Offset: {x: 0, y: 0.0041900873}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -775,7 +775,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.98577166}
+  m_Size: {x: 0.92, y: 0.9916198}
   m_EdgeRadius: 0
 --- !u!114 &1287699183863314150
 MonoBehaviour:
@@ -792,10 +792,10 @@ MonoBehaviour:
   spawnPlatformPosition: {x: 10, y: 2}
   settings: {fileID: 11400000, guid: 3bd8bd4104afefd49bc0db89e3f3d82a, type: 2}
   rayMoveDistance: 0.53
+  groundCheckSize: {x: 0.76, y: 0.05}
   groundCheckDistance: 0.44
   groundCheckUpDistance: 0.75
-  groundCheckUpDistanceBtweenRays: 0.45
-  groundCheckRadius: 0.13
+  groundCheckUpDistanceBtweenRays: 0.01
   layerMask:
     serializedVersion: 2
     m_Bits: 8
@@ -819,7 +819,6 @@ MonoBehaviour:
   - {fileID: 2938389967854904483}
   - {fileID: 3251239511777232968}
   - {fileID: 3406905138489056059}
-  collideGizmo: 0.9
 --- !u!114 &7323254342142190606
 MonoBehaviour:
   m_ObjectHideFlags: 0

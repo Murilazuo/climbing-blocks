@@ -12,10 +12,11 @@ public class PlayerPlatform : MonoBehaviour
     [Header("Move")]
     [SerializeField] float rayMoveDistance;
     [Header("Jump")]
+    [SerializeField] Vector2 groundCheckSize;
     [SerializeField] float groundCheckDistance;
+    [Header("Roof")]
     [SerializeField] float groundCheckUpDistance;
     [SerializeField] float groundCheckUpDistanceBtweenRays;
-    [SerializeField] float groundCheckRadius;
     [SerializeField] LayerMask layerMask;
     float coyoteJumpTimer;
     float jumpTime;
@@ -64,11 +65,14 @@ public class PlayerPlatform : MonoBehaviour
         }
     }
     bool lastInGround;
+
+    bool groundCheckDelay = false;
     bool InGrounded
     {
         get
         {
-            lastInGround = Physics2D.OverlapCircle(GroundCheckPosition, groundCheckRadius, layerMask);
+            lastInGround = Physics2D.BoxCast(GroundCheckPosition, groundCheckSize, 0, Vector2.zero, 1, layerMask);
+
             return lastInGround;
         }
     }
@@ -158,7 +162,7 @@ public class PlayerPlatform : MonoBehaviour
 
             if (!Input.GetButton("Horizontal"))
             {
-                LeanTween.moveX(gameObject, Mathf.Round(transform.position.x), settings.TimeToSnap);
+                Snap();
             }
         }
 
@@ -174,6 +178,11 @@ public class PlayerPlatform : MonoBehaviour
         waterVolumeController.SetWeight(inDangerPercentage);
     }
     bool lastLookRight;
+
+    void Snap()
+    {
+        LeanTween.moveX(gameObject, Mathf.Round(transform.position.x), settings.TimeToSnap);
+    }
     void AnimationUpdate()
     {
         isMove = Input.GetButton("Horizontal");
@@ -196,20 +205,64 @@ public class PlayerPlatform : MonoBehaviour
     {
         SoundManager.Instance.PlaySound((SoundType)soundTypeId);
     }
+    bool callDealayedCall;
+
+    void Jump()
+    {
+       
+
+            print("Jump");
+            view.RPC(nameof(PlaySound), RpcTarget.All, (int)SoundType.Jump);
+            isJumping = true;
+            jumpTime = settings.StartJumpTime;
+            Snap();
+            SetJumpVelocity();
+        
+    }
+
+    LTDescr jumpDelayDelayCall;
+
+    void CallDelayedJump()
+    {
+        print("End delay time");
+        callDealayedCall = false;
+    }
     void JumpUpdate()
     {
-        if (Input.GetButtonDown("Jump"))
+        if (!groundCheckDelay)
         {
-
-            if ((coyoteJumpTimer <=  settings.CoyoteJumpTime || InGrounded) && !HasGroundAbove)
+            groundCheckDelay = true;
+            LeanTween.delayedCall(settings.JumpDelay, () =>
             {
-                view.RPC(nameof(PlaySound),RpcTarget.All,(int)SoundType.Jump);
-                isJumping = true;
-                jumpTime = settings.StartJumpTime;
-                SetJumpVelocity();
+                groundCheckDelay = false;
+            });
+            if (Input.GetButtonDown("Jump"))
+            {
+
+
+                if ((coyoteJumpTimer <= settings.CoyoteJumpTime || InGrounded) && !HasGroundAbove && !callDealayedCall)
+                {
+                    print("Jump button");
+                    Jump();
+                }
+                else if (!HasGroundAbove && !InGrounded)
+                {
+                    callDealayedCall = true;
+                    print("call delay jump");
+
+                    Invoke(nameof(CallDelayedJump), settings.DelayedJumpTime);
+                }
+            }
+
+            if (InGrounded && callDealayedCall)
+            {
+                CancelInvoke(nameof(CallDelayedJump));
+                print("delay jump");
+
+                callDealayedCall = false;
+                Jump();
             }
         }
-        
         if (Input.GetButton("Jump") && isJumping)
         {
             if (jumpTime > 0)
@@ -383,12 +436,12 @@ public class PlayerPlatform : MonoBehaviour
         punchPivot.eulerAngles = new(0, 0, eulerX);
         LeanTween.delayedCall(timeToDisablePunch, () => punchPivot.gameObject.SetActive(false));
     }
-    [SerializeField] float collideGizmo;
     private void OnDrawGizmos()
     {
         Vector3 pos = transform.position;
         pos.y -= groundCheckDistance;
-        Gizmos.DrawWireSphere(GroundCheckPosition, groundCheckRadius);
+
+        Gizmos.DrawWireCube(GroundCheckPosition, groundCheckSize);
 
         pos = transform.position;
         pos.x -= groundCheckUpDistanceBtweenRays;
@@ -396,10 +449,6 @@ public class PlayerPlatform : MonoBehaviour
         pos = transform.position;
         pos.x += groundCheckUpDistanceBtweenRays;
         Gizmos.DrawRay(pos, Vector2.up * groundCheckUpDistance);
-
-        Gizmos.DrawWireCube(transform.position, Vector3.one * collideGizmo);
-        Gizmos.DrawWireSphere(transform.position, 0.5f * collideGizmo);
-
 
         Gizmos.DrawRay(transform.position, rendererTransform.localScale.x * rayMoveDistance * transform.right);
     }

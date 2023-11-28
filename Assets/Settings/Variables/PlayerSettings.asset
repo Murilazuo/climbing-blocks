@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7a0901c24c8b6b46a762ccbed8341df, type: 3}
   m_Name: PlayerSettings
   m_EditorClassIdentifier: 
-  speed: 15
+  speed: 13
   timeToSnap: 0.01
-  timeToDie: 3
-  coyoteJumpTime: 0.15
-  gravityScale: 15
+  timeToDie: 4
+  coyoteJumpTime: 0.1
+  gravityScale: 13
   jumpForce: 15
   startJumpTimer: 0.2
+  jumpDelay: 0.1
+  delayedJumpTime: 0.1
   attackDelay: 0.3

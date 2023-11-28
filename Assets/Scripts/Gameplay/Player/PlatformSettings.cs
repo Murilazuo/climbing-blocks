@@ -23,7 +23,11 @@ public class PlatformSettings : ScriptableObject
     [SerializeField] float jumpForce;
     public float StartJumpTime { get => startJumpTimer; }
     [SerializeField] float startJumpTimer;
- 
+    public float JumpDelay { get => jumpDelay; }
+    [SerializeField] float jumpDelay;
+    public float DelayedJumpTime { get => delayedJumpTime; }
+    [SerializeField] float delayedJumpTime;
+
     [Header("Attack")]
     [SerializeField] float attackDelay;
     public float AttackDelay { get => attackDelay; }
