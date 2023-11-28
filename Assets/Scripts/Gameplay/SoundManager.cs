@@ -1,9 +1,10 @@
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public enum SoundType { Jump, Punch, UIClick}
+public enum SoundType { Jump, Punch, UIClick, Bubbles, Win, Lose }
 public class SoundManager : MonoBehaviour
 {
     [System.Serializable]
@@ -14,6 +15,22 @@ public class SoundManager : MonoBehaviour
         public AudioClip clip;
         public bool clientOnly;
         [Range(0,1)]public float volume;
+        public bool loop;
+        public AudioSource source;
+
+        public void Init()
+        {
+            source.volume = volume;
+            source.clip = clip;
+        }
+        public void Play()
+        {
+            source.Play();
+        }
+        public void Stop()
+        {
+            source.Stop();
+        }
 
     }
     [SerializeField] List<SoundData> soundData;
@@ -24,6 +41,11 @@ public class SoundManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        foreach (var sound in soundData)
+        {
+            if(sound.loop)
+                sound.Init();
+        }
     }
 
     private void OnValidate()
@@ -40,6 +62,9 @@ public class SoundManager : MonoBehaviour
     {
         int soundIndex = soundData.IndexOf(soundData.Find(x => x.sound == sound));
 
+        if (soundData[soundIndex].clip == null)
+            return;
+
         if (view && !soundData[soundIndex].clientOnly)
             view.RPC(nameof(Play), RpcTarget.All, soundIndex);
         else
@@ -49,7 +74,23 @@ public class SoundManager : MonoBehaviour
     [PunRPC]
     void Play(int clipId)
     {
-        source.volume = soundData[clipId].volume;
-        source.PlayOneShot(soundData[clipId].clip);
+        SoundData sound = soundData[clipId];
+        if (sound.loop)
+        {
+            if(sound.source.isPlaying)
+                sound.Play();
+        }
+        else
+        {
+            source.volume = sound.volume;
+            source.PlayOneShot(sound.clip);
+        }
+    }
+
+    public void Stop(SoundType sound)
+    {
+        int soundIndex = soundData.IndexOf(soundData.Find(x => x.sound == sound));
+
+        soundData[soundIndex].Stop();
     }
 }

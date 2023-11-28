@@ -291,6 +291,7 @@ public class PlayerPlatform : MonoBehaviour
                 MatchManager.Instance.PlatformReachTop();
                 break;
             case "Danger":
+                SoundManager.Instance.PlaySound(SoundType.Bubbles);
                 inDanger = true;
                 rig.gravityScale = settings.GravityScale;
                 break;
@@ -301,6 +302,7 @@ public class PlayerPlatform : MonoBehaviour
         switch (collision.tag)
         {
             case "Danger":
+                SoundManager.Instance.Stop(SoundType.Bubbles);
                 rig.gravityScale = settings.GravityScale;
                 inDanger = false;
                 break;

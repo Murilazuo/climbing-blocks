@@ -17,10 +17,13 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     [SerializeField] GameObject createContent;
     [SerializeField] GameObject lobbyContent;
     [SerializeField] CanvasGroup buttonsCanvasGroup;
+
     [Header("Panel Anim")]
     [SerializeField] float closedPositionY;
     [SerializeField] float openPositionY, timeToMove;
     [SerializeField] LeanTweenType ease;
+
+    [SerializeField] GameObject connectingObject;
 
     List<RoomInfo> roomList = new List<RoomInfo>();
 
@@ -32,6 +35,8 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
 
     public void CreateRoom()
     {
+        connectingObject.SetActive(true);
+
         string roomName = createRoomInput.text;
 
         RoomOptions roomOptions = new RoomOptions();
@@ -44,6 +49,8 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     }
     public void JoinRoom()
     {
+        connectingObject.SetActive(true);
+
         string roomName = joinRoomInput.text;
         if (roomName == "")
             ShowWarning("Room name invalid");
@@ -52,18 +59,25 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     }
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
+
         if (returnCode == 32758)
             ShowWarning("Room doesn't exist");
         if (returnCode == 32765)
             ShowWarning("Room is full");
+        else
+            connectingObject.SetActive(false);
     }
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
         if (returnCode == 32766)
             ShowWarning("Room already exist");
+        else
+            connectingObject.SetActive(false);
     }
     void ShowWarning(string warningText)
     {
+        connectingObject.SetActive(false);
+
         LeanTween.cancel(warnigTMP.gameObject);
         warnigTMP.text = warningText;
         warnigTMP.gameObject.SetActive(true);

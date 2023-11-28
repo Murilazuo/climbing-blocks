@@ -31,6 +31,7 @@ public class SelectTeamController : MonoBehaviour
             yield return new WaitForSeconds(.3f);
             UpdateButtons();
         }
+        MasterClientManager.Instance.ClientSetTeam(PlayerType.None);
     }
 
     void UpdateButtons()
