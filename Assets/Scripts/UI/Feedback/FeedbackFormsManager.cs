@@ -9,9 +9,17 @@ public class FeedbackFormsManager : MonoBehaviour
 {
     [SerializeField] TMP_InputField feedback1;
     string URL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSc3UCvxRAGc48kA8aQctauAomQC2yiPIm032zW7hkRK7CiK4Q/formResponse";
+    
+    static FeedbackFormsManager instance;
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        if (instance)
+            Destroy(gameObject);
+        else
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
     }
 
     public void Send()

@@ -11,16 +11,16 @@ public class ClickSoud : MonoBehaviour
     {
         foreach(var button in FindObjectsOfType<Button>())
         {
-            button.onClick.AddListener(() => Play());
+            button.onClick.AddListener(() => PlayClickSound());
         }
         foreach (var inputField in FindObjectsOfType<TMP_InputField>())
         {
-            inputField.onSelect.AddListener((s) => Play());
-            inputField.onSubmit.AddListener((s) => Play());
+            inputField.onSelect.AddListener((s) => PlayClickSound());
+            inputField.onSubmit.AddListener((s) => PlayClickSound());
         }
     }
 
-    void Play()
+    void PlayClickSound()
     {
         print("Play sound");
         SoundManager.Instance.PlaySound(SoundType.UIClick);

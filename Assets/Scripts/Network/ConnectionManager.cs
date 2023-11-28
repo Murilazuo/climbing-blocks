@@ -2,18 +2,22 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-public class ConnectToServer : MonoBehaviourPunCallbacks
+public class ConnectionManager : MonoBehaviourPunCallbacks
 {
-    static ConnectToServer instance;
+    public static ConnectionManager instance;
     private void Awake()
     {
         if (instance)
             Destroy(gameObject);
         else
+        {
+            instance = this;
             DontDestroyOnLoad(gameObject);    
+        }
     }
-    void Start()
+    public void ConnectToServer()
     {
+        LoadingPanel.Instance.Open("Connecting to server...");
         PhotonNetwork.ConnectUsingSettings();       
     }
 
@@ -24,14 +28,11 @@ public class ConnectToServer : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene("Lobby");
     }
 
     public override void OnDisconnected(DisconnectCause cause)
     {
-        if(!Application.isEditor)
-            SceneManager.LoadScene(0);
-        
-        PhotonNetwork.ConnectUsingSettings();
+        SceneManager.LoadScene("Menu");
     }
 }

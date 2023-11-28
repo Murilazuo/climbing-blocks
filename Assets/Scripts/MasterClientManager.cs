@@ -10,7 +10,7 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
     
     public Dictionary<Player, bool> playersReady = new Dictionary<Player, bool>();
     public Dictionary<Player, PlayerType> playersType= new Dictionary<Player, PlayerType>();
-
+    public PlayerType lastSelectType;
     [SerializeField] Color[] playerColors;
    
     public static System.Action<bool> OnPlayersReady;
@@ -197,7 +197,9 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
 
         data[0] = MyPlayer;
         data[1] = playerType;
-        
+
+        lastSelectType = playerType;
+
         view.RPC(nameof(SetTeam), RpcTarget.MasterClient, data);
     }
     [PunRPC]
@@ -215,10 +217,8 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
     {
         if (IsMaster)
         {
-            int i = 0;
             foreach(var player in PhotonNetwork.CurrentRoom.Players)
             {
-                print(i++);
                 playersType[player.Value] = PlayerType.None;
                 playersReady[player.Value] = false;
             }

@@ -11773,7 +11773,6 @@ MonoBehaviour:
     volume: 0.277
     loop: 0
     source: {fileID: 0}
-  view: {fileID: 1486857298}
   source: {fileID: 1486857301}
 --- !u!4 &1486857300
 Transform:

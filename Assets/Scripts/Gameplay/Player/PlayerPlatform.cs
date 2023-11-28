@@ -191,6 +191,11 @@ public class PlayerPlatform : MonoBehaviour
 
         anim.SetBool(isIdleId, !isMove);
     }
+    [PunRPC]
+    void PlaySound(int soundTypeId)
+    {
+        SoundManager.Instance.PlaySound((SoundType)soundTypeId);
+    }
     void JumpUpdate()
     {
         if (Input.GetButtonDown("Jump"))
@@ -198,7 +203,7 @@ public class PlayerPlatform : MonoBehaviour
 
             if ((coyoteJumpTimer <=  settings.CoyoteJumpTime || InGrounded) && !HasGroundAbove)
             {
-                SoundManager.Instance.PlaySound(SoundType.Jump);
+                view.RPC(nameof(PlaySound),RpcTarget.All,(int)SoundType.Jump);
                 isJumping = true;
                 jumpTime = settings.StartJumpTime;
                 SetJumpVelocity();
@@ -344,7 +349,7 @@ public class PlayerPlatform : MonoBehaviour
         
         RaycastHit2D hit = Physics2D.Raycast(attackRayCast.origin,attackRayCast.direction,rayDistance,groundLayer);
 
-        SoundManager.Instance.PlaySound(SoundType.Punch);
+        view.RPC(nameof(PlaySound), RpcTarget.All, (int)SoundType.Punch);
 
         if (hit.collider && hit.transform.gameObject.CompareTag(Piece.STOPED_PIECE_TAG))
             view.RPC(nameof(DestroyBlock), RpcTarget.All, (int)hit.transform.position.x, (int)hit.transform.position.y);

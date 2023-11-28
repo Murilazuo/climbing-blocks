@@ -71,6 +71,10 @@ public class MatchManager : MonoBehaviourPunCallbacks
     public void GoToMenu()
     {
         PhotonNetwork.LeaveRoom();
+    }
+    public override void OnLeftRoom()
+    {
+        base.OnLeftRoom();
         SceneManager.LoadScene(1);
     }
     public void PlayAgain()
@@ -102,7 +106,6 @@ public class MatchManager : MonoBehaviourPunCallbacks
             case NetworkEventSystem.PLATFORM_REACH_TOP_EVENT:
             case NetworkEventSystem.PIECE_REACH_TOP_EVENT:
             case NetworkEventSystem.PLATFORM_DROWNED_EVENT:
-                print("EndGame");
                 OnEndGame?.Invoke(eventData.Code);
                 break;
             case NetworkEventSystem.START_MATCH_EVENT:

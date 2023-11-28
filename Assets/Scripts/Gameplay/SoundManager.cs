@@ -1,8 +1,11 @@
+using ExitGames.Client.Photon;
 using Photon.Pun;
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public enum SoundType { Jump, Punch, UIClick, Bubbles, Win, Lose }
 public class SoundManager : MonoBehaviour
@@ -13,7 +16,6 @@ public class SoundManager : MonoBehaviour
         [HideInInspector]public string name;
         public SoundType sound;
         public AudioClip clip;
-        public bool clientOnly;
         [Range(0,1)]public float volume;
         public bool loop;
         public AudioSource source;
@@ -22,6 +24,7 @@ public class SoundManager : MonoBehaviour
         {
             source.volume = volume;
             source.clip = clip;
+            source.loop = loop;    
         }
         public void Play()
         {
@@ -34,17 +37,23 @@ public class SoundManager : MonoBehaviour
 
     }
     [SerializeField] List<SoundData> soundData;
-    [SerializeField] PhotonView view;
     [SerializeField] AudioSource source;
 
     public static SoundManager Instance;
     private void Awake()
     {
-        Instance = this;
-        foreach (var sound in soundData)
+        if (Instance)
+            Destroy(gameObject);
+        else
         {
-            if(sound.loop)
-                sound.Init();
+            DontDestroyOnLoad(gameObject);
+
+            Instance = this;
+            foreach (var sound in soundData)
+            {
+                if (sound.loop)
+                    sound.Init();
+            }
         }
     }
 
@@ -65,19 +74,14 @@ public class SoundManager : MonoBehaviour
         if (soundData[soundIndex].clip == null)
             return;
 
-        if (view && !soundData[soundIndex].clientOnly)
-            view.RPC(nameof(Play), RpcTarget.All, soundIndex);
-        else
-            Play(soundIndex);
+        Play(soundIndex);
     }
-
-    [PunRPC]
     void Play(int clipId)
     {
         SoundData sound = soundData[clipId];
         if (sound.loop)
         {
-            if(sound.source.isPlaying)
+            if(!sound.source.isPlaying)
                 sound.Play();
         }
         else
@@ -90,7 +94,35 @@ public class SoundManager : MonoBehaviour
     public void Stop(SoundType sound)
     {
         int soundIndex = soundData.IndexOf(soundData.Find(x => x.sound == sound));
-
         soundData[soundIndex].Stop();
+    }
+
+    public void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnLoadSceane;
+    }
+    public void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnLoadSceane;
+    }
+
+    private void OnLoadSceane(Scene arg0, LoadSceneMode arg1)
+    {
+        foreach (var button in FindObjectsOfType<Button>())
+        {
+            button.onClick.AddListener(() => PlayClickSound());
+        }
+        foreach (var inputField in FindObjectsOfType<TMP_InputField>())
+        {
+            inputField.onSelect.AddListener((s) => PlayClickSound());
+            inputField.onSubmit.AddListener((s) => PlayClickSound());
+        }
+    }
+
+
+    void PlayClickSound()
+    {
+        print("Play sound");
+        SoundManager.Instance.PlaySound(SoundType.UIClick);
     }
 }

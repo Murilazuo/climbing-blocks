@@ -56,7 +56,26 @@ public class EndGamePanel : MonoBehaviour
         endGame = true;
         ActivePanel();
 
-        titleText.text = NetworkEventSystem.PlatfomrWin((byte)eventCode) ? "Platformers Win" : "Pieces Win";
+        SoundType endSound;
+
+        if (NetworkEventSystem.PlatfomrWin((byte)eventCode))
+        {
+            if (MasterClientManager.Instance.lastSelectType == PlayerType.Character)
+                endSound = SoundType.Win;
+            else
+                endSound = SoundType.Lose;
+        }
+        else
+        {
+            if (MasterClientManager.Instance.lastSelectType == PlayerType.Character)
+                endSound = SoundType.Lose;
+            else
+                endSound = SoundType.Win;
+        }
+
+        SoundManager.Instance.PlaySound(endSound);
+
+        titleText.text = endSound == SoundType.Win ? "You Win" : "You Lose";
     }
     void ActivePanel()
     {

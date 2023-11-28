@@ -19,6 +19,9 @@ public class NetworkEventSystem
     
     public const byte PIECE_STOP_EVENT = 10;
 
+    public const byte PLAY_SOUND_EVENT = 20;
+    public const byte STOP_SOUND_EVENT = 21;
+
     public const byte START_COUNTER_EVENT = 99;
     public const byte SELECT_TEAM_EVENT = 98;
 
@@ -38,6 +41,10 @@ public class NetworkEventSystem
     }
 
     public static void CallEvent(byte id, object[] data)
+    {
+        PhotonNetwork.RaiseEvent(id, data, RaiseEventOptions.Default, SendOptions.SendUnreliable);
+    }
+    public static void CallEvent(byte id, object data)
     {
         PhotonNetwork.RaiseEvent(id, data, RaiseEventOptions.Default, SendOptions.SendUnreliable);
     }

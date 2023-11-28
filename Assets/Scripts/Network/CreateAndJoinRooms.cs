@@ -23,19 +23,19 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     [SerializeField] float openPositionY, timeToMove;
     [SerializeField] LeanTweenType ease;
 
-    [SerializeField] GameObject connectingObject;
-
     List<RoomInfo> roomList = new List<RoomInfo>();
 
     static CreateAndJoinRooms Instance;
     private void Awake()
     {
         Instance = this;
+        LoadingPanel.Instance.Close();
     }
 
     public void CreateRoom()
     {
-        connectingObject.SetActive(true);
+        LoadingPanel.Instance.Open("Creating Room...");
+
 
         string roomName = createRoomInput.text;
 
@@ -43,41 +43,44 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
         roomOptions.MaxPlayers = 11;
 
         if (roomName == "")
+        {
+            LoadingPanel.Instance.Close();
             ShowWarning("Room name invalid");
+        }
         else
             PhotonNetwork.CreateRoom(roomName, roomOptions, null);
     }
     public void JoinRoom()
     {
-        connectingObject.SetActive(true);
+        LoadingPanel.Instance.Open("Joining Room...");
 
         string roomName = joinRoomInput.text;
         if (roomName == "")
+        {
             ShowWarning("Room name invalid");
+            LoadingPanel.Instance.Close();
+        }
         else
             PhotonNetwork.JoinRoom(roomName);
     }
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
-
         if (returnCode == 32758)
             ShowWarning("Room doesn't exist");
         if (returnCode == 32765)
             ShowWarning("Room is full");
-        else
-            connectingObject.SetActive(false);
+
+        LoadingPanel.Instance.Close();
     }
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
         if (returnCode == 32766)
             ShowWarning("Room already exist");
-        else
-            connectingObject.SetActive(false);
+
+        LoadingPanel.Instance.Close();
     }
     void ShowWarning(string warningText)
     {
-        connectingObject.SetActive(false);
-
         LeanTween.cancel(warnigTMP.gameObject);
         warnigTMP.text = warningText;
         warnigTMP.gameObject.SetActive(true);
@@ -91,17 +94,17 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     public override void OnDisable()
     {
         base.OnDisable();
+
         LeanTween.cancel(warnigTMP.gameObject);
-    }
-    public bool RoomExist(string roomName)
-    {
-        return roomList.Exists(x => x.Name == roomName);
     }
     public override void OnJoinedRoom()
     {
-        PhotonNetwork.LoadLevel(2);
+        PhotonNetwork.LoadLevel("Main");
     }
-    
+    private void OnDestroy()
+    {
+        LoadingPanel.Instance.Close();
+    }
 
     public void OpenPanelCreate()
     {
