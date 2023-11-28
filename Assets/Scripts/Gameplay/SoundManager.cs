@@ -1,6 +1,5 @@
 using ExitGames.Client.Photon;
 using Photon.Pun;
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -19,6 +18,8 @@ public class SoundManager : MonoBehaviour
         [Range(0,1)]public float volume;
         public bool loop;
         public AudioSource source;
+        [Range(-3, 3)] public float maxPitch;
+        [Range(-3, 3)] public float minPitch;
 
         public void Init()
         {
@@ -79,6 +80,9 @@ public class SoundManager : MonoBehaviour
     void Play(int clipId)
     {
         SoundData sound = soundData[clipId];
+
+        sound.source.pitch = Random.Range(sound.minPitch, sound.maxPitch);
+
         if (sound.loop)
         {
             if(!sound.source.isPlaying)
