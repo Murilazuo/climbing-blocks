@@ -792,7 +792,7 @@ MonoBehaviour:
   spawnPlatformPosition: {x: 10, y: 2}
   settings: {fileID: 11400000, guid: 3bd8bd4104afefd49bc0db89e3f3d82a, type: 2}
   rayMoveDistance: 0.53
-  groundCheckSize: {x: 0.76, y: 0.05}
+  groundCheckSize: {x: 0.6, y: 0.05}
   groundCheckDistance: 0.44
   groundCheckUpDistance: 0.75
   groundCheckUpDistanceBtweenRays: 0.01

@@ -209,7 +209,15 @@ public class PlayerPlatform : MonoBehaviour
 
     void Jump()
     {
-       
+        if (!groundCheckDelay)
+        {
+            groundCheckDelay = true;
+            LeanTween.delayedCall(settings.JumpDelay, () =>
+            {
+                groundCheckDelay = false;
+            });
+
+
 
             print("Jump");
             view.RPC(nameof(PlaySound), RpcTarget.All, (int)SoundType.Jump);
@@ -217,7 +225,7 @@ public class PlayerPlatform : MonoBehaviour
             jumpTime = settings.StartJumpTime;
             Snap();
             SetJumpVelocity();
-        
+        }
     }
 
     LTDescr jumpDelayDelayCall;
@@ -229,40 +237,35 @@ public class PlayerPlatform : MonoBehaviour
     }
     void JumpUpdate()
     {
-        if (!groundCheckDelay)
+       
+        if (Input.GetButtonDown("Jump"))
         {
-            groundCheckDelay = true;
-            LeanTween.delayedCall(settings.JumpDelay, () =>
+
+
+            if ((coyoteJumpTimer <= settings.CoyoteJumpTime || InGrounded) && !HasGroundAbove && !callDealayedCall)
             {
-                groundCheckDelay = false;
-            });
-            if (Input.GetButtonDown("Jump"))
-            {
-
-
-                if ((coyoteJumpTimer <= settings.CoyoteJumpTime || InGrounded) && !HasGroundAbove && !callDealayedCall)
-                {
-                    print("Jump button");
-                    Jump();
-                }
-                else if (!HasGroundAbove && !InGrounded)
-                {
-                    callDealayedCall = true;
-                    print("call delay jump");
-
-                    Invoke(nameof(CallDelayedJump), settings.DelayedJumpTime);
-                }
-            }
-
-            if (InGrounded && callDealayedCall)
-            {
-                CancelInvoke(nameof(CallDelayedJump));
-                print("delay jump");
-
-                callDealayedCall = false;
+                print("Jump button");
                 Jump();
             }
+            else if (!HasGroundAbove && !InGrounded)
+            {
+                callDealayedCall = true;
+                print("call delay jump");
+
+                Invoke(nameof(CallDelayedJump), settings.DelayedJumpTime);
+            }
         }
+
+        if (InGrounded && callDealayedCall)
+        {
+            CancelInvoke(nameof(CallDelayedJump));
+            print("delay jump");
+
+            callDealayedCall = false;
+            Jump();
+        }
+
+
         if (Input.GetButton("Jump") && isJumping)
         {
             if (jumpTime > 0)
