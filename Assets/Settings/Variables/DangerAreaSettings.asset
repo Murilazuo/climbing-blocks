@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: DangerAreaSettings
   m_EditorClassIdentifier: 
   piecesToStart: 8
-  piecesToMove: 5
+  piecesToMove: 6
   timeToMoveUp: 0.5
   maxFloor: 16
