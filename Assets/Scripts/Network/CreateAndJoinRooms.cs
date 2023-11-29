@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using System.Linq;
 
 public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
 {
@@ -11,25 +13,34 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     [SerializeField] TMP_InputField createRoomInput;
     [SerializeField] TMP_InputField joinRoomInput;
     [SerializeField] TMP_Text warnigTMP;
+    [SerializeField] Toggle isPublic;
 
     [Header("Panel")]
     [SerializeField] RectTransform panel;
     [SerializeField] GameObject createContent;
     [SerializeField] GameObject lobbyContent;
     [SerializeField] CanvasGroup buttonsCanvasGroup;
+    [SerializeField] GameObject roomListPanel;
+    [SerializeField] SetPreferredHeight setPreferredHeight;
 
     [Header("Panel Anim")]
     [SerializeField] float closedPositionY;
     [SerializeField] float openPositionY, timeToMove;
     [SerializeField] LeanTweenType ease;
 
-    List<RoomInfo> roomList = new List<RoomInfo>();
+    [Header("Room List")]
+    [SerializeField] GameObject roomListItem;
+    [SerializeField] Transform roomListContent;
 
-    static CreateAndJoinRooms Instance;
+    List<RoomListItem> roomItemList = new List<RoomListItem>() ;
+
+
+    public static CreateAndJoinRooms Instance;
     private void Awake()
     {
         Instance = this;
         LoadingPanel.Instance.Close();
+
     }
 
     public void CreateRoom()
@@ -39,8 +50,11 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
 
         string roomName = createRoomInput.text;
 
-        RoomOptions roomOptions = new RoomOptions();
-        roomOptions.MaxPlayers = 11;
+        RoomOptions roomOptions = new RoomOptions
+        {
+            MaxPlayers = 11,
+            IsVisible = isPublic.isOn,
+        };
 
         if (roomName == "")
         {
@@ -48,13 +62,16 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
             ShowWarning("Room name invalid");
         }
         else
-            PhotonNetwork.CreateRoom(roomName, roomOptions, null);
+            PhotonNetwork.CreateRoom(roomName, roomOptions);
     }
     public void JoinRoom()
     {
+        JoinRoom(joinRoomInput.text);
+    }
+    public void JoinRoom(string roomName)
+    {
         LoadingPanel.Instance.Open("Joining Room...");
 
-        string roomName = joinRoomInput.text;
         if (roomName == "")
         {
             ShowWarning("Room name invalid");
@@ -111,12 +128,14 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
         OpenPanel();
         createContent.SetActive(true);
         lobbyContent.SetActive(false);
+        roomListPanel.SetActive(false);
     }
     public void OpenPanelJoin()
     {
         OpenPanel();
         createContent.SetActive(false);
         lobbyContent.SetActive(true);
+        roomListPanel.SetActive(false);
     }
     public void ClosedPanel()
     {
@@ -137,4 +156,56 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
         Instance.panel.anchoredPosition = new Vector2(rect.x, pos);
     }
 
+    public void OpenRoomList()
+    {
+        OpenPanel();
+        createContent.SetActive(false);
+        lobbyContent.SetActive(false);
+        roomListPanel.SetActive(true);
+        PhotonNetwork.GetCustomRoomList(null, "");
+    }
+    private void UpdateCachedRoomList(List<RoomInfo> roomList)
+    {
+        
+        foreach (RoomInfo roomInfo in roomList)
+        {
+            if (roomInfo.RemovedFromList)
+            {
+                int index = roomItemList.FindIndex(x => x.name == roomInfo.Name);
+                Destroy(roomItemList[index].gameObject);
+                roomItemList.TrimExcess();
+            }
+            else
+            {
+                if (roomInfo.IsVisible)
+                {
+                    RoomListItem item = Instantiate(roomListItem, roomListContent).GetComponent<RoomListItem>();
+                    item.UpdateContent(roomInfo);
+                    roomItemList.Add(item);
+                }
+            }
+        }
+
+        setPreferredHeight.UpdateHeight();
+    }
+
+    public override void OnJoinedLobby()
+    {
+        roomItemList.Clear();
+    }
+
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        UpdateCachedRoomList(roomList);
+    }
+
+    public override void OnLeftLobby()
+    {
+        roomItemList.Clear();
+    }
+
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        roomItemList.Clear();
+    }
 }

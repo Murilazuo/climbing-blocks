@@ -11890,36 +11890,48 @@ MonoBehaviour:
     volume: 0.472
     loop: 0
     source: {fileID: 0}
+    maxPitch: 0
+    minPitch: 0
   - name: Punch
     sound: 1
     clip: {fileID: 8300000, guid: 12a21796c333c40489174649418d25e6, type: 3}
     volume: 0.178
     loop: 0
     source: {fileID: 0}
+    maxPitch: 0
+    minPitch: 0
   - name: UIClick
     sound: 2
     clip: {fileID: 8300000, guid: 393d3214c135f2f448df6c7c3a5fe376, type: 3}
     volume: 0.2
     loop: 0
     source: {fileID: 0}
+    maxPitch: 0
+    minPitch: 0
   - name: UIClick
     sound: 2
     clip: {fileID: 8300000, guid: 393d3214c135f2f448df6c7c3a5fe376, type: 3}
     volume: 0.2
     loop: 0
     source: {fileID: 0}
+    maxPitch: 0
+    minPitch: 0
   - name: Bubbles
     sound: 3
     clip: {fileID: 8300000, guid: 3e7431b1894ead84ba3556b8b6832580, type: 3}
     volume: 1
     loop: 1
     source: {fileID: 1486857302}
+    maxPitch: 0
+    minPitch: 0
   - name: Win
     sound: 4
     clip: {fileID: 8300000, guid: 093fa4e8d0066474fb36607837f59fea, type: 3}
     volume: 0.277
     loop: 0
     source: {fileID: 0}
+    maxPitch: 0
+    minPitch: 0
   source: {fileID: 1486857301}
 --- !u!4 &1486857300
 Transform:
