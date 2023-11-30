@@ -43,7 +43,7 @@ public class DangerArea : MonoBehaviour
         LeanTween.scaleY(gameObject, floor, settings.TimeToMoveUp);
     }
 
-    void ResetDanger(int endId)
+    void ResetDanger(int endId, Vector2 position)
     {
         start = false;
         floor = 0;

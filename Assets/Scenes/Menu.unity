@@ -1165,7 +1165,7 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 093fa4e8d0066474fb36607837f59fea, type: 3}
     volume: 0.277
     loop: 0
-    source: {fileID: 0}
+    source: {fileID: 1775803254}
     maxPitch: 1
     minPitch: 1
   - name: Lose
@@ -1173,7 +1173,7 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: c89e536cd11aa2146bf5d4aefcde9bd0, type: 3}
     volume: 0.277
     loop: 0
-    source: {fileID: 0}
+    source: {fileID: 1775803254}
     maxPitch: 1
     minPitch: 1
   source: {fileID: 1775803254}

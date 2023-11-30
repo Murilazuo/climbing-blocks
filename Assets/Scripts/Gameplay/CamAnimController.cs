@@ -36,25 +36,12 @@ public class CamAnimController : MonoBehaviour
         MatchManager.OnPlayAgain -= ResetCam;
     }
     bool endGame;
-    void OnEndGame(int eventCode)
+    void OnEndGame(int eventCode,Vector2 position)
     {
         if (endGame) return;
         endGame = true;
 
-        Vector3 target = transform.position;
-
-        switch (eventCode)
-        {
-            case NetworkEventSystem.PIECE_COLIDE_WITH_PLATFORM_EVENT:
-            case NetworkEventSystem.PLATFORM_REACH_TOP_EVENT:
-            case NetworkEventSystem.PLATFORM_DROWNED_EVENT:
-                target = FindObjectOfType<PlayerPlatform>().transform.position;
-                break;
-            case NetworkEventSystem.PIECE_REACH_TOP_EVENT:
-                target = Piece.lastPieceStoped.transform.position;
-                target.y = endY;
-                break;
-        }
+        Vector3 target = position;
 
         target.z = transform.position.z;
         LeanTween.move(gameObject, target, timeToMove).setEase(ease);

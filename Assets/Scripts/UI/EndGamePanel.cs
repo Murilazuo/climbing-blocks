@@ -41,7 +41,7 @@ public class EndGamePanel : MonoBehaviour
     }
 
     bool endGame;
-    void OnEndGame(int eventCode)
+    void OnEndGame(int eventCode, Vector2 position)
     {
         if (endGame) return;
 
@@ -73,9 +73,9 @@ public class EndGamePanel : MonoBehaviour
                 endSound = SoundType.Win;
         }
 
-        SoundManager.Instance.PlaySound(endSound);
-
         titleText.text = endSound == SoundType.Win ? "You Win" : "You Lose";
+
+        SoundManager.Instance.PlaySound(endSound);
     }
     void ActivePanel()
     {

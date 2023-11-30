@@ -22,7 +22,6 @@ public class ClickSoud : MonoBehaviour
 
     void PlayClickSound()
     {
-        print("Play sound");
         SoundManager.Instance.PlaySound(SoundType.UIClick);
     }
 }

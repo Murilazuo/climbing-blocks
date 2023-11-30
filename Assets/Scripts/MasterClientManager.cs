@@ -213,7 +213,7 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
 
     #endregion
 
-    void EndGame(int endId)
+    void EndGame(int endId, Vector2 position)
     {
         if (IsMaster)
         {

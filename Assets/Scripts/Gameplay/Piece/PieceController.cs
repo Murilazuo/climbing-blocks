@@ -130,7 +130,7 @@ public class PieceController : MonoBehaviour
 
         lastPiece = piece;
     }
-    private void EndGame(int i)
+    private void EndGame(int i, Vector2 position)
     {
         canMove = false;
         CancelInvoke(nameof(PieceGravity));
@@ -152,7 +152,6 @@ public class PieceController : MonoBehaviour
     public void OnEnable()
     {
         MatchManager.OnStarGame += StartMatch;
-        MatchManager.OnDestroyBlock += OnDestroyBlock;
         MatchManager.OnEndGame += EndGame;
         EndGamePanel.OnOpenEndGamePanel += OnOpenEndGamePanel;
     }
@@ -161,15 +160,12 @@ public class PieceController : MonoBehaviour
     public void OnDisable()
     {
         MatchManager.OnStarGame -= StartMatch;
-        MatchManager.OnDestroyBlock -= OnDestroyBlock;
         MatchManager.OnEndGame -= EndGame;
         EndGamePanel.OnOpenEndGamePanel -= OnOpenEndGamePanel;
     }
 
-    private void OnDestroyBlock(Vector2 blockPosition)
+    public void DestroyBlock(Vector2 blockPosition)
     {
-        print("DestroyBlock - piece controller");
-
         SetTileState(new((int)blockPosition.x, (int)blockPosition.y), false);
     }
 }

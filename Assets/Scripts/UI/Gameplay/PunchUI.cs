@@ -18,7 +18,7 @@ public class PunchUI : MonoBehaviour
         keyObject.SetActive(false);
     }
     void Init() => canvasGroup.alpha = 1f;
-    void Disable(int eventId) => canvasGroup.alpha = 0f;
+    void Disable(int eventId, Vector2 position) => canvasGroup.alpha = 0f;
     private void OnEnable()
     {
         MatchManager.OnEndGame += Disable;

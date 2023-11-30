@@ -325,7 +325,7 @@ public class PlayerPlatform : MonoBehaviour
                 colideWithPiece = true;
 
             if (IsLastCharcter)
-                MatchManager.Instance.PieceCollideWithPieceReachTop();
+                MatchManager.Instance.PieceCollideWithPieceReachTop(transform.position);
             else
                 PlayerDie();
         }
@@ -339,7 +339,7 @@ public class PlayerPlatform : MonoBehaviour
                 colideWithPiece = true;
 
             if (IsLastCharcter)
-                MatchManager.Instance.PieceCollideWithPieceReachTop();
+                MatchManager.Instance.PieceCollideWithPieceReachTop(transform.position);
             else
                 PlayerDie();
         }
@@ -349,7 +349,7 @@ public class PlayerPlatform : MonoBehaviour
         switch (collision.tag)
         {
             case "End":
-                MatchManager.Instance.PlatformReachTop();
+                MatchManager.Instance.PlatformReachTop(transform.position);
                 break;
             case "Danger":
                 SoundManager.Instance.PlaySound(SoundType.Bubbles);
@@ -377,7 +377,7 @@ public class PlayerPlatform : MonoBehaviour
                 timeInDanger += Time.deltaTime;
                 if (timeInDanger > settings.TimeToDieInDangerZone)
                     if (IsLastCharcter)
-                        MatchManager.Instance.PlayerDrowned();
+                        MatchManager.Instance.PlayerDrowned(transform.position);
                     else
                         PlayerDie();
                    
@@ -485,7 +485,7 @@ public class PlayerPlatform : MonoBehaviour
     {
         canMove = true;
     }
-    private void EndGame(int obj)
+    private void EndGame(int obj, Vector2 position)
     {
         waterVolumeController.SetWeight(0);
 

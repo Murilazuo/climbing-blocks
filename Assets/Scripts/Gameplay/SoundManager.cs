@@ -71,6 +71,7 @@ public class SoundManager : MonoBehaviour
     public void PlaySound(SoundType sound)
     {
         int soundIndex = soundData.IndexOf(soundData.Find(x => x.sound == sound));
+        print("Play sound " + sound);
 
         if (soundData[soundIndex].clip == null)
             return;
@@ -126,7 +127,6 @@ public class SoundManager : MonoBehaviour
 
     void PlayClickSound()
     {
-        print("Play sound");
-        SoundManager.Instance.PlaySound(SoundType.UIClick);
+        Instance.PlaySound(SoundType.UIClick);
     }
 }

@@ -52,7 +52,7 @@ public class PlayerIconManager : MonoBehaviour
             playerIcons[playerType.Key].SetTeam(teamsSprites[(int)playerType.Value]);
     }
 
-    void EndGame(int endId)
+    void EndGame(int endId, Vector2 position)
     {
         foreach(var icon in playerIcons)
         {

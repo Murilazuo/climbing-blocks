@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Linq;
+using ExitGames.Client.Photon;
 
 public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
 {
@@ -33,14 +34,16 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     [SerializeField] Transform roomListContent;
 
     List<RoomListItem> roomItemList = new List<RoomListItem>() ;
+    private TypedLobby sqlLobby = new TypedLobby("customSqlLobby", LobbyType.SqlLobby);
 
+    public const string GAME_TYPE_KEY = "C0";
 
     public static CreateAndJoinRooms Instance;
     private void Awake()
     {
         Instance = this;
         LoadingPanel.Instance.Close();
-
+        
     }
 
     public void CreateRoom()
@@ -48,12 +51,14 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
         LoadingPanel.Instance.Open("Creating Room...");
 
 
-        string roomName = createRoomInput.text;
+string roomName = createRoomInput.text;
 
         RoomOptions roomOptions = new RoomOptions
         {
             MaxPlayers = 11,
             IsVisible = isPublic.isOn,
+            CustomRoomProperties = new Hashtable { { GAME_TYPE_KEY, "Normal" }  },
+            CustomRoomPropertiesForLobby = new string[] { GAME_TYPE_KEY }
         };
 
         if (roomName == "")
@@ -62,7 +67,7 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
             ShowWarning("Room name invalid");
         }
         else
-            PhotonNetwork.CreateRoom(roomName, roomOptions);
+            PhotonNetwork.CreateRoom(roomName, roomOptions, sqlLobby);
     }
     public void JoinRoom()
     {
@@ -84,8 +89,10 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     {
         if (returnCode == 32758)
             ShowWarning("Room doesn't exist");
-        if (returnCode == 32765)
+        else if (returnCode == 32765)
             ShowWarning("Room is full");
+        else
+            ShowWarning(message);
 
         LoadingPanel.Instance.Close();
     }
@@ -93,6 +100,8 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     {
         if (returnCode == 32766)
             ShowWarning("Room already exist");
+        else
+            ShowWarning(message);
 
         LoadingPanel.Instance.Close();
     }
@@ -162,7 +171,7 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
         createContent.SetActive(false);
         lobbyContent.SetActive(false);
         roomListPanel.SetActive(true);
-        PhotonNetwork.GetCustomRoomList(null, "");
+        PhotonNetwork.GetCustomRoomList(sqlLobby, "C0 = 'Normal'");
     }
     private void UpdateCachedRoomList(List<RoomInfo> roomList)
     {
@@ -202,6 +211,10 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     public override void OnLeftLobby()
     {
         roomItemList.Clear();
+    }
+    public override void OnErrorInfo(ErrorInfo errorInfo)
+    {
+        Debug.Log(errorInfo.Info);
     }
 
     public override void OnDisconnected(DisconnectCause cause)

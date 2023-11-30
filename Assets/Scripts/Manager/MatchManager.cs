@@ -22,7 +22,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
     public static System.Action OnStarGame;
     public static System.Action OnStarCounter;
-    public static System.Action<int> OnEndGame;
+    public static System.Action<int,Vector2> OnEndGame;
     public static System.Action OnUpdatePlayerSelect;
     public static System.Action OnPlayAgain;
 
@@ -33,25 +33,33 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
     public const byte PIECE_COLIDE_WITH_PLATFORM_EVENT = 3;
 
-    public void PlayerDrowned()
+    public void PlayerDrowned(Vector2 position)
     {
-        OnEndGame?.Invoke(NetworkEventSystem.PLATFORM_DROWNED_EVENT);
-        NetworkEventSystem.CallEvent(NetworkEventSystem.PLATFORM_DROWNED_EVENT);
+        object objPos = position;
+
+        OnEndGame?.Invoke(NetworkEventSystem.PLATFORM_DROWNED_EVENT, position);
+        NetworkEventSystem.CallEvent(NetworkEventSystem.PLATFORM_DROWNED_EVENT,objPos);
     }
-    public void PlatformReachTop()
+    public void PlatformReachTop(Vector2 position)
     {
-        OnEndGame?.Invoke(NetworkEventSystem.PLATFORM_REACH_TOP_EVENT);
-        NetworkEventSystem.CallEvent(NetworkEventSystem.PLATFORM_REACH_TOP_EVENT);
+        object objPos = position;
+
+        OnEndGame?.Invoke(NetworkEventSystem.PLATFORM_REACH_TOP_EVENT, position);
+        NetworkEventSystem.CallEvent(NetworkEventSystem.PLATFORM_REACH_TOP_EVENT, objPos);
     }
-    public void PieceCollideWithPieceReachTop()
+    public void PieceCollideWithPieceReachTop(Vector2 position)
     {
-        OnEndGame?.Invoke(NetworkEventSystem.PIECE_COLIDE_WITH_PLATFORM_EVENT);
-        NetworkEventSystem.CallEvent(NetworkEventSystem.PIECE_COLIDE_WITH_PLATFORM_EVENT);
+        object objPos = position;
+
+        OnEndGame?.Invoke(NetworkEventSystem.PIECE_COLIDE_WITH_PLATFORM_EVENT,position);
+        NetworkEventSystem.CallEvent(NetworkEventSystem.PIECE_COLIDE_WITH_PLATFORM_EVENT, objPos);
     }
-    public void PieceReachTop()
+    public void PieceReachTop(Vector2 position)
     {
-        OnEndGame?.Invoke(NetworkEventSystem.PIECE_REACH_TOP_EVENT);
-        NetworkEventSystem.CallEvent(NetworkEventSystem.PIECE_REACH_TOP_EVENT);
+        object objPos = position;
+
+        OnEndGame?.Invoke(NetworkEventSystem.PIECE_REACH_TOP_EVENT,position);
+        NetworkEventSystem.CallEvent(NetworkEventSystem.PIECE_REACH_TOP_EVENT, objPos);
     }
 
     bool matchStarted = false;
@@ -106,7 +114,8 @@ public class MatchManager : MonoBehaviourPunCallbacks
             case NetworkEventSystem.PLATFORM_REACH_TOP_EVENT:
             case NetworkEventSystem.PIECE_REACH_TOP_EVENT:
             case NetworkEventSystem.PLATFORM_DROWNED_EVENT:
-                OnEndGame?.Invoke(eventData.Code);
+                Vector2 position = (Vector2)eventData.CustomData;
+                OnEndGame?.Invoke(eventData.Code, position);
                 break;
             case NetworkEventSystem.START_MATCH_EVENT:
                 if (!matchStarted)

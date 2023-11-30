@@ -163,7 +163,7 @@ public class Piece : MonoBehaviourPun
             LeanTween.delayedCall(.1f, () => t.gameObject.tag = STOPED_PIECE_TAG);
 
             if (endPositionY <= t.transform.position.y)
-                MatchManager.Instance.PieceReachTop();
+                MatchManager.Instance.PieceReachTop(transform.position);
         }
         lastPieceStoped = this;
         OnStopPiece?.Invoke();    

@@ -34,6 +34,9 @@ public class Block : MonoBehaviour
         ParticleSystem.MainModule main = Instantiate(particleDeath, transform.position, Quaternion.identity).GetComponent<ParticleSystem>().main;
 
         main.startColor = spr.color;
+
+        if(PieceController.Instance)
+            PieceController.Instance.DestroyBlock(transform.position);
     }
     public void StopPiece()
     {
