@@ -8,31 +8,39 @@ public class PlayerGhost : MonoBehaviour
 {
     [SerializeField] float toMove;
     [SerializeField] float timeMove;
-    [SerializeField] float secondMove;
+    [SerializeField] float timeToFade;
     [SerializeField] float timeToDisable;
     [SerializeField] PhotonView photonView;
+    [SerializeField] LeanTweenType ease;
+    [SerializeField] GameObject render;
+    [SerializeField] PhotonView view;
 
-    bool IsLastCharcter { get => FindObjectsOfType<PlayerPlatform>().Length <= 1; }
-
+    bool IsLastCharcter { get => FindObjectsOfType<PlayerPlatform>().Length == 0; }
     public void Init(PlayerDeathId deathId)
     {
         LeanTween.delayedCall(toMove / 2, () => CheckDeath(deathId));
-        LeanTween.moveY(gameObject, transform.position.y + toMove, timeMove).setOnComplete(() =>
-        {
-            CheckDeath(deathId);
-            LeanTween.moveY(gameObject, transform.position.y + secondMove, timeToDisable).setOnComplete(() =>
+
+        view.RPC(nameof(FadeColor), RpcTarget.All);
+
+        LeanTween.moveY(gameObject, transform.position.y + toMove, timeMove)
+            .setEase(ease);
+    }
+
+    [PunRPC]
+    void FadeColor()
+    {
+        LeanTween.color(render, Color.clear, timeToFade)
+            .setDelay(toMove)
+            .setOnComplete(() =>
             {
-                if(photonView.IsMine) 
+                if (photonView.IsMine)
                     PhotonNetwork.Destroy(gameObject);
             });
-        });
     }
-    bool isLast = false;
     void CheckDeath(PlayerDeathId deathId)
     {
-        if (IsLastCharcter && !isLast)
+        if (IsLastCharcter)
         {
-            isLast = true;
             switch (deathId)
             {
                 case PlayerDeathId.Drow:

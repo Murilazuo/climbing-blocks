@@ -94,12 +94,13 @@ public class PlayerPlatform : MonoBehaviour
             return ray1 || ray2;
         }
     }
+
+
     float lastInputX;
     bool canMove;
     bool lookVertical;
     private void Start()
     {
-        canMove = Application.isEditor;
         if (view.IsMine)
         {
             rig.gravityScale = settings.GravityScale;
@@ -326,9 +327,6 @@ public class PlayerPlatform : MonoBehaviour
             if (colideWithPiece) return;
                 colideWithPiece = true;
 
-            if (IsLastCharcter)
-                MatchManager.Instance.PieceCollideWithPieceReachTop(transform.position);
-                
             PlayerDie(PlayerDeathId.Smash);
         }
     }
@@ -340,9 +338,6 @@ public class PlayerPlatform : MonoBehaviour
             if (colideWithPiece) return;
                 colideWithPiece = true;
 
-            if (IsLastCharcter)
-                MatchManager.Instance.PieceCollideWithPieceReachTop(transform.position);
-                
             PlayerDie(PlayerDeathId.Smash);
         }
     }
@@ -377,29 +372,34 @@ public class PlayerPlatform : MonoBehaviour
         {
             case "Danger":
                 timeInDanger += Time.deltaTime;
+                
                 if (timeInDanger > settings.TimeToDieInDangerZone)
                 {
-                    if (IsLastCharcter)
-                        MatchManager.Instance.PlayerDrowned(transform.position);
                     PlayerDie(PlayerDeathId.Drow);
                 }
                 break;
         }
     }
+    public bool sendLastPlayerDieEvent = false;
     void PlayerDie(PlayerDeathId playerDeathId)
     {
-        if(view.IsMine)
+        if (view.IsMine)
         {
-            if (false)
-            {
-                PhotonNetwork.Instantiate(playerGhostPrefab.name, transform.position, Quaternion.identity).GetComponent<PlayerGhost>().Init(playerDeathId);
-            }
-            
+            PhotonNetwork.Instantiate(playerGhostPrefab.name, transform.position, Quaternion.identity).GetComponent<PlayerGhost>().Init(playerDeathId);
+
             waterVolumeController.SetWeight(0);
-            
-            if(IsLastCharcter)
-                PhotonNetwork.Destroy(gameObject);
+
+            PhotonNetwork.Destroy(gameObject);
         }
+
+        StopPlayerMove();
+    }
+    void StopPlayerMove()
+    {
+        canMove = false;
+        rig.isKinematic = true;
+        anim.speed = 0;
+        rig.simulated = false;
     }
     void Punch(Vector2 direction)
     {
@@ -465,13 +465,7 @@ public class PlayerPlatform : MonoBehaviour
 
         Gizmos.DrawRay(transform.position, rendererTransform.localScale.x * rayMoveDistance * transform.right);
     }
-    void OpenEndGamePanel()
-    {
-        if (view.IsMine)
-        {
-            PhotonNetwork.Destroy(gameObject);
-        }
-    }
+   
     private void OnEnable()
     {
         LeanTween.cancel(gameObject);
@@ -479,7 +473,6 @@ public class PlayerPlatform : MonoBehaviour
         {
             MatchManager.OnStarGame += OnStartMatch;
             MatchManager.OnEndGame += EndGame;
-            EndGamePanel.OnOpenEndGamePanel += OpenEndGamePanel;
         }
     }
     private void OnDisable()
@@ -488,26 +481,18 @@ public class PlayerPlatform : MonoBehaviour
         {
             MatchManager.OnStarGame -= OnStartMatch;
             MatchManager.OnEndGame -= EndGame;
-            EndGamePanel.OnOpenEndGamePanel -= OpenEndGamePanel;
         }
     }
     void OnStartMatch()
     {
         canMove = true;
+        sendLastPlayerDieEvent = false;
     }
     private void EndGame(int obj, Vector2 position)
     {
         waterVolumeController.SetWeight(0);
 
-        canMove = false;
-        rig.isKinematic = true;
-        rig.simulated = false;
+        
 
-        view.RPC(nameof(StopAnim), RpcTarget.All);
-    }
-    [PunRPC]
-    void StopAnim()
-    {
-        anim.speed = 0;
     }
 }

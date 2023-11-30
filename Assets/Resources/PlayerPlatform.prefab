@@ -820,6 +820,7 @@ MonoBehaviour:
   - {fileID: 2938389967854904483}
   - {fileID: 3251239511777232968}
   - {fileID: 3406905138489056059}
+  sendLastPlayerDieEvent: 0
 --- !u!114 &7323254342142190606
 MonoBehaviour:
   m_ObjectHideFlags: 0
