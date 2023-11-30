@@ -380,7 +380,6 @@ public class PlayerPlatform : MonoBehaviour
                         MatchManager.Instance.PlayerDrowned(transform.position);
                     else
                         PlayerDie();
-                   
                 break;
         }
     }
@@ -388,6 +387,7 @@ public class PlayerPlatform : MonoBehaviour
     {
         if(view.IsMine)
         {
+            waterVolumeController.SmothSetWeight(0, 2);
             PhotonNetwork.Destroy(gameObject);
         }
     }

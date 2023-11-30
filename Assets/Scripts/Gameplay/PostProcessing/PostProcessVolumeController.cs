@@ -20,4 +20,9 @@ public class PostProcessVolumeController : MonoBehaviour
     {
         volume.weight = value;
     }
+
+    public void SmothSetWeight(float value, float time)
+    {
+        LeanTween.value(gameObject, SmothSetWeight, volume.weight, value, time);
+    }
 }
