@@ -7,6 +7,7 @@ public class PlayersIcon : MonoBehaviour
 {
     [SerializeField] Image teamIcon;
     [SerializeField] Image readyImage;
+    [SerializeField] GameObject crownObj;
     public void SetReady(Sprite spriteReady)
     {
         readyImage.sprite = spriteReady;
@@ -18,5 +19,9 @@ public class PlayersIcon : MonoBehaviour
     public void SetColor(Color color)
     {
         teamIcon.color = color;
+    }
+    public void SetMasterClient(bool newMasterClient)
+    {
+        crownObj.SetActive(newMasterClient);
     }
 }

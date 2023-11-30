@@ -175,14 +175,16 @@ string roomName = createRoomInput.text;
     }
     private void UpdateCachedRoomList(List<RoomInfo> roomList)
     {
-        
         foreach (RoomInfo roomInfo in roomList)
         {
             if (roomInfo.RemovedFromList)
             {
                 int index = roomItemList.FindIndex(x => x.name == roomInfo.Name);
                 Destroy(roomItemList[index].gameObject);
-                roomItemList.TrimExcess();
+            }
+            else if (roomItemList.Exists(x => x.name == roomInfo.Name))
+            {
+                roomItemList.Find(x => x.name == roomInfo.Name).UpdateContent(roomInfo);
             }
             else
             {

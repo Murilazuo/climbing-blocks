@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,6 +31,13 @@ public class StartMatchButton : MonoBehaviour
     void PlayAgain()
     {
         canvasGroup.interactable = false;
+    }
+    void OnSwitchMasterClient(Player newMasterClient)
+    {
+        if(newMasterClient.IsLocal)
+        {
+
+        }
     }
     private void OnEnable()
     {

@@ -66,6 +66,14 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
                 PlayerIconManager.Instance.AddPlayer(player.Value);
             }
         }
+
+        
+    }
+    public override void OnMasterClientSwitched(Player newMasterClient)
+    {
+        base.OnMasterClientSwitched(newMasterClient);
+        PlayerIconManager.Instance.SetMasterClient(newMasterClient);
+        OnSetMasterClient?.Invoke(newMasterClient.IsLocal);
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
@@ -90,6 +98,8 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
         }
 
         PlayerIconManager.Instance.RemovePlayer(otherPlayer);
+
+        CheckPlayerTeam();
     }
     public void StartMatch()
     {

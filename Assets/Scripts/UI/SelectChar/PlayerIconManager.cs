@@ -32,6 +32,8 @@ public class PlayerIconManager : MonoBehaviour
 
         playerIcon.SetColor(MasterClientManager.Instance.GetPlayerColor(player.ActorNumber-1));
         playerIcons.Add(player, playerIcon);
+
+        playerIcon.SetMasterClient(player.IsMasterClient);
     }
     public void RemovePlayer(Player player)
     {
@@ -60,7 +62,10 @@ public class PlayerIconManager : MonoBehaviour
             icon.Value.SetTeam(teamsSprites[2]);
         }
     }
-
+    public void SetMasterClient(Player masterClient)
+    {
+        playerIcons[masterClient].SetMasterClient(true);
+    }
     private void OnEnable()
     {
         MasterClientManager.OnPlayersReady += UpdatePlayerReady;
