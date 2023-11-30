@@ -814,6 +814,7 @@ MonoBehaviour:
   - {fileID: 6976567601321121307}
   - {fileID: 8723510247015880756}
   - {fileID: 5612975713760342478}
+  playerGhostPrefab: {fileID: 9179352317349263222, guid: 72daa88780a43894b9c1848cd128527b, type: 3}
   spriteRenderers:
   - {fileID: 4314464110419858293}
   - {fileID: 2938389967854904483}

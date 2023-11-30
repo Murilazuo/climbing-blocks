@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -41,6 +42,7 @@ public class PlayerPlatform : MonoBehaviour
     [SerializeField] Animator anim;
     [SerializeField] Transform rendererTransform;
     [SerializeField] GameObject[] outlineObjects;
+    [SerializeField] GameObject playerGhostPrefab;
     bool lookRigh;
     bool isMove;
     readonly int isIdleId = Animator.StringToHash("IsIdle");
@@ -48,7 +50,7 @@ public class PlayerPlatform : MonoBehaviour
 
     [SerializeField] SpriteRenderer[] spriteRenderers;
     
-    bool IsLastCharcter { get => FindObjectsOfType<PlayerPlatform>().Length == 1; }
+    bool IsLastCharcter { get => FindObjectsOfType<PlayerPlatform>().Length <= 1; }
 
     float timeInDanger;
     bool inDanger;
@@ -326,8 +328,8 @@ public class PlayerPlatform : MonoBehaviour
 
             if (IsLastCharcter)
                 MatchManager.Instance.PieceCollideWithPieceReachTop(transform.position);
-            else
-                PlayerDie();
+                
+            PlayerDie(PlayerDeathId.Smash);
         }
     }
     bool colideWithPiece = false;
@@ -340,8 +342,8 @@ public class PlayerPlatform : MonoBehaviour
 
             if (IsLastCharcter)
                 MatchManager.Instance.PieceCollideWithPieceReachTop(transform.position);
-            else
-                PlayerDie();
+                
+            PlayerDie(PlayerDeathId.Smash);
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
@@ -376,19 +378,27 @@ public class PlayerPlatform : MonoBehaviour
             case "Danger":
                 timeInDanger += Time.deltaTime;
                 if (timeInDanger > settings.TimeToDieInDangerZone)
+                {
                     if (IsLastCharcter)
                         MatchManager.Instance.PlayerDrowned(transform.position);
-                    else
-                        PlayerDie();
+                    PlayerDie(PlayerDeathId.Drow);
+                }
                 break;
         }
     }
-    void PlayerDie()
+    void PlayerDie(PlayerDeathId playerDeathId)
     {
         if(view.IsMine)
         {
-            waterVolumeController.SmothSetWeight(0, 2);
-            PhotonNetwork.Destroy(gameObject);
+            if (false)
+            {
+                PhotonNetwork.Instantiate(playerGhostPrefab.name, transform.position, Quaternion.identity).GetComponent<PlayerGhost>().Init(playerDeathId);
+            }
+            
+            waterVolumeController.SetWeight(0);
+            
+            if(IsLastCharcter)
+                PhotonNetwork.Destroy(gameObject);
         }
     }
     void Punch(Vector2 direction)
