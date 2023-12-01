@@ -1,5 +1,6 @@
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,7 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
    
     public static System.Action<bool> OnPlayersReady;
     public static System.Action<bool> OnSetMasterClient;
+    public static System.Action<bool> OnSetMatchIsStart;
 
     public static System.Action OnPlayerSetTeam;
 
@@ -43,9 +45,19 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
 
     public bool characterIsFull;
 
+    bool matchIsStart;
+    int colorId;
     public Color GetPlayerColor(int playerID)
     {
-        return playerColors[playerID];
+        int id = 0;
+        foreach(var player in PhotonNetwork.CurrentRoom.Players)
+        {
+            print(player.Value.ActorNumber);
+            if (playerID > player.Value.ActorNumber)
+                id++;
+        }
+
+        return playerColors[id];
     }
 
     private void Awake()
@@ -77,6 +89,7 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
+
         PlayerIconManager.Instance.AddPlayer(newPlayer);
 
         playersReady.Add(newPlayer, false);
@@ -87,17 +100,30 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
         CheckPlayerTeam();
 
         OnPlayerSetTeam?.Invoke();
+
+        view.RPC(nameof(SetMatchStart), RpcTarget.All ,false);
+
     }
+    [PunRPC]
+    void SetMatchStart(bool isStart)
+    {
+        print("Set MatchStart " + isStart);
+        matchIsStart = isStart;
+        OnSetMatchIsStart?.Invoke(matchIsStart);
+    }
+
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
+        PlayerIconManager.Instance.RemovePlayer(otherPlayer);
+
         if (IsMaster)
         {
             playersReady.Remove(otherPlayer);
             playersReady.TrimExcess();
+            playersType.Remove(otherPlayer);
+            playersType.TrimExcess();
             UpdateIsReady();
         }
-
-        PlayerIconManager.Instance.RemovePlayer(otherPlayer);
 
         CheckPlayerTeam();
     }
@@ -176,7 +202,10 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
             playersType.Clear();
             for (int i = 0; i < newPlayersType.Length; i += 2)
             {
-                playersType.Add((Player)newPlayersType[i], (PlayerType)newPlayersType[i+1]);
+                Player player = (Player)newPlayersType[i];
+
+                if (!player.IsInactive && player != null)
+                    playersType.Add(player, (PlayerType)newPlayersType[i+1]);
             }
         }
 
@@ -235,18 +264,28 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
 
             UpdateIsReady();
             UpdatePlayersTeam();
+            view.RPC(nameof(SetMatchStart), RpcTarget.All, false);
+        }
+    }
+    private void StarGame()
+    {
+        if (IsMaster)
+        {
+           view.RPC(nameof(SetMatchStart), RpcTarget.All ,true);
         }
     }
     public override void OnEnable()
     {
         base.OnEnable();
+        
         MatchManager.OnEndGame += EndGame;
+        MatchManager.OnStarGame += StarGame;
     }
-
     public override void OnDisable()
     {
         base.OnDisable();
 
         MatchManager.OnEndGame -= EndGame;
+        MatchManager.OnStarGame -= StarGame;
     }
 }

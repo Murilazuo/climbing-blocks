@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -89,12 +90,20 @@ public class SelectTeamController : MonoBehaviour
     {
         MasterClientManager.OnPlayerSetTeam += UpdateButtons;
         MatchManager.OnPlayAgain += PlayAgain;
+        MasterClientManager.OnSetMatchIsStart += SetMatchIsStart;
     }
     public void OnDisable()
     {
         MasterClientManager.OnPlayerSetTeam -= UpdateButtons;
         MatchManager.OnPlayAgain -= PlayAgain;
+        MasterClientManager.OnSetMatchIsStart -= SetMatchIsStart;
     }
 
-    
+    private void SetMatchIsStart(bool matchIsStart)
+    {
+        if (matchIsStart)
+        {
+            DisablePanel();
+        }
+    }
 }

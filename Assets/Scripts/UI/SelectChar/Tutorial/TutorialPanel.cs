@@ -36,17 +36,26 @@ public class TutorialPanel : MonoBehaviour
         tutorials[0].SetActive(false);
         tutorials[1].SetActive(false);
     }
+    void SetMatchIsStart(bool matchIsStart)
+    {
+        if (matchIsStart)
+        {
+            ClosePanel();
+        }
+    }
     private void OnEnable()
     {
         MatchManager.OnStarCounter += ClosePanel;
         SelectTeamController.OnClientSelectTeam += SetPlayer;
         MatchManager.OnPlayAgain += PlayAgain;
+        MasterClientManager.OnSetMatchIsStart += SetMatchIsStart;
     }
     private void OnDisable()
     {
         MatchManager.OnStarCounter -= ClosePanel;
         SelectTeamController.OnClientSelectTeam -= SetPlayer;
         MatchManager.OnPlayAgain -= PlayAgain;
+        MasterClientManager.OnSetMatchIsStart -= SetMatchIsStart;
         
     }
 }

@@ -30,28 +30,36 @@ public class PlayerIconManager : MonoBehaviour
 
         PlayersIcon playerIcon = Instantiate(playerIconPrefab,holder).GetComponent<PlayersIcon>();
 
-        playerIcon.SetColor(MasterClientManager.Instance.GetPlayerColor(player.ActorNumber-1));
+        playerIcon.SetColor(MasterClientManager.Instance.GetPlayerColor(player.ActorNumber));
         playerIcons.Add(player, playerIcon);
 
         playerIcon.SetMasterClient(player.IsMasterClient);
     }
     public void RemovePlayer(Player player)
     {
+        print("Remove Player");
         Destroy(playerIcons[player].gameObject);
-
         playerIcons.Remove(player);
+        playerIcons.TrimExcess();
     }
 
     void UpdatePlayerReady(bool allPlayersReady)
     {
         foreach(var playerReady in MasterClientManager.Instance.playersReady)
-            playerIcons[playerReady.Key].SetReady(playerReady.Value ? readyButton : notReadyButton);
+        {
+            if (playerReady.Key != null)
+                playerIcons[playerReady.Key].SetReady(playerReady.Value ? readyButton : notReadyButton);
+        }
     }
 
     void UpdatePlayerTeam()
     {
         foreach (var playerType in MasterClientManager.Instance.playersType)
-            playerIcons[playerType.Key].SetTeam(teamsSprites[(int)playerType.Value]);
+        {
+
+            if(playerType.Key != null)
+                playerIcons[playerType.Key].SetTeam(teamsSprites[(int)playerType.Value]);
+        }
     }
 
     void EndGame(int endId, Vector2 position)

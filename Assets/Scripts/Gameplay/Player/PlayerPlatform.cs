@@ -105,7 +105,7 @@ public class PlayerPlatform : MonoBehaviour
         {
             rig.gravityScale = settings.GravityScale;
             OnSpawnPlayerPlatform?.Invoke();
-            view.RPC(nameof(SetColor), RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber-1);
+            view.RPC(nameof(SetColor), RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber);
             rig.simulated = true;
             rig.isKinematic = false;
 
