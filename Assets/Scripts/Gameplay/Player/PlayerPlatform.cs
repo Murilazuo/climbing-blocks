@@ -347,6 +347,10 @@ public class PlayerPlatform : MonoBehaviour
         {
             case "End":
                 MatchManager.Instance.PlatformReachTop(transform.position);
+                rig.simulated = false;
+                rig.gravityScale = 0;
+                print("Reach the top");
+                view.RPC(nameof(StopAnim), RpcTarget.All);
                 break;
             case "Danger":
                 SoundManager.Instance.PlaySound(SoundType.Bubbles);
@@ -354,6 +358,11 @@ public class PlayerPlatform : MonoBehaviour
                 rig.gravityScale = settings.GravityScale;
                 break;
         }
+    }
+    [PunRPC]
+    void StopAnim()
+    {
+        anim.speed = 0;
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -473,6 +482,7 @@ public class PlayerPlatform : MonoBehaviour
         {
             MatchManager.OnStarGame += OnStartMatch;
             MatchManager.OnEndGame += EndGame;
+            EndGamePanel.OnOpenEndGamePanel += OpenEndGamepanel;
         }
     }
     private void OnDisable()
@@ -481,6 +491,7 @@ public class PlayerPlatform : MonoBehaviour
         {
             MatchManager.OnStarGame -= OnStartMatch;
             MatchManager.OnEndGame -= EndGame;
+            EndGamePanel.OnOpenEndGamePanel -= OpenEndGamepanel;
         }
     }
     void OnStartMatch()
@@ -492,7 +503,9 @@ public class PlayerPlatform : MonoBehaviour
     {
         waterVolumeController.SetWeight(0);
 
-        
-
+    }
+    void OpenEndGamepanel()
+    {
+        PhotonNetwork.Destroy(gameObject);
     }
 }
