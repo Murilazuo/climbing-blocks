@@ -129,7 +129,20 @@ public class MasterClientManager : MonoBehaviourPunCallbacks
     }
     public void StartMatch()
     {
+        LeanTween.delayedCall(1, DelayStartMatch);
+
         MatchManager.Instance.StartCounter();
+    }
+    void DelayStartMatch()
+    {
+        foreach (var player in PhotonNetwork.CurrentRoom.Players)
+        {
+            playersReady[player.Value] = false;
+            playersType[player.Value] = PlayerType.None;
+        }
+
+        UpdateIsReady();
+        UpdatePlayersTeam();
     }
 
     #region Ready

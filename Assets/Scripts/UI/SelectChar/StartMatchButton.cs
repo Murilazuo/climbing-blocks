@@ -22,11 +22,12 @@ public class StartMatchButton : MonoBehaviour
     }
     void OnSetPlayerReady(bool allPlayerReady)
     {
-        canvasGroup.interactable = allPlayerReady || (Application.isEditor && PhotonNetwork.CurrentRoom.PlayerCount == 1);
+        canvasGroup.interactable = allPlayerReady || (PhotonNetwork.CurrentRoom.PlayerCount == 1);
     }
     public void StartMatch()
     {
         MasterClientManager.Instance.StartMatch();
+
     }
     void PlayAgain()
     {
@@ -44,6 +45,9 @@ public class StartMatchButton : MonoBehaviour
         MasterClientManager.OnSetMasterClient += UpdateMasterClient;
         MasterClientManager.OnPlayersReady += OnSetPlayerReady;
         MatchManager.OnPlayAgain += PlayAgain;
+
+
+        canvasGroup.interactable = false;
     }
     private void OnDisable()
     {
