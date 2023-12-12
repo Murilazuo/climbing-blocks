@@ -394,6 +394,8 @@ public class PlayerPlatform : MonoBehaviour
     {
         if (view.IsMine)
         {
+            view.RPC(nameof(PlaySound), RpcTarget.All, (int)SoundType.PlayerDie);
+
             PhotonNetwork.Instantiate(playerGhostPrefab.name, transform.position, Quaternion.identity).GetComponent<PlayerGhost>().Init(playerDeathId);
 
             waterVolumeController.SetWeight(0);
@@ -424,10 +426,16 @@ public class PlayerPlatform : MonoBehaviour
         
         RaycastHit2D hit = Physics2D.Raycast(attackRayCast.origin,attackRayCast.direction,rayDistance,groundLayer);
 
-        view.RPC(nameof(PlaySound), RpcTarget.All, (int)SoundType.Punch);
 
         if (hit.collider && hit.transform.gameObject.CompareTag(Piece.STOPED_PIECE_TAG))
+        {
+            view.RPC(nameof(PlaySound), RpcTarget.All, (int)SoundType.Punch);
             view.RPC(nameof(DestroyBlock), RpcTarget.All, (int)hit.transform.position.x, (int)hit.transform.position.y);
+        }
+        else
+        {
+            view.RPC(nameof(PlaySound), RpcTarget.All, (int)SoundType.PunchInAir);
+        }
             
         if (view.IsMine)
             view.RPC(nameof(PunchRenderer), RpcTarget.All, direction.x,direction.y);

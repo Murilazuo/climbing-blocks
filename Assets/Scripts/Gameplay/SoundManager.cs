@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public enum SoundType { Jump, Punch, UIClick, Bubbles, Win, Lose }
+public enum SoundType { Jump, Punch, UIClick, Bubbles, Win, Lose, StopPiece, PunchInAir, PlayerDie }
 public class SoundManager : MonoBehaviour
 {
     [System.Serializable]

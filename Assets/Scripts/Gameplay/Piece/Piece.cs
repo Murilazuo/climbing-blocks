@@ -166,6 +166,8 @@ public class Piece : MonoBehaviourPun
                 MatchManager.Instance.PieceReachTop(transform.position);
         }
         lastPieceStoped = this;
+
+        SoundManager.Instance.PlaySound(SoundType.StopPiece);
         OnStopPiece?.Invoke();    
     }
     void OnOpenEndGamePanel()

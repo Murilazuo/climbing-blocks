@@ -1176,6 +1176,30 @@ MonoBehaviour:
     source: {fileID: 1775803254}
     maxPitch: 1
     minPitch: 1
+  - name: StopPiece
+    sound: 6
+    clip: {fileID: 8300000, guid: 63d5809e379de0f488822eafa48dd411, type: 3}
+    volume: 0.303
+    loop: 0
+    source: {fileID: 1775803254}
+    maxPitch: 0.86
+    minPitch: 1.21
+  - name: PunchInAir
+    sound: 7
+    clip: {fileID: 8300000, guid: 96e1eadb4a20bd948a07f8a7153e1079, type: 3}
+    volume: 0.277
+    loop: 0
+    source: {fileID: 1775803254}
+    maxPitch: 0.89
+    minPitch: 1.37
+  - name: PlayerDie
+    sound: 8
+    clip: {fileID: 8300000, guid: a31056c6c5cd2d7429fecb9ebca21979, type: 3}
+    volume: 0.277
+    loop: 0
+    source: {fileID: 1775803254}
+    maxPitch: 1
+    minPitch: 1
   source: {fileID: 1775803254}
 --- !u!4 &1274002274
 Transform:
